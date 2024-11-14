@@ -3,19 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 12%;
+
+  --fb-pallete-100: 240 5% 34%;
+  --fb-pallete-200: 240 5% 26%;
+  --fb-pallete-300: 240 4% 16%;
+  --fb-pallete-400: 240 6% 10%;
+  --fb-pallete-500: 240 10% 4%;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    --background: 0 0% 7%;
+    --foreground: 0 0% 96%;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    --fb-pallete-100: 240 5% 96%;
+    --fb-pallete-200: 240 6% 90%;
+    --fb-pallete-300: 240 5% 84%;
+    --fb-pallete-400: 240 5% 65%;
+    --fb-pallete-500: 240 4% 46%;
+  }
 }
