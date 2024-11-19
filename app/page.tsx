@@ -1,9 +1,9 @@
+import Home from '@/components/sections/Home/Home';
 
-
-export default function Home() {
+export default function Page() {
   return (
-    <div>
-      
-    </div>
+    <main className='flex flex-grow'>
+      <Home />
+    </main>
   );
 }
