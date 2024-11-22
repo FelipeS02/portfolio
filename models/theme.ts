@@ -1,6 +1,7 @@
 import { Photo } from './photos';
 
 export type PaletteShade =
+  | '50'
   | '100'
   | '200'
   | '300'
@@ -9,16 +10,13 @@ export type PaletteShade =
   | '600'
   | '700'
   | '800'
-  | '900';
+  | '900'
+  | '950';
 
-export type Palette = {
-  shades: Record<PaletteShade, string>;
-  background: string;
-};
+export type Palette = Record<PaletteShade, string>;
 
 export interface Theme {
   hexCode: string;
-  lightPalette: Palette;
-  darkPalette: Palette;
+  palette: Palette;
   photo: Photo;
 }

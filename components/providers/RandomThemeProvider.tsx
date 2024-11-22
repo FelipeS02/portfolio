@@ -47,8 +47,7 @@ export const photoInitialState: Photo = {
 
 export const themeInitialState: ThemeState = {
   hexCode: '',
-  lightPalette: initialPalette,
-  darkPalette: initialPalette,
+  palette: initialPalette,
   photo: photoInitialState,
   fullfiled: false,
 };
@@ -83,20 +82,15 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       const newTheme = data.theme;
 
-      // Select palette by scheme
-      const paletteByScheme = isDarkModeActive
-        ? newTheme.darkPalette
-        : newTheme.lightPalette;
-
       // Apply the theme into CSS variables
-      applyPaletteIntoCSS(paletteByScheme);
+      applyPaletteIntoCSS(newTheme.palette);
       applyThemeImage(newTheme.photo);
 
       setTheme(() => ({ ...newTheme, fullfiled: true }));
     } catch (e) {
       console.log(e);
     }
-  }, [isDarkModeActive]);
+  }, []);
 
   const loadInitialTheme = useCallback(async () => {
     if (theme.fullfiled) return;
@@ -114,17 +108,16 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   //@region Handle user scheme change
   // Change theme in dark - light mode change
 
-  useEffect(() => {
-    if (!theme.fullfiled) return;
+  // useEffect(() => {
+  //   if (!theme.fullfiled) return;
 
-    const paletteByScheme = isDarkModeActive
-      ? theme.darkPalette
-      : theme.lightPalette;
+  //   const paletteByScheme = isDarkModeActive
+  //     ? theme.darkPalette
+  //     : theme.lightPalette;
 
-    applyPaletteIntoCSS(paletteByScheme);
-  }, [isDarkModeActive, theme]);
+  //   applyPaletteIntoCSS(paletteByScheme);
+  // }, [isDarkModeActive, theme]);
   //@endregion
-
 
   return (
     <RandomThemeContext.Provider value={theme}>

@@ -11,8 +11,8 @@ const HeaderText = ({
 }) => {
   return (
     <div className='flex flex-col col-span-1 w-full text-md tracking-wide font-medium'>
-      <span className='text-palette-100'>{title}</span>
-      <span className='text-palette-900'>{subtitle}</span>
+      <span className='text-foreground-secondary'>{title}</span>
+      <span className='text-foreground'>{subtitle}</span>
     </div>
   );
 };

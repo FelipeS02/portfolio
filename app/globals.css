@@ -4,18 +4,21 @@
 
 @layer base {
   :root {
-    /* Neutral color palette */
-    --palette-100: 0 0% 96%;
-    --palette-200: 0 0% 90%;
-    --palette-300: 0 0% 83%;
-    --palette-400: 0 0% 64%;
-    --palette-500: 0 0% 45%;
-    --palette-600: 0 0% 32%;
-    --palette-700: 0 0% 25%;
-    --palette-800: 0 0% 15%;
-    --palette-900: 0 0% 9%;
+    /* Using the extremes as background */
+    --palette-50: 240 9% 98%;
+    --palette-950: 240 5% 5%;
 
-    --background: var(--palette-100);
+    --palette-100: 240 7% 96%;
+    --palette-200: 240 9% 89%;
+    --palette-300: 240 10% 83%;
+    --palette-400: 240 9% 66%;
+    --palette-500: 240 8% 47%;
+    --palette-600: 240 8% 35%;
+    --palette-700: 240 7% 28%;
+    --palette-800: 240 7% 16%;
+    --palette-900: 240 6% 11%;
+
+    --background: var(--palette-50);
     --foreground: var(--palette-900);
 
     --card: 0 0% 100%;
@@ -65,18 +68,8 @@
     --radius: 0.5rem;
   }
   .dark {
-    --palette-100: 0 0% 9%;
-    --palette-200: 0 0% 15%;
-    --palette-300: 0 0% 25%;
-    --palette-400: 0 0% 32%;
-    --palette-500: 0 0% 45%;
-    --palette-600: 0 0% 64%;
-    --palette-700: 0 0% 83%;
-    --palette-800: 0 0% 90%;
-    --palette-900: 0 0% 96%;
-
-    --background: var(--palette-100);
-    --foreground: var(--palette-900);
+    --background: var(--palette-950);
+    --foreground: var(--palette-100);
 
     --card: 240 10% 3.9%;
 

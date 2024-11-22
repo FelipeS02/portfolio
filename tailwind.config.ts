@@ -44,6 +44,7 @@ export default {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        "foreground-secondary": "hsl(var(--foreground) / 70%)",
         palette: {
           '100': 'hsl(var(--palette-100))',
           '200': 'hsl(var(--palette-200))',

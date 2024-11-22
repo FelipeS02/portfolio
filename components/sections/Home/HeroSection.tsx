@@ -7,33 +7,32 @@ import HeroPhotoCredits from './HeroPhotoCredits';
 gsap.registerPlugin(useGSAP);
 
 const HeroSection = () => {
-  useGSAP(() => {
-    gsap.set('.char', {
-      yPercent: 100,
-      position: 'static',
-      opacity: 0,
-      willChange: 'transform',
-    });
+  // useGSAP(() => {
+  //   gsap.set('.char', {
+  //     yPercent: 100,
+  //     position: 'static',
+  //     opacity: 0,
+  //     willChange: 'transform',
+  //   });
 
-    gsap.delayedCall(2, () => {
-      gsap.to('.char', {
-        yPercent: 0,
-        duration: 1.2,
-        delay: 0.55,
-        ease: 'circ.inOut',
-        stagger: 0.08,
-        opacity: 1,
-      });
-    });
-  }, []);
+  //   gsap.delayedCall(2, () => {
+  //     gsap.to('.char', {
+  //       yPercent: 0,
+  //       duration: 1.2,
+  //       delay: 0.55,
+  //       ease: 'circ.inOut',
+  //       stagger: 0.08,
+  //       opacity: 1,
+  //     });
+  //   });
+  // }, []);
 
   return (
     <div className='flex flex-col select-none w-fit gap-1 hero-container'>
-      <div className='flex items-center text-palette-600 hero-subtitle'>
-        <h4 className='text-md lg:text-xl after:contents-["-"] after:border after:h-4 after:border-palette-300 after:ml-2 after:animate-blink'>
-          Desarrollador <b className='font-semibold'>Full-Stack</b>
-        </h4>
-      </div>
+      <h4 className='text-md lg:text-xl after:contents-["-"] after:border after:h-4 after:border-palette-800 after:ml-2 after:animate-blink'>
+        Desarrollador <b className='font-semibold'>Full-Stack</b>
+      </h4>
+
       <HeroPhotoCredits>
         <div>
           <BackgroundClippedText
