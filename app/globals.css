@@ -4,9 +4,6 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 12%;
-
     /* Neutral color palette */
     --palette-100: 0 0% 96%;
     --palette-200: 0 0% 90%;
@@ -17,6 +14,9 @@
     --palette-700: 0 0% 25%;
     --palette-800: 0 0% 15%;
     --palette-900: 0 0% 9%;
+
+    --background: var(--palette-100);
+    --foreground: var(--palette-900);
 
     --card: 0 0% 100%;
 
@@ -65,8 +65,18 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
+    --palette-100: 0 0% 9%;
+    --palette-200: 0 0% 15%;
+    --palette-300: 0 0% 25%;
+    --palette-400: 0 0% 32%;
+    --palette-500: 0 0% 45%;
+    --palette-600: 0 0% 64%;
+    --palette-700: 0 0% 83%;
+    --palette-800: 0 0% 90%;
+    --palette-900: 0 0% 96%;
+
+    --background: var(--palette-100);
+    --foreground: var(--palette-900);
 
     --card: 240 10% 3.9%;
 

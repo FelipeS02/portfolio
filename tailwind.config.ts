@@ -9,6 +9,15 @@ export default {
   darkMode: ['selector', '.dark'],
   theme: {
     extend: {
+      transitionDelay: {
+        '250': '250ms',
+        '350': '350ms',
+        '400': '400ms',
+        '450': '450ms',
+      },
+      transitionProperty: {
+        loading: 'height, background-color',
+      },
       dropShadow: {
         hero: '0 0px 1px hsl(var(--palette-300) / 100%)',
         current: '0 0px 4px currentColor',
@@ -19,8 +28,18 @@ export default {
       backgroundImage: {
         theme: 'var(--theme-image)',
       },
+      keyframes: {
+        'blink': {
+          "0%, 100%": {
+            opacity: "0",
+          },
+          "50%": {
+            opacity: "1",
+          },
+        },
+      },
       animation: {
-        'pulse-shadow': 'pulse-shadow 250ms ease-in-out infinite',
+        'blink': 'blink 1s ease infinite',
       },
       colors: {
         background: 'hsl(var(--background))',

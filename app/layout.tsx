@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import SchemeProvider from '@/components/providers/SchemeProvider';
 import RandomThemeProvider from '@/components/providers/RandomThemeProvider';
+import LoadingScreen from '@/components/ui/LoadingScreen/LoadingScreen';
 import './globals.css';
 
 const ppNeueMontreal = localFont({
@@ -42,16 +43,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html
+      lang='en'
+      suppressHydrationWarning
+      className='h-full max-h-full overflow-hidden'
+    >
       <body
-        className={`${ppNeueMontreal.variable} h-screen flex text-foreground bg-background font-neue antialiased md:transition-colors`}
+        className={`${ppNeueMontreal.variable} h-full text-foreground bg-background font-neue antialiased md:transition-colors`}
       >
-        <SchemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-        >
-          <RandomThemeProvider>{children}</RandomThemeProvider>
+        <SchemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <RandomThemeProvider>
+            <LoadingScreen />
+            {children}
+          </RandomThemeProvider>
         </SchemeProvider>
       </body>
     </html>

@@ -59,8 +59,6 @@ function userPrefersDarkMode(
   userScheme: string | undefined
 ): userScheme is 'dark' {
   if (!userScheme) return false;
-  if (userScheme !== 'dark' && userScheme !== 'light')
-    throw Error('Scheme must be dark or light');
 
   return userScheme === 'dark';
 }
@@ -76,38 +74,47 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   //@region Random theme generation
   const getNewTheme = useCallback(async () => {
+    try {
+      // Get theme from API
+      const res = await fetch('api/theme');
+      const { data }: ApiResponse<{ theme: Theme }> = await res.json();
+
+      if (!data?.theme) return;
+
+      const newTheme = data.theme;
+
+      // Select palette by scheme
+      const paletteByScheme = isDarkModeActive
+        ? newTheme.darkPalette
+        : newTheme.lightPalette;
+
+      // Apply the theme into CSS variables
+      applyPaletteIntoCSS(paletteByScheme);
+      applyThemeImage(newTheme.photo);
+
+      setTheme(() => ({ ...newTheme, fullfiled: true }));
+    } catch (e) {
+      console.log(e);
+    }
+  }, [isDarkModeActive]);
+
+  const loadInitialTheme = useCallback(async () => {
     if (theme.fullfiled) return;
 
-    // Get theme from API
-    const res = await fetch('api/theme');
-    const { data }: ApiResponse<{ theme: Theme }> = await res.json();
-
-    if (!data?.theme) return;
-
-    const newTheme = data.theme;
-
-    // Select palette by scheme
-    const paletteByScheme = isDarkModeActive
-      ? newTheme.darkPalette
-      : newTheme.lightPalette;
-
-    // Apply the theme into CSS variables
-    applyPaletteIntoCSS(paletteByScheme);
-    applyThemeImage(newTheme.photo);
-
-    setTheme(() => ({ ...newTheme, fullfiled: true }));
-  }, [theme, isDarkModeActive]);
+    getNewTheme();
+  }, [theme, getNewTheme]);
 
   useEffect(() => {
     if (!mounted) return setMounted(true);
 
-    getNewTheme();
-  }, [getNewTheme, mounted]);
+    loadInitialTheme();
+  }, [loadInitialTheme, mounted]);
   //@endregion
 
   //@region Handle user scheme change
   // Change theme in dark - light mode change
-  const changePaletteByUserScheme = useCallback(() => {
+
+  useEffect(() => {
     if (!theme.fullfiled) return;
 
     const paletteByScheme = isDarkModeActive
@@ -115,14 +122,9 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
       : theme.lightPalette;
 
     applyPaletteIntoCSS(paletteByScheme);
-  }, [theme, isDarkModeActive]);
-
-  useEffect(() => {
-    changePaletteByUserScheme();
-  }, [changePaletteByUserScheme]);
+  }, [isDarkModeActive, theme]);
   //@endregion
 
-  console.log(theme);
 
   return (
     <RandomThemeContext.Provider value={theme}>

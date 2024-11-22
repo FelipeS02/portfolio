@@ -16,16 +16,14 @@ const HeroPhotoCredits: FC<{ children: ReactNode }> = memo(
   function HeroPhotoCredits({ children }) {
     const { photo } = useTheme();
 
-    if (!photo.url) return null;
-
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>{children}</TooltipTrigger>
+          <TooltipTrigger asChild>{children}</TooltipTrigger>
           <TooltipContent
             className='px-2 py-1 h-fit'
             side='right'
-            key={photo.url}
+            key={photo?.url}
           >
             <TooltipArrow className='fill-primary' />
             <a href={photo?.photographer_url} target='_blank'>

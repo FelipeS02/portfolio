@@ -252,6 +252,7 @@ const MOBILE_MQ = '(max-width: 768px)';
 export function applyPaletteIntoCSS(palette: Palette): void {
   if (!palette) return;
 
+
   const root = document.documentElement;
 
   if (!root) return;
@@ -266,7 +267,7 @@ export function applyPaletteIntoCSS(palette: Palette): void {
 
 export function applyThemeImage(photo: Photo): void {
   if (!photo) return;
-  const { large2x, medium } = photo.src;
+  const { large, medium, portrait } = photo.src;
 
   const root = document.documentElement;
 
@@ -276,7 +277,7 @@ export function applyThemeImage(photo: Photo): void {
 
   root.style.setProperty(
     '--theme-image',
-    `url(${isMobile ? medium : large2x})`
+    `url(${large})`
   );
 }
 //@endregion

@@ -2,18 +2,26 @@
 
 import { useScheme } from '@/hooks/theme';
 import { Moon, Sun } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const ICON_SIZE = 18;
 
 const ThemeSwitch = () => {
   const { setTheme, resolvedTheme } = useScheme();
+  const [isMounted, setIsMounted] = useState(false);
 
   const isDarkModeSelected = resolvedTheme === 'dark';
   const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
 
   const switchTheme = () => setTheme(newTheme);
 
-  if (!window) return null;
+
+  // Ensure this only runs in the client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <label
