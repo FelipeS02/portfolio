@@ -1,21 +1,29 @@
 import { getNewThemeByHex, getRandomHex } from '@/lib/theme';
 import { Theme } from '@/models/theme';
+import { NextRequest } from 'next/server';
 
 let cachedTheme: Theme | null = null;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    let theme = null;
+    const searchParams = req.nextUrl.searchParams;
+    const hexCode = searchParams.get('color');
 
-    if (!theme) {
-      const hexCode = getRandomHex();
+    let theme = cachedTheme;
 
-      const newTheme = await getNewThemeByHex(hexCode);
+    let newTheme: Theme | null = null;
 
+    if (hexCode) {
+      newTheme = await getNewThemeByHex(hexCode);
+    } else {
+      if (!theme) {
+        newTheme = await getNewThemeByHex(getRandomHex());
+      }
+    }
+
+    if (newTheme) {
       theme = newTheme;
       cachedTheme = newTheme;
-    } else {
-      console.log("cache brada")
     }
 
     return Response.json({

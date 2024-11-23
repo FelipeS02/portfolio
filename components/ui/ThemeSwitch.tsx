@@ -39,7 +39,7 @@ const ThemeSwitch = () => {
         className='hidden'
       />
       <span
-        className='aspect-square absolute bg-foreground rounded-full transition-all group-data-[toggled=false]:ml-0 group-data-[toggled=true]:ml-[48%] z-10'
+        className='aspect-square absolute bg-foreground rounded-full transition-all group-data-[toggled=false]:ml-0 group-data-[toggled=true]:ml-[48%] z-auto'
         style={{ height: ICON_SIZE }}
       />
       <Sun

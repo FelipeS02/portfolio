@@ -11,27 +11,38 @@ import { useTheme } from '@/hooks/theme';
 import { TooltipArrow } from '@radix-ui/react-tooltip';
 import PexelIcon from '@/public/assets/icons/pexels.svg';
 import Image from 'next/image';
+import { Link } from 'lucide-react';
 
 const HeroPhotoCredits: FC<{ children: ReactNode }> = memo(
   function HeroPhotoCredits({ children }) {
-    const { photo } = useTheme();
+    const {
+      photo: { info },
+    } = useTheme();
 
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>{children}</TooltipTrigger>
           <TooltipContent
-            className='px-2 py-1 h-fit'
+            className='px-2 py-1 h-fit group'
             side='right'
-            key={photo?.url}
+            key={info?.url}
           >
             <TooltipArrow className='fill-primary' />
-            <a href={photo?.photographer_url} target='_blank'>
+            <a href={info?.photographer_url} target='_blank'>
               <div className='flex gap-1.5 items-center'>
-                <Image src={PexelIcon} alt='pexel-icon' className='size-6 rounded-sm'/>
+                <Image
+                  src={PexelIcon}
+                  alt='pexel-icon'
+                  className='size-6 rounded-sm'
+                />
                 <span className='text-lg font-medium tracking-wide'>
-                  {photo?.photographer}
+                  {info?.photographer}
                 </span>
+                <Link
+                  size={18}
+                  className='transition-colors text-neutral-500 group-hover:text-neutral-700'
+                />
               </div>
             </a>
           </TooltipContent>

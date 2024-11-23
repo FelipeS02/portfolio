@@ -1,11 +1,7 @@
 'use client';
 
-import { useScheme } from '@/hooks/theme';
-import {
-  applyPaletteIntoCSS,
-  applyThemeImage,
-  initialPalette,
-} from '@/lib/theme';
+import { applyPaletteIntoCSS, applyThemeImage } from '@/lib/dom';
+import { getThemeImageByDevice, hexIsValid, initialPalette } from '@/lib/theme';
 import { ApiResponse } from '@/models/api';
 import { Photo } from '@/models/photos';
 import { Theme } from '@/models/theme';
@@ -15,11 +11,17 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
-interface ThemeState extends Theme {
+interface ThemeState extends Omit<Theme, 'photo'> {
+  loading: boolean;
   fullfiled: boolean;
+  photo: {
+    info: Photo;
+    resolvedSrc: string;
+  };
 }
 
 export const photoInitialState: Photo = {
@@ -48,79 +50,70 @@ export const photoInitialState: Photo = {
 export const themeInitialState: ThemeState = {
   hexCode: '',
   palette: initialPalette,
-  photo: photoInitialState,
+  photo: { resolvedSrc: '', info: photoInitialState },
   fullfiled: false,
+  loading: false,
 };
 
-export const RandomThemeContext = createContext<ThemeState>(themeInitialState);
-
-function userPrefersDarkMode(
-  userScheme: string | undefined
-): userScheme is 'dark' {
-  if (!userScheme) return false;
-
-  return userScheme === 'dark';
-}
+export const RandomThemeContext = createContext<
+  ThemeState & { getNewTheme?: () => Promise<void> }
+>(themeInitialState);
 
 const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { resolvedTheme: userScheme } = useScheme();
-
   const [mounted, setMounted] = useState(false);
 
   const [theme, setTheme] = useState<ThemeState>(themeInitialState);
 
-  const isDarkModeActive = userPrefersDarkMode(userScheme);
-
   //@region Random theme generation
-  const getNewTheme = useCallback(async () => {
+  const getNewTheme = useCallback(async (color: string = '') => {
     try {
+      console.log(color);
+      if (color && !hexIsValid(color)) throw Error('Hex color is invalid');
+
+      setTheme((prev) => ({ ...prev, loading: true }));
+
       // Get theme from API
-      const res = await fetch('api/theme');
+      const res = await fetch(`api/theme?color=${color.replace('#', '')}`);
+
       const { data }: ApiResponse<{ theme: Theme }> = await res.json();
 
-      if (!data?.theme) return;
+      if (!data?.theme) throw new Error('Failed to get theme');
 
       const newTheme = data.theme;
 
+      const resolvedSrc = getThemeImageByDevice(newTheme.photo);
+
       // Apply the theme into CSS variables
       applyPaletteIntoCSS(newTheme.palette);
-      applyThemeImage(newTheme.photo);
+      applyThemeImage(resolvedSrc);
 
-      setTheme(() => ({ ...newTheme, fullfiled: true }));
+      setTheme((prev) => ({
+        ...prev,
+        ...newTheme,
+        photo: { info: newTheme.photo, resolvedSrc },
+        fullfiled: true,
+      }));
     } catch (e) {
       console.log(e);
+    } finally {
+      setTheme((prev) => ({ ...prev, loading: false }));
     }
   }, []);
 
-  const loadInitialTheme = useCallback(async () => {
-    if (theme.fullfiled) return;
-
-    getNewTheme();
-  }, [theme, getNewTheme]);
-
+  // Initial theme loading
   useEffect(() => {
     if (!mounted) return setMounted(true);
 
-    loadInitialTheme();
-  }, [loadInitialTheme, mounted]);
-  //@endregion
+    getNewTheme();
+  }, [mounted, getNewTheme]);
 
-  //@region Handle user scheme change
-  // Change theme in dark - light mode change
-
-  // useEffect(() => {
-  //   if (!theme.fullfiled) return;
-
-  //   const paletteByScheme = isDarkModeActive
-  //     ? theme.darkPalette
-  //     : theme.lightPalette;
-
-  //   applyPaletteIntoCSS(paletteByScheme);
-  // }, [isDarkModeActive, theme]);
-  //@endregion
+  const memoizedValue = useMemo(
+    () => ({ ...theme, getNewTheme }),
+    [getNewTheme, theme]
+  );
 
   return (
-    <RandomThemeContext.Provider value={theme}>
+    <RandomThemeContext.Provider value={memoizedValue}>
       {children}
     </RandomThemeContext.Provider>
   );

@@ -22,6 +22,10 @@ export default {
         hero: '0 0px 1px hsl(var(--palette-300) / 100%)',
         current: '0 0px 4px currentColor',
       },
+      boxShadow: {
+        'loading-line':
+          '0 2px 3px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+      },
       fontFamily: {
         neue: ['var(--font-ppNeueMontreal)'],
       },
@@ -29,22 +33,22 @@ export default {
         theme: 'var(--theme-image)',
       },
       keyframes: {
-        'blink': {
-          "0%, 100%": {
-            opacity: "0",
+        blink: {
+          '0%, 100%': {
+            opacity: '0',
           },
-          "50%": {
-            opacity: "1",
+          '50%': {
+            opacity: '1',
           },
         },
       },
       animation: {
-        'blink': 'blink 1s ease infinite',
+        blink: 'blink 1s ease infinite',
       },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        "foreground-secondary": "hsl(var(--foreground) / 70%)",
+        'foreground-secondary': 'hsl(var(--foreground) / 70%)',
         palette: {
           '100': 'hsl(var(--palette-100))',
           '200': 'hsl(var(--palette-200))',

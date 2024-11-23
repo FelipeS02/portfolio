@@ -66,6 +66,22 @@
     --chart-5: 27 87% 67%;
 
     --radius: 0.5rem;
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-corner {
+      @apply bg-background;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      @apply bg-foreground/20;
+    }
   }
   .dark {
     --background: var(--palette-950);

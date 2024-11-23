@@ -3,6 +3,8 @@ import { getPhotosFromPexels } from './pexels';
 import { Photo } from '@/models/photos';
 import tinycolor from 'tinycolor2';
 
+const MOBILE_MQ = '(max-width: 768px)';
+
 export function hexIsValid(hexCode: string) {
   const regexHex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
   return regexHex.test(hexCode);
@@ -35,6 +37,18 @@ export const initialPalette: Palette = {
   '950': '',
 };
 
+export function getThemeImageByDevice(photo: Photo): string {
+  if (!photo?.src) throw new Error('Photo src set is not defined');
+
+  const isMobile = window.matchMedia(MOBILE_MQ).matches;
+
+  const { large2x, medium } = photo.src;
+
+  const srcByDevice = isMobile ? medium : large2x;
+
+  return srcByDevice;
+}
+
 // Helper function to convert HEX to HSL (using the `tinycolor2` library or equivalent)
 function hexToHsl(hex: string): [number, number, number] {
   // Convert HEX to HSL using your preferred method or library
@@ -42,7 +56,6 @@ function hexToHsl(hex: string): [number, number, number] {
   const { h, s, l } = color.toHsl();
   return [h, s * 100, l * 100]; // HSL values as percentages
 }
-
 
 function generatePalette(hexColor: string): Palette {
   // Get base HSL values
@@ -135,31 +148,4 @@ export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
   };
 }
 
-//@region DOM Mutation
-const MOBILE_MQ = '(max-width: 768px)';
 
-export function applyPaletteIntoCSS(palette: Palette): void {
-  if (!palette) return;
-
-  const root = document.documentElement;
-
-  if (!root) return;
-
-  Object.entries(palette).forEach(([shade, color]) => {
-    root.style.setProperty(`--palette-${shade}`, color);
-  });
-}
-
-export function applyThemeImage(photo: Photo): void {
-  if (!photo) return;
-  const { large, medium } = photo.src;
-
-  const root = document.documentElement;
-
-  if (!root) return;
-
-  const isMobile = window.matchMedia(MOBILE_MQ).matches;
-
-  root.style.setProperty('--theme-image', `url(${isMobile ? medium : large})`);
-}
-//@endregion
