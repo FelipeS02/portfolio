@@ -1,5 +1,6 @@
 import About from '@/components/sections/About/About';
 import Home from '@/components/sections/Home/Home';
+import Objective from '@/components/sections/Objective/Objective';
 
 export default function Page() {
   return (
@@ -8,6 +9,7 @@ export default function Page() {
         <About />
       </Home>
       <About mobile />
+      <Objective />
     </main>
   );
 }

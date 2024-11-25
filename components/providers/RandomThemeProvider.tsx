@@ -67,7 +67,6 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   //@region Random theme generation
   const getNewTheme = useCallback(async (color: string = '') => {
     try {
-      console.log(color);
       if (color && !hexIsValid(color)) throw Error('Hex color is invalid');
 
       setTheme((prev) => ({ ...prev, loading: true }));
