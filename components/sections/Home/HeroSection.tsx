@@ -2,6 +2,7 @@ import { SplittedWord } from '@/components/ui/SplittedText';
 import BackgroundClippedText from '@/components/ui/BackgroundClippedText';
 import HeroPhotoCredits from './HeroPhotoCredits';
 import { memo } from 'react';
+import HeroTitle from './HeroTitle';
 
 const HeroSection = memo(function HeroSection() {
   return (

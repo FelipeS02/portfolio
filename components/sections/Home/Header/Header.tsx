@@ -20,7 +20,7 @@ const HeaderText = ({
 const Header = () => {
   return (
     <header className='w-full flex justify-between lg:grid grid-cols-3'>
-      <div className='flex flex-col lg:contents gap-4'>
+      <div className='flex flex-col lg:contents gap-6'>
         <HeaderText
           title={
             <div className='flex'>
@@ -33,8 +33,8 @@ const Header = () => {
           title='34º 45’ 43.20” S 58º 12’ 40.63” W'
           subtitle='BUENOS AIRES'
         />
-      </div>
       <HeaderShortcuts />
+      </div>
     </header>
   );
 };

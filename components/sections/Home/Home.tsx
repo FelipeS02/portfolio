@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 import Header from './Header/Header';
-import HeroSection from './Header/HeroSection';
+import HeroSection from './HeroSection';
 
 const Home: FC<{ children: ReactNode }> = memo(function Home({
   children: aboutSection,

@@ -2,18 +2,29 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
 
 export default function useHandleLoadingAnimations() {
-  const { contextSafe } = useGSAP(() => {
-    const el = document.querySelector('[letter-slide-up]');
-    if (el) {
-      gsap.set(el.getElementsByClassName('char'), {
-        yPercent: 100,
-        opacity: 0,
-        willChange: 'transform',
-      });
-    }
-  }, {});
+  // Disable hero animation on chrome due to malfunction
+  const disableAnimation =
+    navigator?.userAgent?.toLowerCase()?.includes('chrome');
+
+  const { contextSafe } = useGSAP(
+    () => {
+      if (disableAnimation) return;
+      const el = document.querySelector('[letter-slide-up]');
+      if (el) {
+        gsap.set(el.getElementsByClassName('char'), {
+          yPercent: 100,
+          opacity: 0,
+          willChange: 'transform',
+          position: 'static',
+        });
+      }
+    },
+    { dependencies: [disableAnimation] }
+  );
 
   const onPageLoading = contextSafe(() => {
+    if (disableAnimation) return;
+
     const el = document.querySelector('[letter-slide-up]');
 
     if (el) {

@@ -130,7 +130,7 @@ export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
   const photos = await getPhotosFromPexels({
     orientation: 'landscape',
     color: hexCode,
-    per_page: '10',
+    per_page: '40',
     query: randomKeyword,
   });
 

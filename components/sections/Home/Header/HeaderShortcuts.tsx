@@ -34,7 +34,9 @@ export const ThemePicker = () => {
 
   if (!fullfiled || !getNewTheme) return null;
 
-  return <ColorPicker value={hexCode} onSubmit={getNewTheme} className='size-7'/>;
+  return (
+    <ColorPicker value={hexCode} onSubmit={getNewTheme} className='size-7' />
+  );
 };
 
 const ShortcutSeparator = () => (
@@ -46,7 +48,7 @@ const ShortcutSeparator = () => (
 
 export default function HeaderShortcuts() {
   return (
-    <div className='col-span-1 flex justify-end gap-3 h-fit items-center'>
+    <div className='col-span-1 w-fit flex md:w-full justify-end gap-3 items-center'>
       <CurriculumShortcut />
       <ShortcutSeparator />
       <ThemeSwitch />
