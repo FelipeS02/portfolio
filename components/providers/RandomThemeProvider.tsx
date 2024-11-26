@@ -72,7 +72,9 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setTheme((prev) => ({ ...prev, loading: true }));
 
       // Get theme from API
-      const res = await fetch(`api/theme?color=${color.replace('#', '')}`);
+      const res = await fetch(
+        `api/theme${color ? `?color=${color.replace('#', '')}` : ''}`
+      );
 
       const { data }: ApiResponse<{ theme: Theme }> = await res.json();
 
@@ -95,7 +97,7 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
     } catch (e) {
       console.log(e);
     } finally {
-      setTheme((prev) => ({ ...prev, loading: false }));
+      setTheme((prev) => ({ ...prev, loading: false, fullfiled: true }));
     }
   }, []);
 

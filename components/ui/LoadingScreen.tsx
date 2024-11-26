@@ -4,6 +4,7 @@ import useHandleLoadingAnimations from '@/hooks/useHandleLoadingAnimations';
 import { useTheme } from '@/hooks/theme';
 import { cn } from '@/lib/utils';
 import { TransitionEvent, useEffect, useState } from 'react';
+import { useImageLoading } from '@/hooks/useImageLoading';
 
 const BASE_STYLES =
   'col-span-1 transition-loading h-screen min-w-full group-data-[loading=false]/container:h-0 ease-in-out duration-350 will-change-auto';
@@ -14,12 +15,16 @@ const LoadingScreen = () => {
   const {
     fullfiled: isThemeFullfiled,
     loading: isThemeLoading,
-    photo: { resolvedSrc },
+    photo: { resolvedSrc: themeImage },
   } = useTheme();
 
   const [isLoaded, setIsLoaded] = useState({
     themeImage: false,
   });
+
+  useImageLoading(themeImage, (res) =>
+    setIsLoaded((prev) => ({ ...prev, themeImage: res }))
+  );
 
   const [isTransitionEnded, setIsTransitionEnded] = useState(false);
 
@@ -27,27 +32,6 @@ const LoadingScreen = () => {
     if (e.propertyName === 'background-color')
       setIsTransitionEnded((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (!resolvedSrc) return;
-
-    // Verify theme image loading state
-    const img = new Image();
-    img.src = resolvedSrc;
-
-    img.onload = () => {
-      setIsLoaded((prev) => ({ ...prev, themeImage: true }));
-    };
-
-    img.onerror = () => {
-      setIsLoaded((prev) => ({ ...prev, themeImage: false }));
-    };
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [resolvedSrc]);
 
   const isThemeReloading = isThemeFullfiled && isThemeLoading;
 
@@ -65,7 +49,7 @@ const LoadingScreen = () => {
 
   return (
     <div
-      className='fixed w-full h-fit grid grid-cols-9 inset-0 z-50 group/container'
+      className='fixed w-full z-50 group/container grid grid-cols-9 inset-0 h-fit'
       data-loading={isPageLoading}
     >
       <div className={cn(BASE_STYLES, 'bg-palette-100 delay-100')} />
@@ -80,6 +64,9 @@ const LoadingScreen = () => {
         className={cn(BASE_STYLES, 'bg-palette-900 delay-500')}
         onTransitionEnd={handleBackgroundTransition}
       />
+      <h3 className='fixed place-self-center text-neutral-800 text-[4rem] md:text-[6rem] font-bold group-data-[loading=false]/container:opacity-0 mix-blend-luminosity duration-500'>
+        FSARACHO
+      </h3>
     </div>
   );
 };
