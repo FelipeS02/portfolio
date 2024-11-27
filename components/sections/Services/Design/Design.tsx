@@ -10,7 +10,10 @@ const verticalLines =
 
 const LineDot = ({ className = '' }: { className?: string }) => (
   <div
-    className={cn('size-[13px] rounded-full bg-foreground absolute z-20', className)}
+    className={cn(
+      'size-[13px] rounded-full bg-foreground absolute z-20',
+      className
+    )}
   />
 );
 
@@ -21,7 +24,15 @@ const TextSquare = ({ className = '' }: { className?: string }) => (
 );
 
 const SectionText = () => (
-  <div className='max-md:items-center flex flex-col gap-2 p-6 absolute z-20'>
+  <div className='max-md:items-center flex flex-col gap-2 p-6 absolute z-20 '>
+    <div
+      className='size-[120%] place-self-center absolute backdrop-blur-sm -z-[1] rounded-full -translate-y-1/4'
+      style={{
+        maskImage:
+          'radial-gradient(circle, rgba(0, 0, 0, 0.9) 60%, rgba(0, 0, 0, 0) 80%)',
+        maskSize: 'contain',
+      }}
+    />
     <div className='max-md:w-full relative px-1 border-2 border-[#0C8CE9] w-fit'>
       <TextSquare className='-top-2 -left-2' />
       <TextSquare className='-top-2 -right-2' />
@@ -29,7 +40,7 @@ const SectionText = () => (
       <TextSquare className='-bottom-2 -right-2' />
       <h4 className='text-5xl md:text-8xl font-semibold'>Diseño web</h4>
     </div>
-    <p className='text-xl tracking-wider md:max-w-[480px] font-medium text-foreground-secondary'>
+    <p className='text-xl tracking-wider md:max-w-[480px] font-medium text-foreground'>
       Creación de diseños visualmente impresionantes y centrados en el usuario
       que capturan la identidad y los valores de la marca.
     </p>
