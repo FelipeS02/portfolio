@@ -7,11 +7,11 @@ import ServicesTransition from '@/components/sections/Services/Transition';
 export default function Page() {
   return (
     <main className='size-full block' id='#main'>
-      {/* <Home>
+      <Home>
         <About />
       </Home>
       <About mobile />
-      <Objective /> */}
+      <Objective />
 
       <Design />
     </main>
