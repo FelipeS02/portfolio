@@ -17,10 +17,6 @@ const ABOUT_PARSED_IDS = {
   TEXT: `#${ABOUT_ELEMENTS_IDS.TEXT}`,
 };
 
-const SERVICES_TRANS_PARSED_IDS = {
-  TEXT: `#${SERVICES_TRANSITION_IDS.TEXT}`,
-};
-
 const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
 
