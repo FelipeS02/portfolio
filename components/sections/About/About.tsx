@@ -25,7 +25,7 @@ const About: FC<{ mobile?: boolean }> = ({ mobile = false }) => {
           <h1 className='text-[5rem] font-bold leading-[0.9]'>
             SOBRE <br /> MI.
           </h1>
-          <p className='text-xl tracking-wider'>
+          <p className='text-xl tracking-wider font-medium'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
             <span className='font-semibold'>
@@ -68,10 +68,10 @@ const About: FC<{ mobile?: boolean }> = ({ mobile = false }) => {
               <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] static'>
                 SOBRE MI.
               </h1>
-              <p className='min-w-[250px] text-xl tracking-wider'>
+              <p className='min-w-[250px] text-xl font-medium tracking-wider text-foreground-secondary'>
                 Soy Felipe, desarrollador Full-Stack especializado en Front-end
                 actualmente viviendo en{' '}
-                <span className='font-semibold'>
+                <span className='font-semibold text-foreground'>
                   Buenos Aires, <span className='text-[#75AADB]'>Arg</span>
                   <span className='text-[#FCBF49]'>en</span>
                   <span className='text-[#75AADB]'>tina</span>

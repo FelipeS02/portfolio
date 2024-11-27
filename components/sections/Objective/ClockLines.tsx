@@ -100,7 +100,7 @@ const ClockLines: FC<{ side?: 'top' | 'bottom'; id?: string }> = ({
   return (
     <Marquee
       autoFill
-      className='w-full'
+      className='w-full z-0'
       direction={side === 'bottom' ? 'right' : 'left'}
       speed={20}
       gradient

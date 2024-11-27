@@ -25,6 +25,10 @@ export default {
       boxShadow: {
         'loading-line':
           '0 2px 3px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+        'figma-toolbar':
+          '0px 3px 8px rgba(0, 0, 0, .35), 0px 1px 3px rgba(0, 0, 0, .5), inset 0px 1px 0px rgba(255, 255, 255, .08), inset 0px 0px 1px rgba(255, 255, 255, .3)',
+        'dev-mode-icon':
+          '0px 0px .5px rgba(0, 0, 0, .5), 0px 1px 3px rgba(0, 0, 0, .4), inset 0px 1px 0px rgba(255, 255, 255, .1), inset 0px 0px 1px rgba(255, 255, 255, .3)',
       },
       fontFamily: {
         neue: ['var(--font-ppNeueMontreal)'],
