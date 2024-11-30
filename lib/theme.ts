@@ -139,7 +139,7 @@ export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
 
   const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
 
-  const palette = generatePalette(randomPhoto.avg_color);
+  const palette = generatePalette(hexCode);
 
   return {
     palette,

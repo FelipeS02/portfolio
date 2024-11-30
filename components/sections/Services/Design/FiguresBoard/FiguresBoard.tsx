@@ -3,14 +3,9 @@
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
 import { MutableRefObject, useCallback, useEffect, useRef } from 'react';
-
 import Figures from './Figures';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import {
-  backupStyles,
-  desktopPositions,
-  mobilePositions,
-} from '@/lib/figuresPositions';
+import figurePositions, { backupStyles } from '@/lib/figuresPositions';
+import { timeout } from '@/lib/utils';
 
 gsap.registerPlugin(Draggable);
 
@@ -18,11 +13,13 @@ const FiguresBoard = () => {
   const boardRef: MutableRefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement | null>(null);
 
-  const figureElementsList: MutableRefObject<Element[] | null> = useRef<
-    Element[] | null
+  const figureElementsList: MutableRefObject<HTMLElement[] | null> = useRef<
+    HTMLElement[] | null
   >(null);
 
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const tl: MutableRefObject<GSAPTimeline | null> = useRef<GSAPTimeline | null>(
+    null
+  );
 
   const loadFiguresRef = useCallback((node: HTMLDivElement) => {
     if (!node) return;
@@ -31,65 +28,120 @@ const FiguresBoard = () => {
 
     if (!figures) return;
 
-    figureElementsList.current = Array.from(figures);
+    figureElementsList.current = Array.from(figures) as HTMLElement[];
   }, []);
 
-  const { contextSafe } = useGSAP(undefined, {
-    scope: boardRef,
-    dependencies: [isMobile],
-  });
+  const { contextSafe } = useGSAP(
+    () => {
+      if (!figureElementsList.current || !boardRef.current) return;
+      figureElementsList.current.forEach((element) => {
+        Draggable.create(element, {
+          bounds: boardRef.current,
+        });
+      });
+    },
+    {
+      scope: boardRef,
+    }
+  );
 
-  const setElementsRandomPosition = contextSafe(() => {
+  const setElementsRandomPosition = contextSafe(async () => {
     if (!figureElementsList.current || !boardRef.current) return;
 
-    const allPositionsByDevice = isMobile ? mobilePositions : desktopPositions;
-
     const randomPositions =
-      allPositionsByDevice[
-        Math.floor(Math.random() * allPositionsByDevice.length)
-      ];
+      figurePositions[Math.floor(Math.random() * figurePositions.length)];
 
     if (!randomPositions) return;
 
-    figureElementsList.current.forEach((figureContainer, index) => {
-      const figureElement = figureContainer.getElementsByClassName('figure')[0];
-
-      if (!figureElement) throw Error("Figure element doesn't exists");
-
-      const styles = randomPositions[index];
-
-      gsap.set(figureContainer, { clearProps: 'all' });
-      gsap.set(figureElement, { clearProps: 'all' });
-
-      gsap.to(figureContainer, {
-        ease: 'circ.inOut',
-        ...styles?.container,
+    // If elements was animated previously, reverse animation to restore original styles and kill timeline
+    if (tl.current) {
+      await new Promise((resolve) => {
+        gsap.to(figureElementsList.current, {
+          x: 0,
+          y: 0,
+          onComplete: resolve,
+        });
       });
-      gsap.to(figureElement, {
-        ease: 'circ.inOut',
-        ...(styles?.figure ?? backupStyles),
+
+      tl.current.reverse();
+
+      await timeout(tl.current.duration() * 2000);
+
+      tl.current.kill();
+    }
+
+    // Using promise to finish function execution when animation is over
+    await new Promise((resolve) => {
+      if (!figureElementsList.current) return;
+
+      const timeline = gsap.timeline({ onComplete: resolve });
+
+      timeline.pause();
+
+      figureElementsList.current.forEach((figureContainer, index) => {
+        const figureElement =
+          figureContainer.getElementsByClassName('figure')[0];
+
+        if (!figureElement) throw Error("Figure element doesn't exists");
+
+        const styles = randomPositions[index];
+
+        // Clear residual styles props
+        gsap.set(figureContainer, { clearProps: 'all' });
+        gsap.set(figureElement, { clearProps: 'all' });
+
+        timeline
+          .to(
+            figureContainer,
+            {
+              ...styles?.container,
+            },
+            '<'
+          )
+          .to(
+            figureElement,
+
+            {
+              ...(styles?.figure ?? backupStyles),
+            },
+            '<'
+          );
       });
+
+      tl.current = timeline;
+
+      timeline.play();
     });
   });
 
   useEffect(() => {
-    const switchPositionsInterval = setInterval(
-      setElementsRandomPosition,
-      3000
-    );
+    let isCancelled = false;
+
+    const executeWithDelay = async () => {
+      if (isCancelled) return;
+
+      await setElementsRandomPosition(); // Espera a que la función termine
+      if (isCancelled) return;
+
+      setTimeout(executeWithDelay, 10000); // Programa la siguiente ejecución
+    };
+
+    executeWithDelay(); // Inicia el proceso
 
     return () => {
-      clearInterval(switchPositionsInterval)
-    }
-
+      isCancelled = true; // Cancela la ejecución si el componente se desmonta
+    };
   }, [setElementsRandomPosition]);
+
+  // useEffect(() => {
+  //   setElementsRandomPosition();
+  // }, [setElementsRandomPosition]);
 
   return (
     <div
-      className='flex flex-col absolute items-center justify-center size-full inset-0 z-10 p-4'
+      className='flex flex-col absolute items-center justify-center size-full inset-0 p-4 z-10'
       ref={boardRef}
     >
-      {/* <BoardAreas breakpoint={currentBreakpoint} /> */}
       <Figures ref={loadFiguresRef} />
     </div>
   );

@@ -13,7 +13,7 @@ export const backupStyles = {
   opacity: 0,
 };
 
-export const desktopPositions: FigurePositions[][] = [
+const figurePositions: FigurePositions[][] = [
   [
     {
       container: {
@@ -326,34 +326,89 @@ export const desktopPositions: FigurePositions[][] = [
   [
     {
       container: {
-        height: '80%',
-        width: '30%',
-        padding: '0.5rem',
-        left: 0,
-        background: getPaletteVar(400),
-        boxShadow:
-          '0 0 5px 0 rgba(0,0,0,.25) inset, 0 5px 10px 5px rgba(0,0,0,.25)',
+        right: 0,
+        top: 0,
+        width: '12.5%',
       },
       figure: {
-        backgroundImage:
-          'url("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/The_Inspiration_of_Saint_Matthew_by_Caravaggio.jpg/640px-The_Inspiration_of_Saint_Matthew_by_Caravaggio.jpg")',
-        backgroundSize: 'cover',
+        background: getPaletteVar(100),
       },
     },
     {
       container: {
-        height: '80%',
-        width: '30%',
-        padding: '0.5rem',
         right: 0,
-        background: getPaletteVar(400),
-        boxShadow:
-          '0 0 5px 0 rgba(0,0,0,.25) inset, 0 5px 10px 5px rgba(0,0,0,.25)',
+        top: 0,
+        xPercent: -100,
+        width: '12.5%',
       },
       figure: {
-        backgroundImage:
-          'url("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Madonna_of_the_Rosary-Caravaggio_(1607).jpg/406px-Madonna_of_the_Rosary-Caravaggio_(1607).jpg")',
-        backgroundSize: 'cover',
+        background: getPaletteVar(200),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -200,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(300),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -300,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(400),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -400,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(500),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -500,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(600),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -600,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(700),
+      },
+    },
+    {
+      container: {
+        right: 0,
+        top: 0,
+        xPercent: -700,
+        width: '12.5%',
+      },
+      figure: {
+        background: getPaletteVar(800),
       },
     },
   ],
@@ -446,6 +501,141 @@ export const desktopPositions: FigurePositions[][] = [
       },
     },
   ],
+  [
+    {
+      container: {
+        width: '25rem',
+        height: '28rem',
+        border: `6px solid ${getPaletteVar(900)}`,
+      },
+      figure: {
+        background: getPaletteVar(100),
+      },
+    },
+    {
+      container: {
+        xPercent: -25,
+        yPercent: -32,
+        height: '15rem',
+        width: '15rem',
+        borderWidth: '6px 3px 3px 6px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(500),
+      },
+    },
+    {
+      container: {
+        xPercent: 100,
+        yPercent: -114,
+        height: '7.5rem',
+        width: '7.5rem',
+        borderWidth: '6px 6px 3px 3px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(300),
+      },
+    },
+    {
+      container: {
+        xPercent: 100,
+        yPercent: -15,
+        height: '7.5rem',
+        width: '7.5rem',
+        borderWidth: '6px 6px 3px 3px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(100),
+        boxShadow: `inset 0 3.50rem 0 0 ${getPaletteVar(
+          100
+        )}, inset 0 3.75rem 0 0 ${getPaletteVar(900)}`,
+      },
+    },
+    {
+      container: {
+        xPercent: -100,
+        yPercent: 85,
+        height: '7.5rem',
+        width: '7.5rem',
+        borderWidth: '3px 3px 3px 6px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(800),
+      },
+    },
+    {
+      container: {
+        xPercent: 0,
+        yPercent: 85,
+        height: '7.5rem',
+        width: '7.5rem',
+        border: `3px solid ${getPaletteVar(900)}`,
+      },
+      figure: {
+        background: getPaletteVar(100),
+        boxShadow: `inset 0 3.50rem 0 0 ${getPaletteVar(
+          100
+        )}, inset 0 3.75rem 0 0 ${getPaletteVar(900)}`,
+      },
+    },
+    {
+      container: {
+        xPercent: 100,
+        yPercent: 85,
+        height: '7.5rem',
+        width: '7.5rem',
+        borderWidth: '3px 6px 3px 3px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(100),
+      },
+    },
+    {
+      container: {
+        xPercent: 90.7,
+        yPercent: -783,
+        height: '1.66rem',
+        width: '8.75rem',
+        borderWidth: '6px 3px 0px 6px',
+
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(600),
+      },
+    },
+    {
+      container: {
+        xPercent: -100,
+        yPercent: 300,
+        height: '4rem',
+        width: '7.5rem',
+        borderWidth: '3px 0px 6px 6px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(300),
+      },
+    },
+    {
+      container: {
+        xPercent: 24.2,
+        yPercent: 450,
+        height: '2.5rem',
+        width: '15.2rem',
+        borderWidth: '3px 6px 6px 6px',
+        borderColor: getPaletteVar(900),
+      },
+      figure: {
+        background: getPaletteVar(300),
+      },
+    },
+  ],
 ];
 
-export const mobilePositions: FigurePositions[][] = [];
+export default figurePositions;

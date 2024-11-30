@@ -3,10 +3,10 @@ import FigmaToolbar from './FigmaToolbar/FigmaToolbar';
 import FiguresBoard from './FiguresBoard/FiguresBoard';
 
 const horizontalLines =
-  'max-md:after:-left-6 after:min-h-full after:w-screen after:border-foreground-secondary after:border-y after:absolute after:-left-20';
+  'max-md:after:-left-6 after:min-h-full after:w-screen after:outline-foreground-secondary after:outline after:outline-1 after:absolute after:-left-20 ';
 
 const verticalLines =
-  'before:min-w-full before:h-screen before:border-foreground-secondary before:border-x before:absolute ';
+  'before:min-w-full before:h-screen before:outline-foreground-secondary before:outline-1 before:outline before:absolute';
 
 const LineDot = ({ className = '' }: { className?: string }) => (
   <div
@@ -17,22 +17,31 @@ const LineDot = ({ className = '' }: { className?: string }) => (
   />
 );
 
-const TextSquare = ({ className = '' }: { className?: string }) => (
+export const SelectZoneSquare = ({
+  className = '',
+}: {
+  className?: string;
+}) => (
   <div
-    className={cn('absolute size-3 bg-white border border-inherit', className)}
+    className={cn(
+      'absolute size-3 bg-white border border-inherit group-data-[clicked=false]/design-text:opacity-0',
+      className
+    )}
   />
 );
 
 const SectionText = () => (
-  <div className='max-md:items-center flex flex-col gap-2 p-6 absolute z-20'>
-    
-    <div className='max-md:w-full relative px-1 border-2 border-[#0C8CE9] w-fit'>
-      <TextSquare className='-top-2 -left-2' />
-      <TextSquare className='-top-2 -right-2' />
-      <TextSquare className='-bottom-2 -left-2' />
-      <TextSquare className='-bottom-2 -right-2' />
-      <h4 className='text-5xl md:text-8xl font-semibold'>Diseño web</h4>
-    </div>
+  <div
+    className='max-md:items-center flex flex-col relative gap-2 p-4 z-20 group/design-text data-[clicked=true]:border-2 border-[#0C8CE9]'
+    id='design-section-draggable'
+    data-clicked={false}
+  >
+    <SelectZoneSquare className='-top-2 -left-2' />
+    <SelectZoneSquare className='-top-2 -right-2' />
+    <SelectZoneSquare className='-bottom-2 -left-2' />
+    <SelectZoneSquare className='-bottom-2 -right-2' />
+
+    <h4 className='text-5xl md:text-8xl font-semibold'>Diseño web</h4>
     <p className='text-xl tracking-wider md:max-w-[480px] font-medium text-foreground'>
       Creación de diseños visualmente impresionantes y centrados en el usuario
       que capturan la identidad y los valores de la marca.
@@ -52,12 +61,13 @@ const Design = () => {
           horizontalLines,
           verticalLines
         )}
+        id='design-section-board'
       >
-        <LineDot className='-left-1.5 -top-1.5' />
-        <LineDot className='-right-1.5 -top-1.5' />
-        <LineDot className='-left-1.5 -bottom-1.5' />
-        <LineDot className='-right-1.5 -bottom-1.5' />
-        {/* <SectionText /> */}
+        <LineDot className='-left-[0.450rem] -top-[0.450rem]' />
+        <LineDot className='-right-[0.450rem] -top-[0.450rem]' />
+        <LineDot className='-left-[0.450rem] -bottom-[0.450rem]' />
+        <LineDot className='-right-[0.450rem] -bottom-[0.450rem]' />
+        <SectionText />
         <FiguresBoard />
       </div>
       <div className='max-md:-ml-6 absolute w-full -ml-20 flex items-center justify-center bottom-4'>

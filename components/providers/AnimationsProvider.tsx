@@ -2,14 +2,14 @@
 
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/all';
+import { ScrollTrigger, Draggable } from 'gsap/all';
 import { memo } from 'react';
 import { ABOUT_ELEMENTS_IDS } from '../sections/About/About';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/Objective/Objective';
 import { useScheme } from '@/hooks/theme';
-import { SERVICES_TRANSITION_IDS } from '../sections/Services/Transition';
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
 
 const ABOUT_PARSED_IDS = {
   OVERLAY: `#${ABOUT_ELEMENTS_IDS.OVERLAY}`,
@@ -149,66 +149,25 @@ const AnimationsProvider = memo(function AnimationProvider() {
               ? 'hsl(var(--palette-800))'
               : 'hsl(var(--palette-200))',
         });
-
-      const servicesWrapper = document.getElementById(
-        SERVICES_TRANSITION_IDS.WRAPPER
-      );
-      const servicesText = document.getElementById(
-        SERVICES_TRANSITION_IDS.TEXT
-      );
-
-      if (servicesWrapper && servicesText) {
-        gsap.set(servicesText, { willChange: 'transform, opacity' });
-
-        // const servicesAnimationTl = gsap.timeline({
-        //   scrollTrigger: {
-        //     trigger: objectiveSection,
-        //     start: () => `bottom+=${objectiveSection.clientHeight / 3} bottom`,
-        //     end: () => `+=${servicesWrapper.offsetHeight}`,
-        //     scrub: true,
-        //     markers: true,
-        //   },
-        // });
-
-        // // Primera mitad: servicesWrapper a opacity 1
-        // servicesAnimationTl
-        //   .fromTo(
-        //     servicesWrapper,
-        //     {  opacity: 0, willChange: 'opacity' },
-        //     {
-        //       opacity: 1,
-        //       duration: 0.2, // Mitad de la duración total
-        //     }
-        //   )
-        //   .to(servicesText, {
-        //     scale: 2,
-        //     opacity: 0,
-        //     duration: 0.8, // Mitad de la duración total
-        //   })
-        //   .to(
-        //     servicesWrapper,
-        //     {
-        //       opacity: 0,
-        //       duration: 0.8, // Mitad de la duración total
-        //     },
-        //     '>' // Sincroniza con el segundo paso
-        //   );
-
-        gsap.to(servicesText, {
-          opacity: 0,
-          scale: 2,
-          scrollTrigger: {
-            trigger: servicesWrapper,
-            start: 'bottom bottom',
-            end: () => `+=${servicesWrapper.offsetHeight}`,
-            markers: true,
-            scrub: true,
-            pin: true,
-          },
-        });
-      }
     }
   }, [resolvedTheme]);
+
+  useGSAP(() => {
+    const designDraggableText = document.getElementById(
+      'design-section-draggable'
+    );
+
+    const designSectionBoard = document.getElementById('design-section-board');
+
+    if (!designSectionBoard || !designDraggableText) return;
+
+    Draggable.create(designDraggableText, {
+      bounds: designSectionBoard,
+      onDragStart: () => {
+        designDraggableText.setAttribute('data-clicked', 'true');
+      },
+    });
+  });
 
   return null;
 });
