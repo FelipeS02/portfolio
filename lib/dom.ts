@@ -1,4 +1,4 @@
-import { Palette } from "@/models/theme";
+import { Palette } from '@/models/theme';
 
 export function getRootElement(): HTMLElement {
   const root = document.documentElement;
@@ -24,4 +24,21 @@ export function applyThemeImage(imageSrc: string): void {
   const root = getRootElement();
 
   root.style.setProperty('--theme-image', `url(${imageSrc})`);
+}
+
+export function getRelativeXY(container: HTMLElement, target: HTMLElement) {
+  if (!container || !target) throw Error("Container or Target doesn't exists");
+
+  // Get viewport coords
+  const { left: containerLeft, top: containerTop } =
+    container.getBoundingClientRect();
+
+  const targetRect = target.getBoundingClientRect();
+  const { left: targetLeft, top: targetTop } = targetRect;
+
+  // Calc coords relative to container element
+  const x = targetLeft - containerLeft;
+  const y = targetTop - containerTop;
+
+  return { x, y, targetRect };
 }

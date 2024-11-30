@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils';
 import FigmaToolbar from './FigmaToolbar/FigmaToolbar';
-import FiguresBoard from './FiguresBoard';
+import FiguresBoard from './FiguresBoard/FiguresBoard';
 
 const horizontalLines =
   'max-md:after:-left-6 after:min-h-full after:w-screen after:border-foreground-secondary after:border-y after:absolute after:-left-20';
 
 const verticalLines =
-  'before:min-w-full before:h-screen before:border-foreground-secondary before:border-x before:absolute before:-top-20';
+  'before:min-w-full before:h-screen before:border-foreground-secondary before:border-x before:absolute ';
 
 const LineDot = ({ className = '' }: { className?: string }) => (
   <div
@@ -24,15 +24,8 @@ const TextSquare = ({ className = '' }: { className?: string }) => (
 );
 
 const SectionText = () => (
-  <div className='max-md:items-center flex flex-col gap-2 p-6 absolute z-20 '>
-    <div
-      className='size-[120%] place-self-center absolute backdrop-blur-sm -z-[1] rounded-full -translate-y-1/4'
-      style={{
-        maskImage:
-          'radial-gradient(circle, rgba(0, 0, 0, 0.9) 60%, rgba(0, 0, 0, 0) 80%)',
-        maskSize: 'contain',
-      }}
-    />
+  <div className='max-md:items-center flex flex-col gap-2 p-6 absolute z-20'>
+    
     <div className='max-md:w-full relative px-1 border-2 border-[#0C8CE9] w-fit'>
       <TextSquare className='-top-2 -left-2' />
       <TextSquare className='-top-2 -right-2' />
@@ -51,7 +44,7 @@ const Design = () => {
   return (
     <section
       id='design'
-      className='max-md:px-6 max-w-full overflow-hidden h-screen p-20 flex relative'
+      className='max-md:p-6 max-w-full overflow-hidden h-screen p-20 flex relative'
     >
       <div
         className={cn(
@@ -64,7 +57,7 @@ const Design = () => {
         <LineDot className='-right-1.5 -top-1.5' />
         <LineDot className='-left-1.5 -bottom-1.5' />
         <LineDot className='-right-1.5 -bottom-1.5' />
-        <SectionText />
+        {/* <SectionText /> */}
         <FiguresBoard />
       </div>
       <div className='max-md:-ml-6 absolute w-full -ml-20 flex items-center justify-center bottom-4'>
