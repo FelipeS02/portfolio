@@ -133,10 +133,6 @@ const FiguresBoard = () => {
     };
   }, [setElementsRandomPosition]);
 
-  // useEffect(() => {
-  //   setElementsRandomPosition();
-  // }, [setElementsRandomPosition]);
-
   return (
     <div
       className='flex flex-col absolute items-center justify-center size-full inset-0 p-4 z-10'
