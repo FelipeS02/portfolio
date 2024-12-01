@@ -1,4 +1,3 @@
-
 import { FiguresPatterns } from '@/models/figuresPatterns';
 import { PaletteShade } from '@/models/theme';
 
@@ -120,6 +119,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         left: 0,
         yPercent: 200,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '400',
@@ -131,6 +131,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         left: 0,
         yPercent: 100,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '600',
@@ -151,6 +152,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         left: 0,
         yPercent: -100,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '600',
@@ -162,6 +164,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         left: 0,
         yPercent: -200,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '400',
@@ -173,6 +176,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         right: 0,
         yPercent: 200,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '400',
@@ -184,6 +188,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       container: {
         right: 0,
         yPercent: 100,
+        overflow: 'hidden',
       },
       figure: {
         paletteBackground: '600',
@@ -203,6 +208,7 @@ const figuresPatterns: FiguresPatterns[][] = [
     {
       container: {
         right: 0,
+        overflow: 'hidden',
         yPercent: -100,
       },
       figure: {
@@ -214,6 +220,7 @@ const figuresPatterns: FiguresPatterns[][] = [
     {
       container: {
         right: 0,
+        overflow: 'hidden',
         yPercent: -200,
       },
       figure: {

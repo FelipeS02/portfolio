@@ -152,23 +152,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
     }
   }, [resolvedTheme]);
 
-  useGSAP(() => {
-    const designDraggableText = document.getElementById(
-      'design-section-draggable'
-    );
-
-    const designSectionBoard = document.getElementById('design-section-board');
-
-    if (!designSectionBoard || !designDraggableText) return;
-
-    Draggable.create(designDraggableText, {
-      bounds: designSectionBoard,
-      onDragStart: () => {
-        designDraggableText.setAttribute('data-clicked', 'true');
-      },
-    });
-  });
-
   return null;
 });
 
