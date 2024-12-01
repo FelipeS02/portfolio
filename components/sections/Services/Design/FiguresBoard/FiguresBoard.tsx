@@ -2,13 +2,7 @@
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
-import {
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Figures from './Figures';
 import figuresPatterns, { backupStyles } from '@/lib/figuresPatterns';
 import { removeByIndex, timeout } from '@/lib/utils';
@@ -39,12 +33,18 @@ const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
 
 // Utility function to get a palette value based on a shade
 const getPaletteValue = (palette: Palette['hex'], value?: PaletteShade) => {
-  if (!value) return 'initial'; // Return a default value if no shade is provided
+  if (!value) return 'transparent'; // Return a default value if no shade is provided
   return palette[value]; // Return the corresponding palette value
 };
 
 // Utility function to apply styles with a resolved palette background color
-const applyStyles = (styles: GSAPTweenVars, palette: Palette['hex']) => {
+const applyStyles = (
+  styles: FiguresPatterns['container'] | FiguresPatterns['figure'],
+  palette: Palette['hex']
+) => {
+  console.log(
+    !palette[styles?.paletteBackground] ? styles?.paletteBackground : 'TIENE'
+  );
   return {
     ...styles, // Spread existing styles
     backgroundColor: getPaletteValue(palette, styles?.paletteBackground), // Resolve palette background color
@@ -191,7 +191,7 @@ const FiguresBoard = () => {
         newTimeline
           .to(
             figureContainer,
-            applyStyles(styles?.container ?? backupStyles, pallete),
+            applyStyles(styles?.container, pallete),
             '<'
           )
           .to(
