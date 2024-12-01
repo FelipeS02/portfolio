@@ -85,7 +85,7 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const resolvedSrc = getThemeImageByDevice(newTheme.photo);
 
       // Apply the theme into CSS variables
-      applyPaletteIntoCSS(newTheme.palette);
+      applyPaletteIntoCSS(newTheme.palette.hsl);
       applyThemeImage(resolvedSrc);
 
       setTheme((prev) => ({

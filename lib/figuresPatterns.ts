@@ -1,10 +1,12 @@
-import { FigurePositions } from '@/models/figurePositions';
 
-function getRandomIntensity() {
+import { FiguresPatterns } from '@/models/figuresPatterns';
+import { PaletteShade } from '@/models/theme';
+
+function getRandomIntensity(): PaletteShade {
   const min = 2; // Minimum multiple of 100 (200 / 100)
   const max = 8; // Maximum multiple of 100 (800 / 100)
   const randomMultiplier = Math.floor(Math.random() * (max - min + 1)) + min;
-  return randomMultiplier * 100;
+  return String(randomMultiplier * 100) as PaletteShade;
 }
 
 const getPaletteVar = (intensity: number) => `hsl(var(--palette-${intensity}))`;
@@ -13,7 +15,7 @@ export const backupStyles = {
   opacity: 0,
 };
 
-const figurePositions: FigurePositions[][] = [
+const figuresPatterns: FiguresPatterns[][] = [
   [
     {
       container: {
@@ -21,7 +23,7 @@ const figurePositions: FigurePositions[][] = [
         xPercent: -100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderBottomLeftRadius: '100%',
       },
     },
@@ -30,14 +32,14 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderTopLeftRadius: '100%',
       },
     },
     {
       container: { xPercent: 100, yPercent: -100 },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderRadius: '100%',
         height: '80%',
         width: '80%',
@@ -46,7 +48,7 @@ const figurePositions: FigurePositions[][] = [
     {
       container: { xPercent: -100 },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderBottomLeftRadius: '100%',
       },
     },
@@ -55,7 +57,7 @@ const figurePositions: FigurePositions[][] = [
         xPercent: 100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderTopRightRadius: '100%',
       },
     },
@@ -64,7 +66,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderTopRightRadius: '100%',
       },
     },
@@ -74,7 +76,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderRadius: '100%',
         height: '60%',
         width: '60%',
@@ -88,7 +90,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderRadius: '100%',
         height: '60%',
         width: '60%',
@@ -102,13 +104,13 @@ const figurePositions: FigurePositions[][] = [
         xPercent: 100,
       },
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderTopRightRadius: '100%',
       },
     },
     {
       figure: {
-        background: getPaletteVar(getRandomIntensity()),
+        paletteBackground: getRandomIntensity(),
         borderTopRightRadius: '100%',
       },
     },
@@ -120,7 +122,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         translateY: '50%',
         borderRadius: '100%',
       },
@@ -131,7 +133,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         translateY: '50%',
         borderRadius: '100%',
       },
@@ -141,7 +143,7 @@ const figurePositions: FigurePositions[][] = [
         left: 0,
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
         borderRadius: '100%',
       },
     },
@@ -151,7 +153,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         translateY: '-50%',
         borderRadius: '100%',
       },
@@ -162,7 +164,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         translateY: '-50%',
         borderRadius: '100%',
       },
@@ -173,7 +175,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         translateY: '50%',
         borderRadius: '100%',
       },
@@ -184,7 +186,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         translateY: '50%',
         borderRadius: '100%',
       },
@@ -194,7 +196,7 @@ const figurePositions: FigurePositions[][] = [
         right: 0,
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
         borderRadius: '100%',
       },
     },
@@ -204,7 +206,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         translateY: '-50%',
         borderRadius: '100%',
       },
@@ -215,7 +217,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         translateY: '-50%',
         borderRadius: '100%',
       },
@@ -228,7 +230,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         borderBottomRightRadius: '100%',
       },
     },
@@ -238,7 +240,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         borderTopLeftRadius: '100%',
       },
     },
@@ -248,7 +250,7 @@ const figurePositions: FigurePositions[][] = [
         xPercent: 100,
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
         borderRadius: '100%',
       },
     },
@@ -258,7 +260,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         borderBottomLeftRadius: '100%',
       },
     },
@@ -268,7 +270,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         borderTopRightRadius: '100%',
       },
     },
@@ -278,7 +280,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         borderBottomLeftRadius: '100%',
       },
     },
@@ -288,7 +290,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: 100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         borderTopRightRadius: '100%',
       },
     },
@@ -298,7 +300,7 @@ const figurePositions: FigurePositions[][] = [
         xPercent: -100,
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
         borderRadius: '100%',
       },
     },
@@ -308,7 +310,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -100,
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
         borderBottomRightRadius: '100%',
       },
     },
@@ -318,7 +320,7 @@ const figurePositions: FigurePositions[][] = [
         yPercent: -200,
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
         borderTopLeftRadius: '100%',
       },
     },
@@ -331,7 +333,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
       },
     },
     {
@@ -342,7 +344,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(200),
+        paletteBackground: '200',
       },
     },
     {
@@ -353,7 +355,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(300),
+        paletteBackground: '300',
       },
     },
     {
@@ -364,7 +366,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
       },
     },
     {
@@ -375,7 +377,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(500),
+        paletteBackground: '500',
       },
     },
     {
@@ -386,7 +388,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
       },
     },
     {
@@ -397,7 +399,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(700),
+        paletteBackground: '700',
       },
     },
     {
@@ -408,7 +410,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
       },
     },
   ],
@@ -420,7 +422,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
       },
     },
     {
@@ -431,7 +433,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(200),
+        paletteBackground: '200',
       },
     },
     {
@@ -442,7 +444,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(300),
+        paletteBackground: '300',
       },
     },
     {
@@ -453,7 +455,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(400),
+        paletteBackground: '400',
       },
     },
     {
@@ -464,7 +466,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(500),
+        paletteBackground: '500',
       },
     },
     {
@@ -475,7 +477,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
       },
     },
     {
@@ -486,7 +488,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(700),
+        paletteBackground: '700',
       },
     },
     {
@@ -497,7 +499,7 @@ const figurePositions: FigurePositions[][] = [
         width: '12.5%',
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
       },
     },
   ],
@@ -509,7 +511,7 @@ const figurePositions: FigurePositions[][] = [
         border: `6px solid ${getPaletteVar(900)}`,
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
       },
     },
     {
@@ -522,7 +524,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(500),
+        paletteBackground: '500',
       },
     },
     {
@@ -535,7 +537,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(300),
+        paletteBackground: '300',
       },
     },
     {
@@ -548,7 +550,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
         boxShadow: `inset 0 3.50rem 0 0 ${getPaletteVar(
           100
         )}, inset 0 3.75rem 0 0 ${getPaletteVar(900)}`,
@@ -564,7 +566,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(800),
+        paletteBackground: '800',
       },
     },
     {
@@ -576,7 +578,7 @@ const figurePositions: FigurePositions[][] = [
         border: `3px solid ${getPaletteVar(900)}`,
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
         boxShadow: `inset 0 3.50rem 0 0 ${getPaletteVar(
           100
         )}, inset 0 3.75rem 0 0 ${getPaletteVar(900)}`,
@@ -592,7 +594,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(100),
+        paletteBackground: '100',
       },
     },
     {
@@ -606,7 +608,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(600),
+        paletteBackground: '600',
       },
     },
     {
@@ -619,7 +621,7 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(300),
+        paletteBackground: '300',
       },
     },
     {
@@ -632,10 +634,10 @@ const figurePositions: FigurePositions[][] = [
         borderColor: getPaletteVar(900),
       },
       figure: {
-        background: getPaletteVar(300),
+        paletteBackground: '300',
       },
     },
   ],
 ];
 
-export default figurePositions;
+export default figuresPatterns;

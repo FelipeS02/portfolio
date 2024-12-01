@@ -13,7 +13,12 @@ export type PaletteShade =
   | '900'
   | '950';
 
-export type Palette = Record<PaletteShade, string>;
+export type PaletteDictionary = Record<PaletteShade, string>;
+
+export type Palette = {
+  hsl: PaletteDictionary;
+  hex: PaletteDictionary;
+};
 
 export interface Theme {
   hexCode: string;

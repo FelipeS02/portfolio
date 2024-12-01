@@ -2,14 +2,35 @@
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
-import { MutableRefObject, useCallback, useEffect, useRef } from 'react';
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Figures from './Figures';
-import figurePositions, { backupStyles } from '@/lib/figuresPositions';
-import { timeout } from '@/lib/utils';
+import figuresPatterns, { backupStyles } from '@/lib/figuresPatterns';
+import { removeByIndex, timeout } from '@/lib/utils';
+import { useTheme } from '@/hooks/theme';
+import { Palette, PaletteShade } from '@/models/theme';
+import { FiguresPatterns } from '@/models/figuresPatterns';
 
 gsap.registerPlugin(Draggable);
 
+const getPaletteValue = (palette: Palette['hex'], value?: PaletteShade) => {
+  if (!value) return 'initial';
+
+  return palette[value];
+};
+
 const FiguresBoard = () => {
+  const [mounted, setMounted] = useState(false);
+
+  const {
+    palette: { hex: pallete },
+  } = useTheme();
+
   const boardRef: MutableRefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement | null>(null);
 
@@ -17,9 +38,10 @@ const FiguresBoard = () => {
     HTMLElement[] | null
   >(null);
 
-  const tl: MutableRefObject<GSAPTimeline | null> = useRef<GSAPTimeline | null>(
-    null
-  );
+  const figuresTimeline: MutableRefObject<GSAPTimeline | null> =
+    useRef<GSAPTimeline | null>(null);
+
+  const patternsRef = useRef(figuresPatterns);
 
   const loadFiguresRef = useCallback((node: HTMLDivElement) => {
     if (!node) return;
@@ -31,7 +53,7 @@ const FiguresBoard = () => {
     figureElementsList.current = Array.from(figures) as HTMLElement[];
   }, []);
 
-  const { contextSafe } = useGSAP(
+  useGSAP(
     () => {
       if (!figureElementsList.current || !boardRef.current) return;
       figureElementsList.current.forEach((element) => {
@@ -45,16 +67,31 @@ const FiguresBoard = () => {
     }
   );
 
-  const setElementsRandomPosition = contextSafe(async () => {
+  const getRandomPattern = useCallback(() => {
+    if (patternsRef.current.length === 0) {
+      patternsRef.current = figuresPatterns;
+    }
+
+    const randomIndex = Math.floor(Math.random() * patternsRef.current.length);
+
+    const randomPositions = patternsRef.current[randomIndex];
+
+    patternsRef.current = removeByIndex<FiguresPatterns[]>(
+      patternsRef.current,
+      randomIndex
+    );
+
+    return randomPositions;
+  }, []);
+
+  const setElementsRandomPosition = useCallback(async () => {
     if (!figureElementsList.current || !boardRef.current) return;
 
-    const randomPositions =
-      figurePositions[Math.floor(Math.random() * figurePositions.length)];
-
-    if (!randomPositions) return;
+    const randomPattern = getRandomPattern();
 
     // If elements was animated previously, reverse animation to restore original styles and kill timeline
-    if (tl.current) {
+    if (figuresTimeline.current) {
+      // Await to restore position modified by draggable
       await new Promise((resolve) => {
         gsap.to(figureElementsList.current, {
           x: 0,
@@ -63,20 +100,20 @@ const FiguresBoard = () => {
         });
       });
 
-      tl.current.reverse();
+      figuresTimeline.current.reverse();
 
-      await timeout(tl.current.duration() * 2000);
+      await timeout(figuresTimeline.current.duration() * 4000);
 
-      tl.current.kill();
+      figuresTimeline.current.kill();
     }
 
-    // Using promise to finish function execution when animation is over
+    // Using promise to resolve function execution when animation is over
     await new Promise((resolve) => {
       if (!figureElementsList.current) return;
 
-      const timeline = gsap.timeline({ onComplete: resolve });
+      const newTimeline = gsap.timeline({ onComplete: resolve });
 
-      timeline.pause();
+      newTimeline.pause();
 
       figureElementsList.current.forEach((figureContainer, index) => {
         const figureElement =
@@ -84,54 +121,66 @@ const FiguresBoard = () => {
 
         if (!figureElement) throw Error("Figure element doesn't exists");
 
-        const styles = randomPositions[index];
+        const styles = randomPattern[index];
 
         // Clear residual styles props
-        gsap.set(figureContainer, { clearProps: 'all' });
-        gsap.set(figureElement, { clearProps: 'all' });
+        gsap.set(figureContainer, { clearProps: 'all', willChange: 'auto' });
+        gsap.set(figureElement, { clearProps: 'all', willChange: 'auto' });
 
-        timeline
+        newTimeline
           .to(
             figureContainer,
             {
               ...styles?.container,
+              backgroundColor: getPaletteValue(
+                pallete,
+                styles?.container?.paletteBackground
+              ),
             },
             '<'
           )
           .to(
             figureElement,
-
             {
+              ease: 'power4.out',
               ...(styles?.figure ?? backupStyles),
+              backgroundColor: getPaletteValue(
+                pallete,
+                styles?.figure?.paletteBackground
+              ),
             },
             '<'
           );
       });
 
-      tl.current = timeline;
+      figuresTimeline.current = newTimeline;
 
-      timeline.play();
+      newTimeline.play();
     });
-  });
+  }, [pallete, getRandomPattern]);
 
   useEffect(() => {
+    if (!mounted) return setMounted(true);
+
     let isCancelled = false;
 
     const executeWithDelay = async () => {
       if (isCancelled) return;
 
-      await setElementsRandomPosition(); // Espera a que la función termine
+      await setElementsRandomPosition();
+
       if (isCancelled) return;
 
-      setTimeout(executeWithDelay, 10000); // Programa la siguiente ejecución
+      setTimeout(executeWithDelay, 10000);
     };
 
-    executeWithDelay(); // Inicia el proceso
+    executeWithDelay();
 
     return () => {
-      isCancelled = true; // Cancela la ejecución si el componente se desmonta
+      // Cancel next ejecution on unmount
+      isCancelled = true;
     };
-  }, [setElementsRandomPosition]);
+  }, [setElementsRandomPosition, mounted]);
 
   return (
     <div

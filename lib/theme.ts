@@ -24,17 +24,32 @@ export function getRandomHex(): string {
 }
 
 export const initialPalette: Palette = {
-  '50': '',
-  '100': '',
-  '200': '',
-  '300': '',
-  '400': '',
-  '500': '',
-  '600': '',
-  '700': '',
-  '800': '',
-  '900': '',
-  '950': '',
+  hsl: {
+    '50': '',
+    '100': '',
+    '200': '',
+    '300': '',
+    '400': '',
+    '500': '',
+    '600': '',
+    '700': '',
+    '800': '',
+    '900': '',
+    '950': '',
+  },
+  hex: {
+    '50': '',
+    '100': '',
+    '200': '',
+    '300': '',
+    '400': '',
+    '500': '',
+    '600': '',
+    '700': '',
+    '800': '',
+    '900': '',
+    '950': '',
+  },
 };
 
 export function getThemeImageByDevice(photo: Photo): string {
@@ -51,8 +66,7 @@ export function getThemeImageByDevice(photo: Photo): string {
 
 // Helper function to convert HEX to HSL (using the `tinycolor2` library or equivalent)
 function hexToHsl(hex: string): [number, number, number] {
-  // Convert HEX to HSL using your preferred method or library
-  const color = tinycolor(hex); // Assuming `tinycolor` is available
+  const color = tinycolor(hex);
   const { h, s, l } = color.toHsl();
   return [h, s * 100, l * 100]; // HSL values as percentages
 }
@@ -83,13 +97,17 @@ function generatePalette(hexColor: string): Palette {
   };
 
   // Generate the color scale
-  const palette = {} as Palette;
+  const palette = initialPalette;
 
   Object.entries(lightnessScale).forEach(([step, lightness]) => {
     const saturation = getSaturation(lightness);
-    palette[
-      String(step) as PaletteShade
-    ] = `${baseHue} ${saturation}% ${lightness}%`;
+
+    const hslValues = `${baseHue} ${saturation}% ${lightness}%`;
+
+    const parsedStep = String(step) as PaletteShade;
+
+    palette.hex[parsedStep] = `#${tinycolor(`hsl(${hslValues})`).toHex()}`;
+    palette.hsl[parsedStep] = hslValues;
   });
 
   return palette;
@@ -147,5 +165,3 @@ export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
     hexCode,
   };
 }
-
-
