@@ -42,9 +42,6 @@ const applyStyles = (
   styles: FiguresPatterns['container'] | FiguresPatterns['figure'],
   palette: Palette['hex']
 ) => {
-  console.log(
-    !palette[styles?.paletteBackground] ? styles?.paletteBackground : 'TIENE'
-  );
   return {
     ...styles, // Spread existing styles
     backgroundColor: getPaletteValue(palette, styles?.paletteBackground), // Resolve palette background color
