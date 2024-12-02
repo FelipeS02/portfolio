@@ -11,7 +11,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/Popover';
 import { ChevronRight } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider } from './Tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './Tooltip';
 
 interface ColorPickerProps {
   value: string;
@@ -33,7 +38,6 @@ const ColorPicker: FC<
 }) => {
   const parsedStoreValue = `#${storedValue}`;
   const [value, setValue] = useState(parsedStoreValue || '#FFFFFF');
-
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -42,24 +46,26 @@ const ColorPicker: FC<
 
   return (
     <TooltipProvider>
-      <Tooltip defaultOpen>
+      <Tooltip>
         <Popover onOpenChange={setOpen} open={open}>
           <PopoverTrigger asChild disabled={disabled} onBlur={onBlur}>
-            <Button
-              {...props}
-              className={cn('block', className)}
-              name={name}
-              onClick={() => {
-                setOpen(true);
-              }}
-              size='icon'
-              style={{
-                backgroundColor: parsedStoreValue,
-              }}
-              variant='outline'
-            >
-              <div />
-            </Button>
+            <TooltipTrigger asChild>
+              <Button
+                {...props}
+                className={cn('block', className)}
+                name={name}
+                onClick={() => {
+                  setOpen(true);
+                }}
+                size='icon'
+                style={{
+                  backgroundColor: parsedStoreValue,
+                }}
+                variant='outline'
+              >
+                <div />
+              </Button>
+            </TooltipTrigger>
           </PopoverTrigger>
           <PopoverContent
             align='end'

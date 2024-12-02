@@ -1,12 +1,13 @@
 import { SplittedText } from '@/components/ui/SplittedText';
 import ClockLines from './ClockLines';
+import { memo } from 'react';
 
 export const OBJECTIVE_ELEMENTS_IDS = {
   SECTION: 'objective',
   TEXT: 'objective-text',
 };
 
-const Objective = () => {
+const Objective = memo(function Objective() {
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
@@ -25,6 +26,6 @@ const Objective = () => {
       <ClockLines side='bottom' />
     </section>
   );
-};
+});
 
 export default Objective;

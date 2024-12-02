@@ -23,7 +23,7 @@ const SectionText = memo(function SectionText({
 }) {
   return (
     <SelectableElement
-      className='flex flex-col gap-2 p-4 z-20'
+      className='flex flex-col gap-2 p-4 z-20 mix-blend-plus-darker dark:mix-blend-plus-lighter'
       selected={selectedElement === DESIGN_SECTION_HERO_ID}
       id={DESIGN_SECTION_HERO_ID}
     >
@@ -156,7 +156,7 @@ const FiguresBoard = () => {
   // Reverse previous animations if any
   const cleanExistentTimeline = useCallback(async (timeline: GSAPTimeline) => {
     // Clear transform from draggable if exists
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       gsap.to(figureElementsList.current, {
         x: 0,
         y: 0,
@@ -174,12 +174,14 @@ const FiguresBoard = () => {
       if (!pattern) throw Error('Pattern is not defined');
 
       // Animate elements to new positions based on random pattern
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         if (!figureElementsList.current)
           throw Error('Figures ref are not defined');
 
         // Initialize new timeline
-        const newTimeline = gsap.timeline({ onComplete: resolve });
+        const newTimeline = gsap.timeline({
+          onComplete: resolve,
+        });
         newTimeline.pause();
 
         figureElementsList.current.forEach((figureContainer, index) => {
@@ -191,8 +193,14 @@ const FiguresBoard = () => {
           const styles = pattern[index];
 
           // Reset styles to avoid conflicts
-          gsap.set(figureContainer, { clearProps: 'all', willChange: 'auto' });
-          gsap.set(figureElement, { clearProps: 'all', willChange: 'auto' });
+          gsap.set(figureContainer, {
+            clearProps: 'all',
+            willChange: 'transform',
+          });
+          gsap.set(figureElement, {
+            clearProps: 'all',
+            willChange: 'height, backgroundColor',
+          });
 
           // Apply animations for container and figure elements
           newTimeline
@@ -242,7 +250,7 @@ const FiguresBoard = () => {
   // Effect to handle automatic updates every 10 seconds
   useEffect(() => {
     if (!isSectionVisible) return;
-    
+
     let isCancelled = false;
 
     const executeWithDelay = async () => {

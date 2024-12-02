@@ -29,7 +29,7 @@ export const CurriculumShortcut = memo(function CurriculumShortcut() {
   );
 });
 
-export const ThemePicker = () => {
+export const ThemePicker = memo(function ThemePicker() {
   const { hexCode, getNewTheme, fullfiled } = useTheme();
 
   if (!fullfiled || !getNewTheme) return null;
@@ -37,7 +37,7 @@ export const ThemePicker = () => {
   return (
     <ColorPicker value={hexCode} onSubmit={getNewTheme} className='size-7' />
   );
-};
+});
 
 const ShortcutSeparator = () => (
   <Separator
@@ -46,9 +46,9 @@ const ShortcutSeparator = () => (
   />
 );
 
-export default function HeaderShortcuts() {
+const HeaderShortcuts = memo(function HeaderShortcuts() {
   return (
-    <div className='col-span-1 w-fit flex md:w-full justify-end gap-3 items-center'>
+    <div className='col-span-1 w-fit flex lg:w-full justify-end gap-3 items-center'>
       <CurriculumShortcut />
       <ShortcutSeparator />
       <ThemeSwitch />
@@ -56,4 +56,6 @@ export default function HeaderShortcuts() {
       <ThemePicker />
     </div>
   );
-}
+});
+
+export default HeaderShortcuts;

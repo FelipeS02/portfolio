@@ -1,5 +1,5 @@
 import { Dot } from 'lucide-react';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 import HeaderShortcuts from './HeaderShortcuts';
 
 const HeaderText = ({
@@ -17,7 +17,7 @@ const HeaderText = ({
   );
 };
 
-const Header = () => {
+const Header = memo(function Header() {
   return (
     <header className='w-full flex justify-between lg:grid grid-cols-3'>
       <div className='flex flex-col lg:contents gap-6'>
@@ -33,10 +33,10 @@ const Header = () => {
           title='34º 45’ 43.20” S 58º 12’ 40.63” W'
           subtitle='BUENOS AIRES'
         />
-      <HeaderShortcuts />
+        <HeaderShortcuts />
       </div>
     </header>
   );
-};
+});
 
 export default Header;

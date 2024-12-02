@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import AboutImage from '@/public/images/about_image.webp';
 
 export const ABOUT_ELEMENTS_IDS = {
@@ -9,7 +9,9 @@ export const ABOUT_ELEMENTS_IDS = {
   TEXT: 'about-text',
 };
 
-const About: FC<{ mobile?: boolean }> = ({ mobile = false }) => {
+const About: FC<{ mobile?: boolean }> = memo(function About({
+  mobile = false,
+}) {
   if (mobile)
     return (
       <section
@@ -83,6 +85,6 @@ const About: FC<{ mobile?: boolean }> = ({ mobile = false }) => {
       </div>
     </div>
   );
-};
+});
 
 export default About;
