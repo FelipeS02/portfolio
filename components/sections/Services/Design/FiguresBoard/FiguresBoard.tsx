@@ -2,7 +2,7 @@
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import Figures from './Figures';
 import figuresPatterns, { backupStyles } from '@/lib/figuresPatterns';
 import { removeByIndex, timeout } from '@/lib/utils';
@@ -10,12 +10,17 @@ import { useTheme } from '@/hooks/theme';
 import { Palette, PaletteShade } from '@/models/theme';
 import { FiguresPatterns } from '@/models/figuresPatterns';
 import SelectableElement from './SelectableElement';
+import useVisibilityChecker from '@/hooks/useVisibilityChecker';
 
 gsap.registerPlugin(Draggable);
 
 export const DESIGN_SECTION_HERO_ID = 'design-section-hero';
 
-const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
+const SectionText = memo(function SectionText({
+  selectedElement,
+}: {
+  selectedElement?: string;
+}) {
   return (
     <SelectableElement
       className='flex flex-col gap-2 p-4 z-20'
@@ -29,12 +34,14 @@ const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
       </p>
     </SelectableElement>
   );
-};
+});
 
 // Utility function to get a palette value based on a shade
 const getPaletteValue = (palette: Palette['hex'], value?: PaletteShade) => {
-  if (!value) return 'transparent'; // Return a default value if no shade is provided
-  return palette[value]; // Return the corresponding palette value
+  // Return a default value if no shade is provided
+  if (!value) return 'transparent';
+  // Return the corresponding palette value
+  return palette[value];
 };
 
 // Utility function to apply styles with a resolved palette background color
@@ -42,30 +49,33 @@ const applyStyles = (
   styles: FiguresPatterns['container'] | FiguresPatterns['figure'],
   palette: Palette['hex']
 ) => {
-  console.log(
-    !palette[styles?.paletteBackground] ? styles?.paletteBackground : 'TIENE'
-  );
   return {
-    ...styles, // Spread existing styles
-    backgroundColor: getPaletteValue(palette, styles?.paletteBackground), // Resolve palette background color
+    ...styles,
+    // Resolve palette background color
+    backgroundColor: getPaletteValue(palette, styles?.paletteBackground),
   };
 };
 
 const FiguresBoard = () => {
-  const [mounted, setMounted] = useState(false); // State to track if the component is mounted
-
   const {
-    palette: { hex: pallete }, // Extract palette hex values from the theme
+    // Extract palette hex values from the theme
+    palette: { hex: pallete },
   } = useTheme();
 
   // Refs to manage DOM elements and GSAP-related data
-  const boardRef = useRef<HTMLDivElement | null>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
   const figureElementsList = useRef<HTMLElement[] | null>(null);
   const figuresTimeline = useRef<GSAPTimeline | null>(null);
-  const patternsRef = useRef(figuresPatterns); // Reference to manage patterns
   const draggableElements = useRef<Draggable[] | null>(null);
+  // Reference to manage patterns
+  const patternsRef = useRef<FiguresPatterns[][]>(figuresPatterns);
 
-  const [selectedElement, setSelectedElement] = useState<string>(''); // State to track the selected element ID
+  const isSectionVisible = useVisibilityChecker(boardRef.current as Element, {
+    threshold: 0.15,
+  });
+
+  // State to track the selected element ID
+  const [selectedElement, setSelectedElement] = useState<string>('');
 
   // Handle selection of draggable elements by their ID
   const handleDraggableSelection = useCallback((elementId: string) => {
@@ -83,15 +93,6 @@ const FiguresBoard = () => {
     figureElementsList.current = Array.from(figures) as HTMLElement[]; // Store figure elements in the ref
   }, []);
 
-  // Enable or disable draggable elements
-  const alternateDraggables = useCallback((action: 'disable' | 'enable') => {
-    if (!['disable', 'enable'].includes(action)) {
-      throw Error('New state must be enable or disable'); // Validate the action
-    }
-
-    draggableElements.current?.forEach((draggable) => draggable[action]()); // Apply the action to each draggable
-  }, []);
-
   // Initialize GSAP Draggable instances and assign them to elements
   useGSAP(
     () => {
@@ -102,12 +103,10 @@ const FiguresBoard = () => {
       const draggableList: Draggable[] = [];
 
       // Create draggable for the section hero element
-      draggableList.push(
-        ...Draggable.create(sectionHero, {
-          bounds: boardRef.current,
-          onPress: () => handleDraggableSelection(sectionHero.id), // Handle selection on press
-        })
-      );
+      Draggable.create(sectionHero, {
+        bounds: boardRef.current,
+        onPress: () => handleDraggableSelection(sectionHero.id), // Handle selection on press
+      });
 
       // Create draggable for figure elements
       draggableList.push(
@@ -119,12 +118,22 @@ const FiguresBoard = () => {
         })
       );
 
+      // Only storing figure elements to disable before animations
       draggableElements.current = draggableList; // Store draggable instances
     },
     {
       scope: boardRef, // Scope for GSAP hooks
     }
   );
+
+  // Enable or disable draggable elements
+  const alternateDraggables = useCallback((action: 'disable' | 'enable') => {
+    if (!['disable', 'enable'].includes(action)) {
+      throw Error('New state must be enable or disable'); // Validate the action
+    }
+
+    draggableElements.current?.forEach((draggable) => draggable[action]()); // Apply the action to each draggable
+  }, []);
 
   // Get a random pattern and remove it from the patterns list
   const getRandomPattern = useCallback(() => {
@@ -144,6 +153,69 @@ const FiguresBoard = () => {
     return randomPositions;
   }, []);
 
+  // Reverse previous animations if any
+  const cleanExistentTimeline = useCallback(async (timeline: GSAPTimeline) => {
+    // Clear transform from draggable if exists
+    await new Promise((resolve) => {
+      gsap.to(figureElementsList.current, {
+        x: 0,
+        y: 0,
+        onComplete: resolve,
+      });
+    });
+
+    timeline.reverse(); // Reverse the timeline
+    await timeout(timeline.duration() * 2000);
+    timeline.kill(); // Kill the timeline to reset
+  }, []);
+
+  const applyNewFigurePatterns = useCallback(
+    async (pattern: FiguresPatterns[]) => {
+      if (!pattern) throw Error('Pattern is not defined');
+
+      // Animate elements to new positions based on random pattern
+      await new Promise((resolve) => {
+        if (!figureElementsList.current)
+          throw Error('Figures ref are not defined');
+
+        // Initialize new timeline
+        const newTimeline = gsap.timeline({ onComplete: resolve });
+        newTimeline.pause();
+
+        figureElementsList.current.forEach((figureContainer, index) => {
+          const figureElement =
+            figureContainer.getElementsByClassName('figure')[0];
+
+          if (!figureElement) throw Error("Figure element doesn't exist");
+
+          const styles = pattern[index];
+
+          // Reset styles to avoid conflicts
+          gsap.set(figureContainer, { clearProps: 'all', willChange: 'auto' });
+          gsap.set(figureElement, { clearProps: 'all', willChange: 'auto' });
+
+          // Apply animations for container and figure elements
+          newTimeline
+            .to(figureContainer, applyStyles(styles?.container, pallete), '<')
+            .to(
+              figureElement,
+              {
+                ease: 'power4.out',
+                ...applyStyles(styles?.figure ?? backupStyles, pallete),
+              },
+              '<'
+            );
+        });
+
+        // Store the new timeline
+        figuresTimeline.current = newTimeline;
+        // Play to sincronize all changes
+        newTimeline.play();
+      });
+    },
+    [pallete]
+  );
+
   // Set random positions and styles for figure elements
   const setElementsRandomPosition = useCallback(async () => {
     if (!figureElementsList.current || !boardRef.current) return;
@@ -151,70 +223,26 @@ const FiguresBoard = () => {
     alternateDraggables('disable'); // Disable draggables during animation
     setSelectedElement(''); // Clear the selected element
 
+    if (figuresTimeline.current)
+      await cleanExistentTimeline(figuresTimeline.current);
+
     const randomPattern = getRandomPattern();
 
-    // Reverse previous animations if any
-    if (figuresTimeline.current) {
-      await new Promise((resolve) => {
-        gsap.to(figureElementsList.current, {
-          x: 0,
-          y: 0,
-          onComplete: resolve,
-        });
-      });
+    await applyNewFigurePatterns(randomPattern);
 
-      figuresTimeline.current.reverse(); // Reverse the timeline
-      await timeout(figuresTimeline.current.duration() * 3000);
-      figuresTimeline.current.kill(); // Kill the timeline to reset
-    }
-
-    // Animate elements to new positions based on random pattern
-    await new Promise((resolve) => {
-      if (!figureElementsList.current) return;
-
-      const newTimeline = gsap.timeline({ onComplete: resolve });
-      newTimeline.pause();
-
-      figureElementsList.current.forEach((figureContainer, index) => {
-        const figureElement =
-          figureContainer.getElementsByClassName('figure')[0];
-
-        if (!figureElement) throw Error("Figure element doesn't exist");
-
-        const styles = randomPattern[index];
-
-        // Reset styles to avoid conflicts
-        gsap.set(figureContainer, { clearProps: 'all', willChange: 'auto' });
-        gsap.set(figureElement, { clearProps: 'all', willChange: 'auto' });
-
-        // Apply animations for container and figure elements
-        newTimeline
-          .to(
-            figureContainer,
-            applyStyles(styles?.container, pallete),
-            '<'
-          )
-          .to(
-            figureElement,
-            {
-              ease: 'power4.out',
-              ...applyStyles(styles?.figure ?? backupStyles, pallete),
-            },
-            '<'
-          );
-      });
-
-      figuresTimeline.current = newTimeline; // Store the new timeline
-      newTimeline.play();
-    });
-
-    alternateDraggables('enable'); // Re-enable draggables after animation
-  }, [pallete, getRandomPattern, alternateDraggables]);
+    // Re-enable draggables after animation
+    alternateDraggables('enable');
+  }, [
+    getRandomPattern,
+    alternateDraggables,
+    applyNewFigurePatterns,
+    cleanExistentTimeline,
+  ]);
 
   // Effect to handle automatic updates every 10 seconds
   useEffect(() => {
-    if (!mounted) return setMounted(true);
-
+    if (!isSectionVisible) return;
+    
     let isCancelled = false;
 
     const executeWithDelay = async () => {
@@ -232,7 +260,7 @@ const FiguresBoard = () => {
     return () => {
       isCancelled = true; // Prevent further executions on unmount
     };
-  }, [setElementsRandomPosition, mounted]);
+  }, [setElementsRandomPosition, isSectionVisible]);
 
   return (
     <div
