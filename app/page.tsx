@@ -2,6 +2,7 @@ import About from '@/components/sections/About/About';
 import Home from '@/components/sections/Home/Home';
 import Objective from '@/components/sections/Objective/Objective';
 import Design from '@/components/sections/Services/Design/Design';
+import Development from '@/components/sections/Services/Development/Development';
 
 export default function Page() {
   return (
@@ -14,6 +15,7 @@ export default function Page() {
       <Objective />
 
       <Design />
+      <Development />
     </main>
   );
 }

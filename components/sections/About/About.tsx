@@ -15,7 +15,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
   if (mobile)
     return (
       <section
-        className='grid grid-rows-2 w-full h-screen md:hidden'
+        className='grid grid-rows-2 w-full h-screen lg:hidden'
         id='about'
       >
         <Image
@@ -42,7 +42,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
 
   return (
     <div
-      className='max-md:hidden fixed w-full z-10 h-0 inset-0 m-auto after:content-["(DESLIZAR)"] after:text-md after:text-foreground after:tracking-wider after:right-0 after:absolute after:mt-2'
+      className='max-xl:hidden fixed w-full z-10 h-0 inset-0 m-auto after:content-["(DESLIZAR)"] after:text-md after:text-foreground after:tracking-wider after:right-0 after:absolute after:mt-2'
       id={ABOUT_ELEMENTS_IDS.WRAPPER}
     >
       <div className='size-full relative overflow-hidden bg-background '>

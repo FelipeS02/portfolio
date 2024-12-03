@@ -7,6 +7,7 @@ import { memo } from 'react';
 import { ABOUT_ELEMENTS_IDS } from '../sections/About/About';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/Objective/Objective';
 import { useScheme } from '@/hooks/theme';
+import { DEVELOPMENT } from '../sections/Services/Development/Development';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -27,7 +28,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
     if (homeEl && aboutWrapper) {
       const mm = gsap.matchMedia();
 
-      mm.add('(min-width: 768px)', () => {
+      mm.add('(min-width: 1280px)', () => {
         gsap.set(aboutWrapper, {
           height: 0,
           willChange: 'height',
@@ -151,6 +152,60 @@ const AnimationsProvider = memo(function AnimationProvider() {
         });
     }
   }, [resolvedTheme]);
+
+  useGSAP((_, contextSafe) => {
+    if (!contextSafe) return;
+    const developmentSection = document.getElementById(DEVELOPMENT.SECTION);
+    const globe = document.getElementById('3d-globe');
+
+    if (!developmentSection || !globe) return;
+    const rings = Array.from(
+      developmentSection.getElementsByClassName('orbit-ring')
+    );
+
+    if (!rings) return;
+
+    const resizeGlobe = contextSafe(() => {
+      const lastRing = rings.at(-1) as HTMLElement;
+
+      gsap.set(globe, {
+        maxWidth: `${lastRing.offsetWidth}px`,
+        maxHeight: `${lastRing.offsetHeight}px`,
+      });
+    });
+
+    // Apply padding
+    rings.forEach((ring, index) => {
+      const opacity = Math.max(0, 65 + index * 5);
+      const rotate = '20deg';
+      if (index === rings.length - 1) {
+        gsap.set(ring, {
+          rotate,
+        });
+        return;
+      }
+      // Calculate the padding for the current element
+      const paddingValue = Math.max(0, 10 - index * 0.25);
+
+      // Apply the padding
+      gsap.set(ring, {
+        padding: `${paddingValue}%`,
+        opacity: `${opacity}%`,
+        rotate,
+      });
+    });
+
+    // Resize on init
+    resizeGlobe();
+
+    // Resize globe when window size change
+    window.addEventListener('resize', resizeGlobe);
+
+    // Cleanup function to prevent memory leaks
+    return () => {
+      window.removeEventListener('resize', resizeGlobe);
+    };
+  });
 
   return null;
 });
