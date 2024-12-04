@@ -8,8 +8,6 @@ function getRandomIntensity(): PaletteShade {
   return String(randomMultiplier * 100) as PaletteShade;
 }
 
-const getPaletteVar = (intensity: number) => `hsl(var(--palette-${intensity}))`;
-
 export const backupStyles = {
   opacity: 0,
 };

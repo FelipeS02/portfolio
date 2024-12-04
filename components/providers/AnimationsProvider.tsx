@@ -1,6 +1,6 @@
 'use client';
 
-import gsap, { Linear } from 'gsap';
+import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger, Draggable } from 'gsap/all';
 import { memo } from 'react';
@@ -164,15 +164,12 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     // gsap.set(planetOrbit, { yPercent: 50 });
 
-    const spinLoop = gsap.to(ringsContainer, {
+    gsap.to(ringsContainer, {
       rotation: '+=360',
       repeat: -1,
       ease: 'none',
       duration: 60,
     });
-
-    // ringsContainer.addEventListener('mouseenter', () => spinLoop.pause());
-    // ringsContainer.addEventListener('mouseleave', () => spinLoop.play());
 
     if (!developmentSection || !globe) return;
     const rings = Array.from(
@@ -221,25 +218,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     // Resize globe when window size change
     window.addEventListener('resize', resizeGlobe);
-
-    // gsap
-    //   .timeline({
-    //     scrollTrigger: {
-    //       trigger: developmentSection,
-    //       start: 'top top',
-    //       end: () => `+=${developmentSection.offsetHeight * 4}`,
-    //       scrub: true,
-    //       pin: true,
-    //     },
-    //   })
-    //   .to('#planet-orbit', { yPercent: 0, duration: 0.25 })
-    //   .to('#rings-container', {
-    //     scale: 100,
-    //     duration: 0.5,
-    //     ease: 'circ.inOut',
-    //   })
-    //   .to('#rings-container', { opacity: 0, duration: 0.15 }, '<')
-    //   .to(globe, { height: '100%' }, '<');
 
     // Cleanup function to prevent memory leaks
     return () => {
