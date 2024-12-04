@@ -1,4 +1,3 @@
-import { Dot } from 'lucide-react';
 import { memo, ReactNode } from 'react';
 import HeaderShortcuts from './HeaderShortcuts';
 
@@ -25,7 +24,7 @@ const Header = memo(function Header() {
           title={
             <span className='flex items-center gap-2'>
               DISPONIBLE{' '}
-              <div className='size-1 rounded-full bg-foreground-secondary animate-ping mb-[4px]' />
+              <span className='size-1 rounded-full bg-foreground-secondary animate-ping mb-[4px]' />
             </span>
           }
           subtitle='FELIPESARACHO02@GMAIL.COM'

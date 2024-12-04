@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, memo, ReactNode } from 'react';
 import styles from './ring.module.css';
 import { cn } from '@/lib/utils';
 import { LucideIcon, LucideProps } from 'lucide-react';
@@ -44,21 +44,20 @@ export const RingItem = ({
   );
 };
 
-const Ring: FC<{ children?: ReactNode; className?: string }> = ({
-  children,
-  className = '',
-}) => {
-  return (
-    <div
-      className={cn(
-        styles['orbit-ring'],
-        'orbit-ring relative inset-0',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
+const Ring: FC<{ children?: ReactNode; className?: string }> = memo(
+  function Ring({ children, className = '' }) {
+    return (
+      <div
+        className={cn(
+          styles['orbit-ring'],
+          'orbit-ring relative inset-0',
+          className
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
 export default Ring;

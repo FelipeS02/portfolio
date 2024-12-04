@@ -3,7 +3,7 @@
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger, Draggable } from 'gsap/all';
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { ABOUT_ELEMENTS_IDS } from '../sections/About/About';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/Objective/Objective';
 import { useScheme } from '@/hooks/theme';
@@ -20,14 +20,14 @@ const ABOUT_PARSED_IDS = {
 
 const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
-  const matchMedia = useRef(gsap.matchMedia());
 
   useGSAP(() => {
     const homeEl = document.getElementById('home');
     const aboutWrapper = document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER);
+    const mm = gsap.matchMedia();
 
     if (homeEl && aboutWrapper) {
-      matchMedia.current.add('(min-width: 1280px)', () => {
+      mm.add('(min-width: 1280px)', () => {
         gsap.set(aboutWrapper, {
           height: 0,
           willChange: 'height',
@@ -163,42 +163,60 @@ const AnimationsProvider = memo(function AnimationProvider() {
       return;
 
     // #region Initial orbit rings config
-    // gsap.to(ringsContainer, {
-    //   rotation: '+=360',
-    //   repeat: -1,
-    //   ease: 'none',
-    //   duration: 60,
-    // });
-
     const rings = Array.from(
       developmentSection.getElementsByClassName('orbit-ring')
     );
 
     if (!rings) return;
 
-    // Apply padding
-    rings.forEach((ring, index) => {
-      const rotate = '20deg';
-      if (index === rings.length - 1) {
+    const mm = gsap.matchMedia();
+
+    mm.add('(max-width: 768px)', () => {
+      rings.forEach((ring, index) => {
+        const rotate = '20deg';
+        if (index === rings.length - 1) {
+          gsap.set(ring, {
+            rotate,
+          });
+          return;
+        }
+
+        // Dynamic opacity to produce profundity on rings
+        const opacity = Math.max(0, 90 + index * 2);
+        // Calculate the padding for the current element
+        const paddingValue = Math.max(0, 10 - index * 0.25);
+
+        // Apply the padding
         gsap.set(ring, {
+          padding: `${paddingValue}%`,
+          opacity: `${opacity}%`,
           rotate,
         });
-        return;
-      }
-      // Dynamic opacity to produce profundity on rings
-      // const opacity = Math.max(0, 90 + index * 2);
-      // Calculate the padding for the current element
-      const paddingValue = Math.max(0, 10 - index * 0.25);
-      const blur = Math.max(0, 0.05 + index * 0.15);
+      });
+    }).add('(min-width: 768px)', () => {
+      rings.forEach((ring, index) => {
+        const rotate = '20deg';
+        if (index === rings.length - 1) {
+          gsap.set(ring, {
+            rotate,
+          });
+          return;
+        }
 
-      // Apply the padding
-      gsap.set(ring, {
-        padding: `${paddingValue}%`,
-        // opacity: `${opacity}%`,
-        filter: `blur(${blur}px)`,
-        rotate,
+        // Calculate the padding for the current element
+        const paddingValue = Math.max(0, 10 - index * 0.25);
+        // Using blur instead of opacity for more realism
+        const blur = Math.max(0, 0.05 + index * 0.15);
+
+        // Apply the padding
+        gsap.set(ring, {
+          padding: `${paddingValue}%`,
+          filter: `blur(${blur}px)`,
+          rotate,
+        });
       });
     });
+
     // #endregion
 
     // #region globe resizing controller
@@ -223,7 +241,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
     window.addEventListener('resize', resizeGlobe);
     // #endregion
 
-    const handleParallax = contextSafe((event: MouseEvent) => {
+    const handleMouseParallax = contextSafe((event: MouseEvent) => {
       gsap.set(rings, { willChange: 'transform' });
       gsap.set(globe, { willChange: 'transform' });
 
@@ -253,14 +271,14 @@ const AnimationsProvider = memo(function AnimationProvider() {
         willChange: 'none',
       });
     });
-    matchMedia.current.add('(min-width: 1280px)', () => {
-      document.addEventListener('mousemove', handleParallax);
+    mm.add('(min-width: 768px)', () => {
+      document.addEventListener('mousemove', handleMouseParallax);
       document.addEventListener('mouseleave', restoreElementsPosition);
     });
     // Cleanup function to prevent memory leaks
     return () => {
       window.removeEventListener('resize', resizeGlobe);
-      document.removeEventListener('mousemove', handleParallax);
+      document.removeEventListener('mousemove', handleMouseParallax);
       document.removeEventListener('mouseleave', restoreElementsPosition);
     };
   });

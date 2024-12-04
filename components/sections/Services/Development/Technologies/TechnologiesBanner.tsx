@@ -16,7 +16,7 @@ const iconProps: LucideProps = {
   strokeWidth: 0.25,
   absoluteStrokeWidth: true,
   className:
-    'text-palette-800 fill-palette-800 dark:text-palette-100 dark:fill-palette-100 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-opacity transition-all [&>#letter]:fill-palette-100 dark:[&>#letter]:fill-palette-800 duration-500',
+    'text-palette-600 fill-palette-600 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-opacity transition-all [&>#letter]:fill-palette-100 duration-500',
 };
 
 const TechnologiesBanner = memo(function TechonologiesBanner() {

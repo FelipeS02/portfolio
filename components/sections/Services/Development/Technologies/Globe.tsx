@@ -1,11 +1,14 @@
 'use client'; // Habilita el renderizado en cliente
 
 import { useScheme, useTheme } from '@/hooks/theme';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
 import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import Image from 'next/image';
+import Marquee from 'react-fast-marquee';
 
 const Globe: FC<{ className?: string }> = ({ className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,6 +16,9 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
     palette: { hex: palette },
   } = useTheme();
   const { resolvedTheme } = useScheme();
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
 
   useEffect(() => {
     const container = containerRef.current;
@@ -22,7 +28,9 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
 
     // Create the WebGL renderer with transparency (alpha: true)
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setPixelRatio(window.devicePixelRatio); // Ensure smooth rendering on high-DPI screens
+    renderer.setPixelRatio(
+      isMobile ? Math.min(2, window.devicePixelRatio) : window.devicePixelRatio
+    ); // Ensure smooth rendering on high-DPI screens
     renderer.setClearColor(isDark ? palette[200] : palette[50]);
     container.appendChild(renderer.domElement);
 
@@ -37,7 +45,10 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
     camera.position.z = 165; // Adjust the z-position for the desired view
 
     // Create the sphere geometry (globe) with smooth subdivisions
-    const geometry = new THREE.SphereGeometry(100, 64, 32);
+    const geometry = isMobile
+      ? new THREE.SphereGeometry(100, 32, 16)
+      : new THREE.SphereGeometry(100, 64, 32);
+
     const material = new THREE.MeshBasicMaterial({ transparent: true });
     const globe = new THREE.Mesh(geometry, material);
     scene.add(globe);
@@ -48,7 +59,8 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       textureUrl,
       (texture) => {
         // Set texture properties for improved rendering
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        if (!isMobile)
+          texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         globe.material.map = texture;
         globe.material.needsUpdate = true;
       },
@@ -82,7 +94,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       renderer.dispose();
       container.removeChild(renderer.domElement);
     };
-  }, [palette, resolvedTheme]);
+  }, [resolvedTheme, isMobile, palette]);
 
   return (
     <div

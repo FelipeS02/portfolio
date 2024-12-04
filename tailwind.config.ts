@@ -50,10 +50,15 @@ export default {
             opacity: '1',
           },
         },
+        earth: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '355px 0' },
+        },
       },
       animation: {
         blink: 'blink 1s ease infinite',
         'orbit-rings': 'spin 60s linear infinite',
+        earth: 'earth 10s linear 0s infinite',
       },
       colors: {
         background: 'hsl(var(--background))',
