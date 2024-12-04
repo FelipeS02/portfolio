@@ -7,14 +7,14 @@ import Development from '@/components/sections/Services/Development/Development'
 export default function Page() {
   return (
     <main className='size-full block' id='#main'>
-      {/* <Home>
+      <Home>
         <About />
       </Home>
 
       <About mobile />
       <Objective />
 
-      <Design /> */}
+      <Design />
       <Development />
     </main>
   );
