@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FC, memo } from 'react';
-import AboutImage from '@/public/images/about_image.webp';
+import AboutImage from '@/public/assets/images/about_image.webp';
 
 export const ABOUT_ELEMENTS_IDS = {
   WRAPPER: 'about-wrapper',

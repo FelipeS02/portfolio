@@ -57,6 +57,7 @@ export default {
         foreground: 'hsl(var(--foreground))',
         'foreground-secondary': 'hsl(var(--foreground) / 70%)',
         palette: {
+          '50': 'hsl(var(--palette-50))',
           '100': 'hsl(var(--palette-100))',
           '200': 'hsl(var(--palette-200))',
           '300': 'hsl(var(--palette-300))',
@@ -66,6 +67,7 @@ export default {
           '700': 'hsl(var(--palette-700))',
           '800': 'hsl(var(--palette-800))',
           '900': 'hsl(var(--palette-900))',
+          '950': 'hsl(var(--palette-950))',
         },
         card: {
           DEFAULT: 'hsl(var(--card))',

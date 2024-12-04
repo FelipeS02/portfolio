@@ -2,18 +2,17 @@
 
 import { useScheme, useTheme } from '@/hooks/theme';
 import { FC, useEffect, useRef } from 'react';
-import GlobeDark from '@/public/images/globe-map-dark.webp';
-import GlobeLight from '@/public/images/globe-map-light.webp';
+import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
 import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
 
 const Globe: FC<{ className?: string }> = ({ className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { resolvedTheme } = useScheme();
   const {
     palette: { hex: palette },
   } = useTheme();
+  const { resolvedTheme } = useScheme();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -24,14 +23,14 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
     // Create the WebGL renderer with transparency (alpha: true)
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio); // Ensure smooth rendering on high-DPI screens
-    renderer.setClearColor(isDark ? palette[200] : palette[800]);
+    renderer.setClearColor(isDark ? palette[200] : palette[50]);
     container.appendChild(renderer.domElement);
 
     // Initialize the Three.js scene
     const scene = new THREE.Scene();
 
     // Determine which texture to use based on the current theme
-    const textureUrl = isDark ? GlobeDark.src : GlobeLight.src;
+    const textureUrl = GlobeDark.src;
 
     // Configure the camera with a perspective projection
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -70,9 +69,6 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
     // Initialize renderer size on mount
     resizeRenderer();
 
-    // Add resize event listener
-    window.addEventListener('resize', resizeRenderer);
-
     // Animation loop
     const animate = () => {
       globe.rotation.y += 0.002; // Control rotation speed
@@ -83,11 +79,10 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
 
     // Cleanup function to prevent memory leaks
     return () => {
-      window.removeEventListener('resize', resizeRenderer);
       renderer.dispose();
       container.removeChild(renderer.domElement);
     };
-  }, [resolvedTheme, palette]);
+  }, [palette, resolvedTheme]);
 
   return (
     <div

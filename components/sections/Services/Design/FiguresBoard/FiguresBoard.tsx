@@ -171,6 +171,7 @@ const FiguresBoard = () => {
 
   const applyNewFigurePatterns = useCallback(
     async (pattern: FiguresPatterns[]) => {
+      console.log("entre")
       if (!pattern) throw Error('Pattern is not defined');
 
       // Animate elements to new positions based on random pattern

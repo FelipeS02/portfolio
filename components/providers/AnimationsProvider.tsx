@@ -1,6 +1,6 @@
 'use client';
 
-import gsap from 'gsap';
+import gsap, { Linear } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger, Draggable } from 'gsap/all';
 import { memo } from 'react';
@@ -157,6 +157,22 @@ const AnimationsProvider = memo(function AnimationProvider() {
     if (!contextSafe) return;
     const developmentSection = document.getElementById(DEVELOPMENT.SECTION);
     const globe = document.getElementById('3d-globe');
+    const ringsContainer = document.getElementById('rings-container');
+    const planetOrbit = document.getElementById('planet-orbit');
+
+    if (!ringsContainer || !planetOrbit) return;
+
+    // gsap.set(planetOrbit, { yPercent: 50 });
+
+    const spinLoop = gsap.to(ringsContainer, {
+      rotation: '+=360',
+      repeat: -1,
+      ease: 'none',
+      duration: 60,
+    });
+
+    // ringsContainer.addEventListener('mouseenter', () => spinLoop.pause());
+    // ringsContainer.addEventListener('mouseleave', () => spinLoop.play());
 
     if (!developmentSection || !globe) return;
     const rings = Array.from(
@@ -169,14 +185,19 @@ const AnimationsProvider = memo(function AnimationProvider() {
       const lastRing = rings.at(-1) as HTMLElement;
 
       gsap.set(globe, {
-        maxWidth: `${lastRing.offsetWidth}px`,
-        maxHeight: `${lastRing.offsetHeight}px`,
+        width: `${lastRing.offsetWidth}px`,
+        height: `${lastRing.offsetHeight}px`,
+      });
+
+      gsap.set(globe.getElementsByTagName('canvas'), {
+        width: `${lastRing.offsetWidth}px`,
+        height: `${lastRing.offsetHeight}px`,
       });
     });
 
     // Apply padding
     rings.forEach((ring, index) => {
-      const opacity = Math.max(0, 65 + index * 5);
+      const opacity = Math.max(0, 85 + index * 1);
       const rotate = '20deg';
       if (index === rings.length - 1) {
         gsap.set(ring, {
@@ -200,6 +221,25 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     // Resize globe when window size change
     window.addEventListener('resize', resizeGlobe);
+
+    // gsap
+    //   .timeline({
+    //     scrollTrigger: {
+    //       trigger: developmentSection,
+    //       start: 'top top',
+    //       end: () => `+=${developmentSection.offsetHeight * 4}`,
+    //       scrub: true,
+    //       pin: true,
+    //     },
+    //   })
+    //   .to('#planet-orbit', { yPercent: 0, duration: 0.25 })
+    //   .to('#rings-container', {
+    //     scale: 100,
+    //     duration: 0.5,
+    //     ease: 'circ.inOut',
+    //   })
+    //   .to('#rings-container', { opacity: 0, duration: 0.15 }, '<')
+    //   .to(globe, { height: '100%' }, '<');
 
     // Cleanup function to prevent memory leaks
     return () => {
