@@ -23,12 +23,12 @@ const SectionText = memo(function SectionText({
 }) {
   return (
     <SelectableElement
-      className='flex flex-col gap-2 p-4 z-20 mix-blend-plus-darker dark:mix-blend-plus-lighter'
+      className='flex flex-col gap-2 p-4 z-20'
       selected={selectedElement === DESIGN_SECTION_HERO_ID}
       id={DESIGN_SECTION_HERO_ID}
     >
-      <h4 className='text-5xl md:text-8xl font-semibold'>Diseño web</h4>
-      <p className='text-xl tracking-wider md:max-w-[480px] font-medium text-foreground'>
+      <h4 className='text-5xl md:text-8xl font-semibold drop-shadow-md'>Diseño web</h4>
+      <p className='text-xl md:max-w-[480px] text-foreground'>
         Creación de diseños visualmente impresionantes y centrados en el usuario
         que capturan la identidad y los valores de la marca.
       </p>

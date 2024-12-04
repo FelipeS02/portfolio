@@ -82,6 +82,10 @@
     ::-webkit-scrollbar-thumb {
       @apply bg-foreground/20;
     }
+
+    p {
+      @apply font-archivo;
+    }
   }
   .dark {
     --background: var(--palette-950);

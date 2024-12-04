@@ -10,9 +10,9 @@ const HeaderText = ({
   subtitle: string | ReactNode;
 }) => {
   return (
-    <div className='flex flex-col col-span-1 w-full text-md tracking-wide font-medium'>
-      <span className='text-foreground-secondary'>{title}</span>
-      <span className='text-foreground'>{subtitle}</span>
+    <div className='flex flex-col col-span-1 w-full text-md tracking-wide'>
+      <p className='text-foreground-secondary'>{title}</p>
+      <p className='text-foreground'>{subtitle}</p>
     </div>
   );
 };
@@ -23,9 +23,10 @@ const Header = memo(function Header() {
       <div className='flex flex-col lg:contents gap-6'>
         <HeaderText
           title={
-            <div className='flex'>
-              DISPONIBLE <Dot className='animate-ping' size={26} />
-            </div>
+            <span className='flex items-center gap-2'>
+              DISPONIBLE{' '}
+              <div className='size-1 rounded-full bg-foreground-secondary animate-ping mb-[4px]' />
+            </span>
           }
           subtitle='FELIPESARACHO02@GMAIL.COM'
         />

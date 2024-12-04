@@ -27,7 +27,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           <h1 className='text-[5rem] font-bold leading-[0.9]'>
             SOBRE <br /> MI.
           </h1>
-          <p className='text-xl tracking-wider font-medium'>
+          <p className='text-xl'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
             <span className='font-semibold'>
@@ -70,7 +70,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
               <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] static'>
                 SOBRE MI.
               </h1>
-              <p className='min-w-[250px] text-xl font-medium tracking-wider text-foreground-secondary'>
+              <p className='min-w-[250px] text-xl text-foreground-secondary'>
                 Soy Felipe, desarrollador Full-Stack especializado en Front-end
                 actualmente viviendo en{' '}
                 <span className='font-semibold text-foreground'>

@@ -3,7 +3,7 @@
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger, Draggable } from 'gsap/all';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { ABOUT_ELEMENTS_IDS } from '../sections/About/About';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/Objective/Objective';
 import { useScheme } from '@/hooks/theme';
@@ -20,15 +20,14 @@ const ABOUT_PARSED_IDS = {
 
 const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
+  const matchMedia = useRef(gsap.matchMedia());
 
   useGSAP(() => {
     const homeEl = document.getElementById('home');
     const aboutWrapper = document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER);
 
     if (homeEl && aboutWrapper) {
-      const mm = gsap.matchMedia();
-
-      mm.add('(min-width: 1280px)', () => {
+      matchMedia.current.add('(min-width: 1280px)', () => {
         gsap.set(aboutWrapper, {
           height: 0,
           willChange: 'height',
@@ -160,24 +159,49 @@ const AnimationsProvider = memo(function AnimationProvider() {
     const ringsContainer = document.getElementById('rings-container');
     const planetOrbit = document.getElementById('planet-orbit');
 
-    if (!ringsContainer || !planetOrbit) return;
+    if (!ringsContainer || !planetOrbit || !developmentSection || !globe)
+      return;
 
-    // gsap.set(planetOrbit, { yPercent: 50 });
+    // #region Initial orbit rings config
+    // gsap.to(ringsContainer, {
+    //   rotation: '+=360',
+    //   repeat: -1,
+    //   ease: 'none',
+    //   duration: 60,
+    // });
 
-    gsap.to(ringsContainer, {
-      rotation: '+=360',
-      repeat: -1,
-      ease: 'none',
-      duration: 60,
-    });
-
-    if (!developmentSection || !globe) return;
     const rings = Array.from(
       developmentSection.getElementsByClassName('orbit-ring')
     );
 
     if (!rings) return;
 
+    // Apply padding
+    rings.forEach((ring, index) => {
+      const rotate = '20deg';
+      if (index === rings.length - 1) {
+        gsap.set(ring, {
+          rotate,
+        });
+        return;
+      }
+      // Dynamic opacity to produce profundity on rings
+      // const opacity = Math.max(0, 90 + index * 2);
+      // Calculate the padding for the current element
+      const paddingValue = Math.max(0, 10 - index * 0.25);
+      const blur = Math.max(0, 0.05 + index * 0.15);
+
+      // Apply the padding
+      gsap.set(ring, {
+        padding: `${paddingValue}%`,
+        // opacity: `${opacity}%`,
+        filter: `blur(${blur}px)`,
+        rotate,
+      });
+    });
+    // #endregion
+
+    // #region globe resizing controller
     const resizeGlobe = contextSafe(() => {
       const lastRing = rings.at(-1) as HTMLElement;
 
@@ -192,36 +216,52 @@ const AnimationsProvider = memo(function AnimationProvider() {
       });
     });
 
-    // Apply padding
-    rings.forEach((ring, index) => {
-      const opacity = Math.max(0, 85 + index * 1);
-      const rotate = '20deg';
-      if (index === rings.length - 1) {
-        gsap.set(ring, {
-          rotate,
-        });
-        return;
-      }
-      // Calculate the padding for the current element
-      const paddingValue = Math.max(0, 10 - index * 0.25);
-
-      // Apply the padding
-      gsap.set(ring, {
-        padding: `${paddingValue}%`,
-        opacity: `${opacity}%`,
-        rotate,
-      });
-    });
-
     // Resize on init
     resizeGlobe();
 
     // Resize globe when window size change
     window.addEventListener('resize', resizeGlobe);
+    // #endregion
 
+    const handleParallax = contextSafe((event: MouseEvent) => {
+      gsap.set(rings, { willChange: 'transform' });
+      gsap.set(globe, { willChange: 'transform' });
+
+      const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.008;
+      const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.008;
+
+      const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
+      const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
+
+      gsap.to(rings, { x: ringsDeltaX, y: ringsDeltaY, duration: 0.75 });
+      gsap.to(globe, { x: globeDeltaX, y: globeDeltaY, duration: 0.75 });
+    });
+
+    const restoreElementsPosition = contextSafe(() => {
+      gsap.to(rings, {
+        x: 0,
+        y: 0,
+        duration: 1,
+        ease: 'back.out',
+        willChange: 'none',
+      });
+      gsap.to(globe, {
+        x: 0,
+        y: 0,
+        duration: 1,
+        ease: 'back.out',
+        willChange: 'none',
+      });
+    });
+    matchMedia.current.add('(min-width: 1280px)', () => {
+      document.addEventListener('mousemove', handleParallax);
+      document.addEventListener('mouseleave', restoreElementsPosition);
+    });
     // Cleanup function to prevent memory leaks
     return () => {
       window.removeEventListener('resize', resizeGlobe);
+      document.removeEventListener('mousemove', handleParallax);
+      document.removeEventListener('mouseleave', restoreElementsPosition);
     };
   });
 

@@ -29,11 +29,14 @@ export default {
           '0px 3px 8px rgba(0, 0, 0, .35), 0px 1px 3px rgba(0, 0, 0, .5), inset 0px 1px 0px rgba(255, 255, 255, .08), inset 0px 0px 1px rgba(255, 255, 255, .3)',
         'dev-mode-icon':
           '0px 0px .5px rgba(0, 0, 0, .5), 0px 1px 3px rgba(0, 0, 0, .4), inset 0px 1px 0px rgba(255, 255, 255, .1), inset 0px 0px 1px rgba(255, 255, 255, .3)',
-        globe:
+        'globe-dark':
           '0 0px 80px 15px hsl(var(--palette-500) / 20%), 0 4px 6px -3px hsl(var(--palette-500) / 50%)',
+        'globe-light':
+          '0 0px 80px 15px hsl(var(--palette-700) / 20%), 0 4px 6px -3px hsl(var(--palette-700) / 50%)',
       },
       fontFamily: {
         neue: ['var(--font-ppNeueMontreal)'],
+        archivo: ['var(--font-archivo)'],
       },
       backgroundImage: {
         theme: 'var(--theme-image)',
