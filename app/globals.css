@@ -18,7 +18,7 @@
     --palette-800: 240 7% 16%;
     --palette-900: 240 6% 11%;
 
-    --background: var(--palette-100);
+    --background: var(--palette-50);
     --foreground: var(--palette-900);
 
     --card: 0 0% 100%;

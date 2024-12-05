@@ -65,7 +65,7 @@ const LoadingScreen = () => {
         className={cn(BASE_STYLES, 'bg-palette-900 delay-500')}
         onTransitionEnd={handleBackgroundTransition}
       />
-      <h3 className='fixed place-self-center text-neutral-500 lg:text-neutral-800 text-[4rem] md:text-[6rem] font-bold group-data-[loading=false]/container:opacity-0 mix-blend-luminosity duration-500'>
+      <h3 className='fixed place-self-center text-foreground text-[4rem] md:text-[6rem] font-bold group-data-[loading=false]/container:opacity-0 mix-blend-luminosity duration-500'>
         FSARACHO
       </h3>
     </div>
