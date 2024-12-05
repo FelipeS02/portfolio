@@ -1,14 +1,12 @@
 'use client'; // Habilita el renderizado en cliente
 
 import { useScheme, useTheme } from '@/hooks/theme';
-import { FC, useEffect, useMemo, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
 import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import Image from 'next/image';
-import Marquee from 'react-fast-marquee';
 
 const Globe: FC<{ className?: string }> = ({ className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);

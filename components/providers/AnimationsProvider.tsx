@@ -7,7 +7,7 @@ import { memo } from 'react';
 import { ABOUT_ELEMENTS_IDS } from '../sections/About/About';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/Objective/Objective';
 import { useScheme } from '@/hooks/theme';
-import { DEVELOPMENT } from '../sections/Services/Development/Development';
+import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/Services/Development/Development';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -154,7 +154,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
   useGSAP((_, contextSafe) => {
     if (!contextSafe) return;
-    const developmentSection = document.getElementById(DEVELOPMENT.SECTION);
+    const developmentSection = document.getElementById(
+      DEVELOPMENT_ELEMENTS_IDS.SECTION
+    );
     const globe = document.getElementById('3d-globe');
     const ringsContainer = document.getElementById('rings-container');
     const planetOrbit = document.getElementById('planet-orbit');

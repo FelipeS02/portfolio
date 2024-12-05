@@ -17,10 +17,16 @@ const LineDot = ({ className = '' }: { className?: string }) => (
   />
 );
 
+export const DESIGN_ELEMENTS_IDS = {
+  SECTION: 'design',
+  BOARD: 'design-board',
+  HERO: 'design-section-hero',
+};
+
 const Design = () => {
   return (
     <section
-      id='design'
+      id={DESIGN_ELEMENTS_IDS.SECTION}
       className='max-md:p-6 max-w-full overflow-hidden h-screen p-20 flex relative'
     >
       <div
@@ -29,7 +35,7 @@ const Design = () => {
           horizontalLines,
           verticalLines
         )}
-        id='design-section-board'
+        id={DESIGN_ELEMENTS_IDS.BOARD}
       >
         <LineDot className='-left-[0.450rem] -top-[0.450rem]' />
         <LineDot className='-right-[0.450rem] -top-[0.450rem]' />
@@ -37,7 +43,7 @@ const Design = () => {
         <LineDot className='-right-[0.450rem] -bottom-[0.450rem]' />
         <FiguresBoard />
       </div>
-      <div className='max-md:-ml-6 absolute w-full -ml-20 flex items-center justify-center bottom-4'>
+      <div className='max-md:-ml-6 absolute w-full -ml-20 z-10 flex items-center justify-center bottom-4'>
         <FigmaToolbar className='max-md:scale-75' />
       </div>
     </section>

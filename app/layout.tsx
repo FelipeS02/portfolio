@@ -5,7 +5,7 @@ import RandomThemeProvider from '@/components/providers/RandomThemeProvider';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import { gsap } from 'gsap/gsap-core';
 import { useGSAP } from '@gsap/react';
-import { ReactLenis } from 'lenis/react';
+import LenisProvider from '@/components/providers/LenisProvider';
 import AnimationsProvider from '@/components/providers/AnimationsProvider';
 import { Archivo } from 'next/font/google';
 import './globals.css';
@@ -57,15 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReactLenis
-      root
-      options={{
-        lerp: 0.1,
-        wheelMultiplier: 0.7,
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-      }}
-    >
+    <LenisProvider>
       <html
         lang='es-ES'
         suppressHydrationWarning
@@ -85,6 +77,6 @@ export default function RootLayout({
           </SchemeProvider>
         </body>
       </html>
-    </ReactLenis>
+    </LenisProvider>
   );
 }

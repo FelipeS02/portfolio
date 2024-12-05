@@ -5,7 +5,7 @@ import AboutImage from '@/public/assets/images/about_image.webp';
 export const ABOUT_ELEMENTS_IDS = {
   WRAPPER: 'about-wrapper',
   OVERLAY: 'about-overlay',
-  SECTION: 'about-section',
+  SECTION: 'about',
   TEXT: 'about-text',
 };
 
@@ -16,7 +16,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
     return (
       <section
         className='grid grid-rows-2 w-full h-screen lg:hidden'
-        id='about'
+        id={ABOUT_ELEMENTS_IDS.SECTION}
       >
         <Image
           src={AboutImage}

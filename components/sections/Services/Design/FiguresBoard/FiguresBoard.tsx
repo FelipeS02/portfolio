@@ -11,10 +11,9 @@ import { Palette, PaletteShade } from '@/models/theme';
 import { FiguresPatterns } from '@/models/figuresPatterns';
 import SelectableElement from './SelectableElement';
 import useVisibilityChecker from '@/hooks/useVisibilityChecker';
+import { DESIGN_ELEMENTS_IDS } from '../Design';
 
 gsap.registerPlugin(Draggable);
-
-export const DESIGN_SECTION_HERO_ID = 'design-section-hero';
 
 const SectionText = memo(function SectionText({
   selectedElement,
@@ -24,10 +23,12 @@ const SectionText = memo(function SectionText({
   return (
     <SelectableElement
       className='flex flex-col gap-2 p-4 z-20'
-      selected={selectedElement === DESIGN_SECTION_HERO_ID}
-      id={DESIGN_SECTION_HERO_ID}
+      selected={selectedElement === DESIGN_ELEMENTS_IDS.HERO}
+      id={DESIGN_ELEMENTS_IDS.HERO}
     >
-      <h4 className='text-5xl md:text-8xl font-semibold drop-shadow-md'>Diseño web</h4>
+      <h4 className='text-5xl md:text-8xl font-semibold drop-shadow-md'>
+        Diseño web
+      </h4>
       <p className='text-xl md:max-w-[480px] text-foreground'>
         Creación de diseños visualmente impresionantes y centrados en el usuario
         que capturan la identidad y los valores de la marca.
@@ -51,6 +52,8 @@ const applyStyles = (
 ) => {
   return {
     ...styles,
+    // Forcing GPU to better perfomance
+    force3d: true,
     // Resolve palette background color
     backgroundColor: getPaletteValue(palette, styles?.paletteBackground),
   };
@@ -96,7 +99,7 @@ const FiguresBoard = () => {
   // Initialize GSAP Draggable instances and assign them to elements
   useGSAP(
     () => {
-      const sectionHero = document.getElementById(DESIGN_SECTION_HERO_ID);
+      const sectionHero = document.getElementById(DESIGN_ELEMENTS_IDS.HERO);
       if (!figureElementsList.current || !boardRef.current || !sectionHero)
         return;
 
@@ -171,7 +174,6 @@ const FiguresBoard = () => {
 
   const applyNewFigurePatterns = useCallback(
     async (pattern: FiguresPatterns[]) => {
-      console.log("entre")
       if (!pattern) throw Error('Pattern is not defined');
 
       // Animate elements to new positions based on random pattern
@@ -250,9 +252,8 @@ const FiguresBoard = () => {
 
   // Effect to handle automatic updates every 10 seconds
   useEffect(() => {
-    if (!isSectionVisible) return;
-
-    let isCancelled = false;
+    // Cancel if section is not visible
+    let isCancelled = !isSectionVisible;
 
     const executeWithDelay = async () => {
       if (isCancelled) return;

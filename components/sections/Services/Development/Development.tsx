@@ -1,9 +1,8 @@
 import { Fragment } from 'react';
 import TechnologiesRings from './Technologies/TechnologiesRings';
 import TechnologiesBanner from './Technologies/TechnologiesBanner';
-import Globe from './Technologies/Globe';
 
-export const DEVELOPMENT = {
+export const DEVELOPMENT_ELEMENTS_IDS = {
   SECTION: 'development-section',
 };
 
@@ -23,7 +22,7 @@ const Development = () => {
   return (
     <section
       className='h-screen w-full max-h-screen flex flex-col items-center justify-end overflow-hidden relative will-change-transform duration-1000'
-      id={DEVELOPMENT.SECTION}
+      id={DEVELOPMENT_ELEMENTS_IDS.SECTION}
     >
       <div className='w-full px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20 z-10 border-t-2 bg-background/50 border-palette-500 flex justify-between items-center '>
         <div className='flex flex-col gap-3'>
