@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import useVisibilityChecker from '@/hooks/useVisibilityChecker';
 
 const Globe: FC<{ className?: string }> = ({ className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -15,20 +16,28 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
   } = useTheme();
   const { resolvedTheme } = useScheme();
 
+  const haveToRender = useVisibilityChecker(containerRef.current as Element, {
+    // Added margin to re/render half section before
+    rootMargin: '100%',
+  });
+
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-
   useEffect(() => {
+    if (!haveToRender) return;
     const container = containerRef.current;
+
     if (!container) return;
 
     const isDark = resolvedTheme === 'dark';
 
     // Create the WebGL renderer with transparency (alpha: true)
     const renderer = new THREE.WebGLRenderer({ alpha: true });
+
     renderer.setPixelRatio(
       isMobile ? Math.min(2, window.devicePixelRatio) : window.devicePixelRatio
     ); // Ensure smooth rendering on high-DPI screens
+
     renderer.setClearColor(isDark ? palette[200] : palette[50]);
     container.appendChild(renderer.domElement);
 
@@ -48,6 +57,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       : new THREE.SphereGeometry(100, 64, 32);
 
     const material = new THREE.MeshBasicMaterial({ transparent: true });
+    
     const globe = new THREE.Mesh(geometry, material);
     scene.add(globe);
 
@@ -70,7 +80,6 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
     const resizeRenderer = () => {
       const width = container.offsetWidth;
       const height = container.offsetHeight;
-
       renderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -85,6 +94,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
+    
     animate();
 
     // Cleanup function to prevent memory leaks
@@ -92,7 +102,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       renderer.dispose();
       container.removeChild(renderer.domElement);
     };
-  }, [resolvedTheme, isMobile, palette]);
+  }, [resolvedTheme, isMobile, palette, haveToRender]);
 
   return (
     <div

@@ -12,9 +12,11 @@ export default function Page() {
       </Home>
 
       <About mobile />
+
       <Objective />
 
       <Design />
+
       <Development />
     </main>
   );
