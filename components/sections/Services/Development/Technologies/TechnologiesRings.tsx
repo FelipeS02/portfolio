@@ -89,7 +89,7 @@ const TechnologiesRings = memo(function TechnologiesRings() {
           </Ring>
         </Ring>
       </div>
-      <Globe className='absolute inset-0 place-self-center max-w-full dark:shadow-globe-dark shadow-globe-light overflow-hidden' />
+      <Globe className='absolute m-auto place-self-center max-w-full dark:shadow-globe-dark shadow-globe-light overflow-hidden' />
     </div>
   );
 });
