@@ -16,16 +16,16 @@ export const RingItem = ({
   Icon: LucideIcon;
 } & LucideProps) => {
   const stylesByPosition: Record<typeof position, string> = {
-    right: 'top-1/2 right-0 translate-x-1/2 -translate-y-1/2',
-    left: 'top-1/2 left-0 -translate-x-1/2 -translate-y-1/2',
-    bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2',
-    top: 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2',
+    right: 'top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r',
+    left: 'top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-l',
+    bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-gradient-to-b',
+    top: 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-t',
   };
 
   return (
     <div
       className={cn(
-        'p-3 bg-gradient-to-b from-palette-800 to-palette-900 border border-palette-800 absolute rounded-full aspect-square flex items-center justify-center',
+        'p-3 from-palette-800 to-palette-900 border border-palette-800 absolute rounded-full aspect-square flex items-center justify-center',
         stylesByPosition[position],
         className
       )}

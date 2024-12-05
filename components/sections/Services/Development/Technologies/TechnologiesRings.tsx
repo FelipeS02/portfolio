@@ -15,7 +15,7 @@ import { memo } from 'react';
 const TechnologiesRings = memo(function TechnologiesRings() {
   return (
     <div
-      className='flex items-center justify-center size-full absolute'
+      className='flex items-center justify-center h-screen w-full sticky -mb-[100vh] top-0 overflow-hidden '
       id='planet-orbit'
     >
       <div

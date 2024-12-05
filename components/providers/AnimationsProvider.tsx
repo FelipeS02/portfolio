@@ -247,8 +247,8 @@ const AnimationsProvider = memo(function AnimationProvider() {
       gsap.set(rings, { willChange: 'transform' });
       gsap.set(globe, { willChange: 'transform' });
 
-      const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.008;
-      const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.008;
+      const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.01;
+      const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.01;
 
       const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
       const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
