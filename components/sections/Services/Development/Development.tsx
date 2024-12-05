@@ -21,7 +21,7 @@ const Development = () => {
 
   return (
     <section
-      className='size-screen relative'
+      className='size-screen relative bg-palette-200 dark:bg-palette-950'
       id={DEVELOPMENT_ELEMENTS_IDS.SECTION}
     >
       <TechnologiesRings />

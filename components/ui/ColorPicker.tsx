@@ -68,7 +68,12 @@ const ColorPicker: FC<
               {parsedStoreValue}
             </span>
             <ChevronRight size={18} className='text-foreground-secondary/40' />
-            <span style={{ color: value }}>{value}</span>
+            <input
+              style={{ all: 'unset', color: value, maxWidth: '8em' }}
+              value={value}
+              maxLength={7}
+              onChange={(e) => setValue(e.target.value)}
+            />
           </div>
         </div>
         <HexColorPicker color={value} onChange={setValue} />
