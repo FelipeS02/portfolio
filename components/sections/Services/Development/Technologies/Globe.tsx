@@ -25,6 +25,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
 
   useEffect(() => {
     if (!haveToRender) return;
+    
     const container = containerRef.current;
 
     if (!container) return;
@@ -57,7 +58,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       : new THREE.SphereGeometry(100, 64, 32);
 
     const material = new THREE.MeshBasicMaterial({ transparent: true });
-    
+
     const globe = new THREE.Mesh(geometry, material);
     scene.add(globe);
 
@@ -94,7 +95,7 @@ const Globe: FC<{ className?: string }> = ({ className = '' }) => {
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
-    
+
     animate();
 
     // Cleanup function to prevent memory leaks

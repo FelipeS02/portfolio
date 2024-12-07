@@ -1,18 +1,15 @@
 'use client';
 
 import gsap from 'gsap';
-import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react';
+import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { LenisRef, ReactLenis } from 'lenis/react';
 
 const LenisProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const lenisRef = useRef<LenisRef | null>(null);
+  const lenisRef = useRef<LenisRef>(null);
 
-  const handleLenisRef = useCallback((node: LenisRef) => {
-    if (!node?.lenis) return;
-
-    lenisRef.current = node;
-
-    // #region integration with GSAP
+  useEffect(() => {
+    if (!lenisRef.current) return;
+    
     // Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
     // This ensures Lenis's smooth scroll animation updates on each GSAP tick
     function update(time: number) {
@@ -22,7 +19,6 @@ const LenisProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     // Disable lag smoothing in GSAP to prevent any delay in scroll animations
     gsap.ticker.lagSmoothing(0);
-    // #endregion
 
     return () => gsap.ticker.remove(update);
   }, []);
@@ -37,7 +33,7 @@ const LenisProvider: FC<{ children: ReactNode }> = ({ children }) => {
         smoothWheel: true,
         autoRaf: false,
       }}
-      ref={handleLenisRef}
+      ref={lenisRef}
     >
       {children}
     </ReactLenis>
