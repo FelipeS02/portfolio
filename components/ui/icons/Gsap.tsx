@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const Gsap = createLucideIcon('Gsap', [
+export const Gsap = createLucideIcon('Gsap', [
   [
     'path',
     {
@@ -26,5 +26,3 @@ const Gsap = createLucideIcon('Gsap', [
     },
   ],
 ]);
-
-export default Gsap

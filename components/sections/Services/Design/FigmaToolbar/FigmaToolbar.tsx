@@ -11,7 +11,7 @@ import {
   Text,
   DevMode as DevModeIcon,
 } from './Icons';
-import { Separator } from '@/components/ui/Separator';
+import { Separator } from '@/components/ui';
 
 const ToolbarOption: FC<{
   icon: ReactNode;

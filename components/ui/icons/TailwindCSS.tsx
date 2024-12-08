@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const TailwindCSS = createLucideIcon('TailwindCSS', [
+export const TailwindCSS = createLucideIcon('TailwindCSS', [
   [
     'path',
     {
@@ -9,4 +9,3 @@ const TailwindCSS = createLucideIcon('TailwindCSS', [
   ],
 ]);
 
-export default TailwindCSS

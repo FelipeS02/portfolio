@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import SchemeProvider from '@/components/providers/SchemeProvider';
 import RandomThemeProvider from '@/components/providers/RandomThemeProvider';
-import LoadingScreen from '@/components/ui/LoadingScreen';
+import LoadingScreen from '@/components/LoadingScreen';
 import { gsap } from 'gsap/gsap-core';
 import { useGSAP } from '@gsap/react';
 import LenisProvider from '@/components/providers/LenisProvider';

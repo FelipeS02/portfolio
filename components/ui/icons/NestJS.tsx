@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const NestJS = createLucideIcon('NestJS', [
+export const NestJS = createLucideIcon('NestJS', [
   [
     'path',
     {
@@ -9,5 +9,3 @@ const NestJS = createLucideIcon('NestJS', [
     },
   ],
 ]);
-
-export default NestJS;

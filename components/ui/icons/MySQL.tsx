@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const MySQL = createLucideIcon('MySQL', [
+export const MySQL = createLucideIcon('MySQL', [
   [
     'path',
     {
@@ -8,5 +8,3 @@ const MySQL = createLucideIcon('MySQL', [
     },
   ],
 ]);
-
-export default MySQL;

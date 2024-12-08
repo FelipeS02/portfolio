@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const CSharp = createLucideIcon('CSharp', [
+export const CSharp = createLucideIcon('CSharp', [
   [
     'path',
     {
@@ -43,5 +43,3 @@ const CSharp = createLucideIcon('CSharp', [
     },
   ],
 ]);
-
-export default CSharp;

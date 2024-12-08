@@ -28,4 +28,4 @@ const BackgroundClippedText = <T extends ElementType = 'span'>({
   );
 };
 
-export default BackgroundClippedText;
+export { BackgroundClippedText };

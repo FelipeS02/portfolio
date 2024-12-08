@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const Typescript = createLucideIcon('Typescript', [
+export const Typescript = createLucideIcon('Typescript', [
   [
     'path',
     {
@@ -8,5 +8,3 @@ const Typescript = createLucideIcon('Typescript', [
     },
   ],
 ]);
-
-export default Typescript

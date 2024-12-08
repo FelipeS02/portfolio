@@ -5,7 +5,6 @@ import { useTheme } from '@/hooks/theme';
 import { cn } from '@/lib/utils';
 import { TransitionEvent, useEffect, useState } from 'react';
 import { useImageLoading } from '@/hooks/useImageLoading';
-import { useLenis } from 'lenis/dist/lenis-react.js';
 
 const BASE_STYLES =
   'col-span-1 transition-loading h-screen min-w-full group-data-[loading=false]/container:h-0 ease-in-out duration-350 will-change-auto';

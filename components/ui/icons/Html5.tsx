@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const Html5 = createLucideIcon('Html5', [
+export const Html5 = createLucideIcon('Html5', [
   ['path', { d: 'M4.6043 20.0068 3 2h17.6373l-1.6042 17.9971L11.8041 22' }],
   ['path', { d: 'M11.8184 20.4688V3.478h7.2095l-1.3758 15.3622' }],
   [
@@ -22,4 +22,3 @@ const Html5 = createLucideIcon('Html5', [
   ],
 ]);
 
-export default Html5;

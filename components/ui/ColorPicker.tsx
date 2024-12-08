@@ -100,6 +100,7 @@ const ColorPicker: FC<
     </Popover>
   );
 };
+
 ColorPicker.displayName = 'ColorPicker';
 
 export { ColorPicker };

@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const NodeJs = createLucideIcon('NodeJs', [
+export const NodeJs = createLucideIcon('NodeJs', [
   [
     'path',
     {
@@ -9,5 +9,3 @@ const NodeJs = createLucideIcon('NodeJs', [
     },
   ],
 ]);
-
-export default NodeJs;

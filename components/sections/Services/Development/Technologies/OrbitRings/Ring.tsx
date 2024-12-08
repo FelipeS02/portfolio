@@ -1,7 +1,7 @@
 import { FC, memo, ReactNode } from 'react';
-import styles from './ring.module.css';
 import { cn } from '@/lib/utils';
 import { LucideIcon, LucideProps } from 'lucide-react';
+import styles from './ring.module.css';
 
 export const RingItem = ({
   Icon,

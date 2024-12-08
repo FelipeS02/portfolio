@@ -1,6 +1,6 @@
 import { createLucideIcon } from 'lucide-react';
 
-const Css = createLucideIcon('Css', [
+export const Css = createLucideIcon('Css', [
   [
     'path',
     {
@@ -16,5 +16,3 @@ const Css = createLucideIcon('Css', [
     },
   ],
 ]);
-
-export default Css;
