@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import useVisibilityChecker from '@/hooks/useVisibilityChecker';
+import { useUnmount } from '@/hooks/useUnmount';
+import { useDebounceValue } from '@/hooks/useDebounceValue';
 
 type GlobeUtils = {
   renderer: THREE.WebGLRenderer;
@@ -16,93 +18,112 @@ type GlobeUtils = {
   globe: THREE.Mesh;
 };
 
+type RenderParams = {
+  renderer: THREE.WebGLRenderer | null;
+  rendered: boolean;
+  renderedScheme: string;
+  renderedPalette: string;
+};
+
 const Globe: FC<{ className?: string }> = memo(function Globe({
   className = '',
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderer, setRenderer] = useState<THREE.WebGLRenderer | null>(null);
-  const [rendered, setRendered] = useState(false);
-  const [currentColor, setCurrentColor] = useState<string>('');
+
+  const { resolvedTheme } = useScheme();
 
   const {
     palette: { hex: palette },
     hexCode,
+    fullfiled: paletteIsFullfiled,
   } = useTheme();
 
-  const haveToRender = useVisibilityChecker(containerRef.current as Element, {
-    // Added margin to re/render half section before
-    rootMargin: '100%',
+  const [debouncedPaletteColor] = useDebounceValue(hexCode, 250);
+  const [debouncedShade] = useDebounceValue(resolvedTheme, 250);
+
+  // Current state of render
+  const [
+    { renderedPalette, rendered, renderer, renderedScheme },
+    setRenderParams,
+  ] = useState<RenderParams>({
+    renderer: null,
+    rendered: false,
+    renderedScheme: '',
+    renderedPalette: '',
   });
-  const { resolvedTheme } = useScheme();
 
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const renderScene = useCallback(async (): Promise<GlobeUtils | void> => {
     const container = containerRef.current;
 
-    if (!container) return;
+    if (!container || !resolvedTheme || !paletteIsFullfiled) return;
 
-    const { renderer, scene, camera, globe } = await new Promise<GlobeUtils>(
-      (resolve) => {
-        // #region Initialize ThreeJs utils
-        // Create the WebGL renderer with transparency (alpha: true)
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
+    const {
+      renderer: newRenderer,
+      scene,
+      camera,
+      globe,
+    } = await new Promise<GlobeUtils>((resolve) => {
+      // #region Initialize ThreeJs utils
 
-        // Initialize the Three.js scene
-        const scene = new THREE.Scene();
+      // Create the WebGL renderer with transparency (alpha: true)
+      const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-        // Configure the camera with a perspective projection
-        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        camera.position.z = 165; // Adjust the z-position for the desired view
+      // Initialize the Three.js scene
+      const scene = new THREE.Scene();
 
-        const material = new THREE.MeshBasicMaterial({ transparent: true });
+      // Configure the camera with a perspective projection
+      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+      camera.position.z = 165; // Adjust the z-position for the desired view
 
-        // Initialize the sphere globe
-        const geometry = isMobile
-          ? new THREE.SphereGeometry(100, 32, 16)
-          : new THREE.SphereGeometry(100, 64, 32);
-        const globe = new THREE.Mesh(geometry, material);
+      const material = new THREE.MeshBasicMaterial({ transparent: true });
 
-        const textureLoader = new THREE.TextureLoader();
-        // #endregion
+      // Initialize the sphere globe
+      const geometry = isMobile
+        ? new THREE.SphereGeometry(100, 32, 16)
+        : new THREE.SphereGeometry(100, 64, 32);
+      const globe = new THREE.Mesh(geometry, material);
 
-        renderer.setPixelRatio(
-          isMobile
-            ? Math.min(2, window.devicePixelRatio)
-            : window.devicePixelRatio
-        );
-        // Ensure smooth rendering on high-DPI screens
-        renderer.setClearColor(
-          resolvedTheme === 'dark' ? palette[200] : palette[50]
-        );
-        container.appendChild(renderer.domElement);
+      const textureLoader = new THREE.TextureLoader();
+      // #endregion
 
-        scene.add(globe);
+      renderer.setPixelRatio(
+        isMobile
+          ? Math.min(2, window.devicePixelRatio)
+          : window.devicePixelRatio
+      );
+      // Ensure smooth rendering on high-DPI screens
+      renderer.setClearColor(
+        resolvedTheme === 'dark' ? palette[200] : palette[50]
+      );
+      container.appendChild(renderer.domElement);
 
-        // Load and apply the texture to the globe
-        textureLoader.load(
-          GlobeDark.src, // Texture
-          (texture) => {
-            // Set texture properties for improved rendering
-            if (!isMobile)
-              texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-            globe.material.map = texture;
+      scene.add(globe);
 
-            globe.material.needsUpdate = true;
+      // Load and apply the texture to the globe
+      textureLoader.load(
+        GlobeDark.src, // Texture
+        (texture) => {
+          // Set texture properties for improved rendering
+          if (!isMobile)
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+          globe.material.map = texture;
 
-            resolve({ renderer, scene, camera, globe });
-          },
-          undefined,
-          (error) => console.error('Failed to load texture:', error)
-        );
-      }
-    );
+          globe.material.needsUpdate = true;
+
+          resolve({ renderer, scene, camera, globe });
+        },
+        undefined,
+        (error) => console.error('Failed to load texture:', error)
+      );
+    });
 
     // Resize renderer and update camera aspect ratio
     const resizeRenderer = () => {
       const width = container.offsetWidth;
       const height = container.offsetHeight;
-      renderer.setSize(width, height);
+      newRenderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
     };
@@ -113,18 +134,22 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     // Animation loop
     const animate = () => {
       globe.rotation.y += 0.002; // Control rotation speed
-      renderer.render(scene, camera);
+      newRenderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
 
     animate();
 
-    setRendered(true);
-    setCurrentColor(hexCode);
-    setRenderer(renderer);
+    // Store globe construction params
+    setRenderParams({
+      rendered: true,
+      renderedPalette: hexCode,
+      renderer: newRenderer,
+      renderedScheme: resolvedTheme,
+    });
 
-    return { renderer, scene, camera, globe };
-  }, [isMobile, palette, hexCode, resolvedTheme]);
+    return { renderer: newRenderer, scene, camera, globe };
+  }, [isMobile, palette, hexCode, resolvedTheme, paletteIsFullfiled]);
 
   // DOM and renderer cleanup
   const cleanup = useCallback(() => {
@@ -133,29 +158,42 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     const container = containerRef?.current;
 
     renderer?.dispose();
-    setRenderer(null);
+    setRenderParams((prev) => ({ ...prev, renderer: null }));
     container.removeChild(renderer.domElement);
   }, [renderer]);
 
   // First render
   useEffect(() => {
-    if (!haveToRender || rendered || !containerRef?.current) return;
+    if (rendered || !containerRef?.current) return;
 
     renderScene();
+  }, [renderScene, rendered, renderer, cleanup]);
 
-    return () => {
-      cleanup();
-    };
-  }, [renderScene, haveToRender, rendered, renderer, cleanup]);
-
-  // Re render when palette changes
+  // Re render management
   useEffect(() => {
-    if (renderer && currentColor !== hexCode) {
+    const hasToReRender =
+      renderer &&
+      rendered &&
+      (renderedPalette !== debouncedPaletteColor ||
+        renderedScheme !== debouncedShade);
+
+    if (hasToReRender) {
       cleanup();
 
       renderScene();
     }
-  }, [renderScene, currentColor, hexCode, renderer, cleanup]);
+  }, [
+    renderScene,
+    rendered,
+    renderedPalette,
+    renderedScheme,
+    cleanup,
+    renderer,
+    debouncedPaletteColor,
+    debouncedShade,
+  ]);
+
+  useUnmount(() => cleanup());
 
   return (
     <div
