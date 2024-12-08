@@ -12,7 +12,7 @@ const HeroSection = memo(function HeroSection() {
       <HeroPhotoCredits>
         <BackgroundClippedText
           as='h1'
-          className='font-bold flex flex-col text-[18vw] lg:text-[10vw] leading-[0.8] w-fit -ml-[0.05em] drop-shadow-hero text-left relative transition-[font-size]'
+          className='font-bold flex flex-col text-[18vw] lg:text-[10vw] leading-[0.8] w-fit -ml-[0.05em] text-left relative transition-[font-size]'
           letter-slide-up='true'
         >
           <SplittedWord>FELIPE</SplittedWord>
