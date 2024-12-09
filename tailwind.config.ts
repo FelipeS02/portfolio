@@ -59,6 +59,7 @@ export default {
       animation: {
         blink: 'blink 1s ease infinite',
         'orbit-rings': 'spin 60s linear infinite',
+        radar: 'spin 8s linear infinite',
         earth: 'earth 10s linear 0s infinite',
       },
       colors: {

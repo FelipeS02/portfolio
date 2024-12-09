@@ -1,9 +1,12 @@
 import { Fragment } from 'react';
 import TechnologiesRings from './Technologies/TechnologiesRings';
 import TechnologiesList from './Technologies/TechnologiesList';
+import Experience from './Experience/Experience';
 
 export const DEVELOPMENT_ELEMENTS_IDS = {
   SECTION: 'development-section',
+  CONTENT: 'development-section-info',
+  HERO: 'development-section-hero',
 };
 
 const Development = () => {
@@ -26,8 +29,14 @@ const Development = () => {
     >
       <TechnologiesRings />
 
-      <div className='min-h-screen flex items-end'>
-        <div className='w-full px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20 z-10 border-t-2 border-palette-600 flex justify-between items-center relative bg-background/50'>
+      <div
+        id={DEVELOPMENT_ELEMENTS_IDS.CONTENT}
+        className='bg-background/50 z-10 relative'
+      >
+        <div
+          className='w-full px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20  border-t-2 border-palette-600 flex justify-between items-center relative'
+          id={DEVELOPMENT_ELEMENTS_IDS.HERO}
+        >
           <div className='flex flex-col gap-3'>
             <h4 className='text-3xl md:text-6xl font-semibold after:ml-1 after:border-2 after:contents-["-"] md:after:border-4 after:border-palette-600 md:after:ml-4 after:animate-blink'>
               {texts[Math.floor(Math.random() * texts.length)]}
@@ -39,9 +48,11 @@ const Development = () => {
             </p>
           </div>
         </div>
-      </div>
 
-      <TechnologiesList />
+        <TechnologiesList />
+
+        <Experience />
+      </div>
     </section>
   );
 };
