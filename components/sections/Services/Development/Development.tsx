@@ -31,7 +31,7 @@ const Development = () => {
 
       <div
         id={DEVELOPMENT_ELEMENTS_IDS.CONTENT}
-        className='bg-background/50 z-10 relative'
+        className='z-10 relative'
       >
         <div
           className='w-full px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20  border-t-2 border-palette-600 flex justify-between items-center relative'

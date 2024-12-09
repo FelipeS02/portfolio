@@ -196,12 +196,12 @@ const AnimationsProvider = memo(function AnimationProvider() {
       });
 
       gsap.to(developmentSectionContent, {
-        backgroundColor: `${bgByTheme}85`,
+        backgroundColor: `${bgByTheme}90`,
         ease: 'sine.inOut',
         scrollTrigger: {
           trigger: developmentSectionContent,
           start: 'start center',
-          end: () => `+=${developmentSectionContent.offsetHeight * 0.4}`,
+          end: () => `+=${developmentSectionContent.offsetHeight * 0.2}`,
           scrub: true,
         },
       });
