@@ -1,0 +1,26 @@
+/* .radar {
+  background: radial-gradient(
+    circle,
+    hsl(var(--palette-700) / 50%),
+    transparent
+  );
+} */
+
+.radar::before {
+  @apply size-full absolute inset-0 animate-radar;
+  content: '';
+  background: conic-gradient(transparent 60%, hsl(var(--palette-500)));
+  z-index: 2;
+}
+
+.radar::after {
+  @apply absolute h-full inset-0 place-self-center origin-center animate-radar;
+  content: '';
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--palette-500)) ,
+    transparent calc(50% + 1px)
+  );
+  z-index: 3;
+}

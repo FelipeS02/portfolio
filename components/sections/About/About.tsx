@@ -6,7 +6,7 @@ export const ABOUT_ELEMENTS_IDS = {
   WRAPPER: 'about-wrapper',
   OVERLAY: 'about-overlay',
   SECTION: 'about',
-  TEXT: 'about-text',
+  CONTENT: 'about-content',
 };
 
 const About: FC<{ mobile?: boolean }> = memo(function About({
@@ -64,7 +64,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           </div>
           <div
             className='items-center flex flex-col justify-center text-balance md:items-start overflow-hidden'
-            id={ABOUT_ELEMENTS_IDS.TEXT}
+            id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
             <div className='p-8'>
               <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] static'>

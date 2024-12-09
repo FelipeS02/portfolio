@@ -1,18 +1,13 @@
 import { cn } from '@/lib/utils';
-import React, { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
-
-type BackgroundClippedTextProps<T extends ElementType> = {
-  as?: T;
-  className?: string;
-  children?: ReactNode;
-} & Omit<ComponentPropsWithoutRef<T>, 'as' | 'className' | 'children'>;
+import ComposedComponent from '@/models/composedComponent';
+import React, { ElementType } from 'react';
 
 const BackgroundClippedText = <T extends ElementType = 'span'>({
   as,
   className = '',
   children,
   ...props
-}: BackgroundClippedTextProps<T>) => {
+}: ComposedComponent<T>) => {
   const Component = as ?? 'span';
 
   return (

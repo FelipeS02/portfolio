@@ -38,7 +38,7 @@ const ppNeueMontreal = localFont({
 });
 
 const archivo = Archivo({
-  weight: ['400', '500', '600'],
+  weight: ['300', '400', '500', '600'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-archivo',

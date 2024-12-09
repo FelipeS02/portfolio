@@ -1,20 +1,20 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
+import { PropsWithChildren } from 'react';
 
 const ListItem = ({
-  name,
+  children,
   className = '',
-}: {
-  name: string;
+}: PropsWithChildren<{
   className?: string;
-}) => {
+}>) => {
   return (
     <li
       className={cn(
-        'last-of-type:border-0 first-of-type:border-t-2 border-b-2 border-palette-600 py-8 text-6xl lg:text-8xl font-neue text-pretty',
+        'border-b-2 first:border-t-2 last:border-b-0 border-palette-600 h-52 font-neue text-pretty flex items-center',
         className
       )}
     >
-      <h6>{name}</h6>
+      {children}
     </li>
   );
 };

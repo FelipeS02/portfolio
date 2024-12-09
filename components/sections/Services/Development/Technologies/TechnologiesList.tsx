@@ -1,3 +1,4 @@
+import { DevelopmentListTitle, DevelopmentList } from '@/components/layout';
 import { ListItem } from '@/components/ui';
 import { Boxes } from 'lucide-react';
 
@@ -18,21 +19,22 @@ const technologies = [
 
 const TechnologiesList = () => {
   return (
-    <div className='min-h-screen flex flex-col gap-3 px-4 lg:px-14 w-full relative bg-background/50'>
+    <DevelopmentList>
       <span className='sr-only'>Tech stack</span>
-      <h5 className='flex gap-1 items-center text-2xl lg:text-3xl font-medium font-archivo'>
-        <Boxes size={30} strokeWidth={1.5} className='text-inherit' /> STACK
-      </h5>
+      <DevelopmentListTitle className='flex gap-2 items-center'>
+        <Boxes size={30} strokeWidth={1.5} className='text-palette-500' /> STACK
+      </DevelopmentListTitle>
       <ul>
         {technologies.map((name) => (
-          <ListItem name={name} key={`list-tech-${name}`} />
+          <ListItem className='text-6xl lg:text-8xl' key={`list-tech-${name}`}>
+            <h6>{name}</h6>
+          </ListItem>
         ))}
-        <ListItem
-          name='Abierto a nuevas tecnologías'
-          className='text-4xl lg:text-6xl font-medium'
-        />
+        <ListItem className='text-4xl lg:text-6xl font-medium'>
+          <h6>Abierto a nuevas tecnologías</h6>
+        </ListItem>
       </ul>
-    </div>
+    </DevelopmentList>
   );
 };
 

@@ -8,3 +8,4 @@ export * from './Tooltip';
 export * from './ThemeSwitch';
 export * from './Popover';
 export * from './HTMLComment';
+export * from './ArrowButton';
