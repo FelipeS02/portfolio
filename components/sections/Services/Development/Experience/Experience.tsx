@@ -21,11 +21,11 @@ const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
 );
 
 const ExperienceInfo: FC<{ children: ReactNode }> = ({ children }) => {
-  return <div className='gap-2 lg:gap-6 flex justify-end flex-wrap'>{children}</div>;
+  return <div className=' gap-2 lg:gap-6 flex flex-wrap'>{children}</div>;
 };
 
 const StyledLilabIcon = () => (
-  <Lilab className='grayscale dark:invert size-40' />
+  <Lilab className='-translate-x-[5%] grayscale dark:invert w-40' />
 );
 
 const Experience = () => {
@@ -47,9 +47,8 @@ const Experience = () => {
       </p>
 
       <ul className='size-full'>
-        <ListItem className='overflow-hidden relative justify-between'>
-          <Radar className='absolute w-[40%] -translate-x-5 opacity-70 bg-background' />
-          <div className='z-[2]'>
+        <ListItem className='overflow-hidden relative justify-between flex-wrap'>
+          <div>
             <h6 className='text-2xl font-semibold tracking-wide'>
               En búsqueda de nuevos desafíos
             </h6>
@@ -66,8 +65,9 @@ const Experience = () => {
           >
             Contactame ahora
           </ArrowButton>
+          <Radar className='max-md:place-self-center absolute w-full md:w-[40%] md:-translate-x-5 opacity-70 bg-background z-[-1]' />
         </ListItem>
-        <ListItem className='justify-between'>
+        <ListItem className='justify-between flex-wrap'>
           <StyledLilabIcon />
           <ExperienceInfo>
             <ExperienceBadge>
@@ -76,7 +76,7 @@ const Experience = () => {
             <ExperienceBadge>Dic. 2023 - Jun. 2024</ExperienceBadge>
           </ExperienceInfo>
         </ListItem>
-        <ListItem className='justify-between'>
+        <ListItem className='justify-between flex-wrap'>
           <StyledLilabIcon />
           <ExperienceInfo>
             <ExperienceBadge>
@@ -85,8 +85,8 @@ const Experience = () => {
             <ExperienceBadge>Nov. 2021 - Mar. 2023</ExperienceBadge>
           </ExperienceInfo>
         </ListItem>
-        <ListItem className='justify-between'>
-          <Henry className='size-56 grayscale dark:invert' />
+        <ListItem className='justify-between flex-wrap'>
+          <Henry className='w-56 grayscale dark:invert' />
           <ExperienceInfo>
             <ExperienceBadge>
               Bootcamp / Practica Profesional Full-Stack

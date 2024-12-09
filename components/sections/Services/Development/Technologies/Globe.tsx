@@ -1,4 +1,4 @@
-'use client'; // Habilita el renderizado en cliente
+'use client';
 
 import { useScheme, useTheme } from '@/hooks/theme';
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
@@ -7,7 +7,6 @@ import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import HTMLComment from '@/components/ui/HTMLComment';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import useVisibilityChecker from '@/hooks/useVisibilityChecker';
 import { useUnmount } from '@/hooks/useUnmount';
 import { useDebounceValue } from '@/hooks/useDebounceValue';
 
@@ -80,9 +79,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       const material = new THREE.MeshBasicMaterial({ transparent: true });
 
       // Initialize the sphere globe
-      const geometry = isMobile
-        ? new THREE.SphereGeometry(100, 32, 16)
-        : new THREE.SphereGeometry(100, 64, 32);
+      const geometry = new THREE.SphereGeometry(100, 32, 16);
       const globe = new THREE.Mesh(geometry, material);
 
       const textureLoader = new THREE.TextureLoader();
@@ -167,6 +164,8 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     if (rendered || !containerRef?.current) return;
 
     renderScene();
+
+    return () => cleanup();
   }, [renderScene, rendered, renderer, cleanup]);
 
   // Re render management
@@ -192,8 +191,6 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     debouncedPaletteColor,
     debouncedShade,
   ]);
-
-  useUnmount(() => cleanup());
 
   return (
     <div
