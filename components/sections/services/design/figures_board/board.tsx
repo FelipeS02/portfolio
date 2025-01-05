@@ -53,8 +53,6 @@ const applyStyles = (
 ) => {
   return {
     ...styles,
-    // Forcing GPU to better perfomance
-    force3d: true,
     // Resolve palette background color
     backgroundColor: getPaletteValue(palette, styles?.paletteBackground),
   };
