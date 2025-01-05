@@ -18,7 +18,7 @@
     --palette-800: 240 7% 16%;
     --palette-900: 240 6% 11%;
 
-    --background: var(--palette-50);
+    --background: 0 0% 100%;
     --foreground: var(--palette-900);
 
     --card: 0 0% 100%;
@@ -88,7 +88,7 @@
     }
   }
   .dark {
-    --background: var(--palette-950);
+    --background: 0 0% 7%;
     --foreground: var(--palette-100);
 
     --card: 240 10% 3.9%;

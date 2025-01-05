@@ -1,14 +1,15 @@
 'use client';
 
-import { useScheme, useTheme } from '@/hooks/theme';
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
-import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
+
 import * as THREE from 'three';
+import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
+
+import HTMLComment from '@/components/ui/html_comment';
+import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
+
 import { cn } from '@/lib/utils';
-import HTMLComment from '@/components/ui/HTMLComment';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useUnmount } from '@/hooks/useUnmount';
-import { useDebounceValue } from '@/hooks/useDebounceValue';
+import { useScheme, useTheme } from '@/hooks/theme';
 
 type GlobeUtils = {
   renderer: THREE.WebGLRenderer;
@@ -88,11 +89,11 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       renderer.setPixelRatio(
         isMobile
           ? Math.min(2, window.devicePixelRatio)
-          : window.devicePixelRatio
+          : window.devicePixelRatio,
       );
       // Ensure smooth rendering on high-DPI screens
       renderer.setClearColor(
-        resolvedTheme === 'dark' ? palette[200] : palette[50]
+        resolvedTheme === 'dark' ? palette[200] : palette[50],
       );
       container.appendChild(renderer.domElement);
 
@@ -112,7 +113,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
           resolve({ renderer, scene, camera, globe });
         },
         undefined,
-        (error) => console.error('Failed to load texture:', error)
+        (error) => console.error('Failed to load texture:', error),
       );
     });
 
@@ -196,7 +197,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     <div
       ref={containerRef}
       id='3d-globe'
-      className={cn('size-full aspect-square rounded-full', className)}
+      className={cn('aspect-square size-full rounded-full', className)}
     >
       <HTMLComment text='Props to sohrabzia https://codepen.io/sohrabzia' />
     </div>

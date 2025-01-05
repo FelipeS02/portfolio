@@ -1,5 +1,6 @@
 import { memo, ReactNode } from 'react';
-import HeaderShortcuts from './HeaderShortcuts';
+
+import HeaderShortcuts from './shortcuts';
 
 const HeaderText = ({
   title,
@@ -9,7 +10,7 @@ const HeaderText = ({
   subtitle: string | ReactNode;
 }) => {
   return (
-    <div className='flex flex-col col-span-1 w-full text-md tracking-wide'>
+    <div className='text-md col-span-1 flex w-full flex-col tracking-wide'>
       <p className='text-foreground-secondary'>{title}</p>
       <p className='text-foreground'>{subtitle}</p>
     </div>
@@ -18,13 +19,13 @@ const HeaderText = ({
 
 const Header = memo(function Header() {
   return (
-    <header className='w-full flex justify-between lg:grid grid-cols-3'>
-      <div className='flex flex-col lg:contents gap-6'>
+    <header className='flex w-full grid-cols-3 justify-between lg:grid'>
+      <div className='flex flex-col gap-6 lg:contents'>
         <HeaderText
           title={
             <span className='flex items-center gap-2'>
               DISPONIBLE{' '}
-              <span className='size-1 rounded-full bg-foreground-secondary animate-ping mb-[4px]' />
+              <span className='mb-[4px] size-1 animate-ping rounded-full bg-foreground-secondary' />
             </span>
           }
           subtitle='FELIPESARACHO02@GMAIL.COM'

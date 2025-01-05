@@ -1,6 +1,7 @@
+import { NextRequest } from 'next/server';
+
 import { getNewThemeByHex, getRandomHex } from '@/lib/theme';
 import { Theme } from '@/models/theme';
-import { NextRequest } from 'next/server';
 
 let cachedTheme: Theme | null = null;
 

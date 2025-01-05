@@ -7,19 +7,19 @@
 } */
 
 .radar::before {
-  @apply size-full absolute inset-0 animate-radar;
+  @apply absolute inset-0 size-full animate-radar;
   content: '';
   background: conic-gradient(transparent 60%, hsl(var(--palette-500)));
   z-index: 2;
 }
 
 .radar::after {
-  @apply absolute h-full inset-0 place-self-center origin-center animate-radar;
+  @apply absolute inset-0 h-full origin-center animate-radar place-self-center;
   content: '';
   width: 3px;
   background: linear-gradient(
     to bottom,
-    hsl(var(--palette-500)) ,
+    hsl(var(--palette-500)),
     transparent calc(50% + 1px)
   );
   z-index: 3;

@@ -1,6 +1,8 @@
-import { SplittedText } from '@/components/ui/SplittedText';
-import ClockLines from './ClockLines';
 import { memo } from 'react';
+
+import { SplittedText } from '@/components/ui/splitted_text';
+
+import ClockLines from './clock_lines';
 
 export const OBJECTIVE_ELEMENTS_IDS = {
   SECTION: 'objective',
@@ -11,11 +13,11 @@ const Objective = memo(function Objective() {
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
-      className='my-12 gap-8 px-4 flex flex-col items-center w-full justify-between md:h-[60vh] md:my-28'
+      className='my-12 flex w-full flex-col items-center justify-between gap-8 px-4 md:my-28 md:h-[60vh]'
     >
       <ClockLines />
       <h3
-        className='text-[3rem] md:text-[4rem] font-semibold w-full max-w-[1400px] text-balance leading-tight'
+        className='w-full max-w-[1400px] text-balance text-[3rem] font-semibold leading-tight md:text-[4rem]'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
       >
         <SplittedText>

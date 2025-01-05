@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import SchemeProvider from '@/components/providers/SchemeProvider';
-import RandomThemeProvider from '@/components/providers/RandomThemeProvider';
-import LoadingScreen from '@/components/LoadingScreen';
-import { gsap } from 'gsap/gsap-core';
-import { useGSAP } from '@gsap/react';
-import LenisProvider from '@/components/providers/LenisProvider';
-import AnimationsProvider from '@/components/providers/AnimationsProvider';
 import { Archivo } from 'next/font/google';
+import localFont from 'next/font/local';
+
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap/gsap-core';
+
+import LoadingScreen from '@/components/loading_screen';
+import AnimationsProvider from '@/components/providers/animations_provider';
+import LenisProvider from '@/components/providers/lenis_provider';
+import RandomThemeProvider from '@/components/providers/random_theme';
+import SchemeProvider from '@/components/providers/scheme';
+
 import './globals.css';
 
 const ppNeueMontreal = localFont({
@@ -65,7 +68,7 @@ export default function RootLayout({
         className='notranslate h-full max-h-full'
       >
         <body
-          className={`${ppNeueMontreal.variable} ${archivo.variable} h-full text-foreground bg-background font-neue antialiased md:transition-colors`}
+          className={`${ppNeueMontreal.variable} ${archivo.variable} h-full bg-background font-neue text-foreground antialiased md:transition-colors`}
           suppressHydrationWarning
         >
           <SchemeProvider attribute='class' defaultTheme='system' enableSystem>

@@ -1,9 +1,6 @@
-import { Palette, PaletteShade, Theme } from '@/models/theme';
-import { getPhotosFromPexels } from './pexels';
-import { Photo } from '@/models/photos';
 import tinycolor from 'tinycolor2';
 
-const MOBILE_MQ = '(max-width: 768px)';
+import { Palette, PaletteShade, Theme } from '@/models/theme';
 
 export function hexIsValid(hexCode: string) {
   const regexHex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
@@ -13,7 +10,6 @@ export function hexIsValid(hexCode: string) {
 export function getRandomHex(): string {
   const letters = '0123456789ABCDEF';
 
-  // Not using "#" for correct pexels api call
   let hexCode = '';
 
   for (let i = 0; i < 6; i++) {
@@ -51,18 +47,6 @@ export const initialPalette: Palette = {
     '950': '',
   },
 };
-
-export function getThemeImageByDevice(photo: Photo): string {
-  if (!photo?.src) throw new Error('Photo src set is not defined');
-
-  const isMobile = window.matchMedia(MOBILE_MQ).matches;
-
-  const { large2x, medium } = photo.src;
-
-  const srcByDevice = isMobile ? medium : large2x;
-
-  return srcByDevice;
-}
 
 // Helper function to convert HEX to HSL (using the `tinycolor2` library or equivalent)
 function hexToHsl(hex: string): [number, number, number] {
@@ -113,55 +97,13 @@ function generatePalette(hexColor: string): Palette {
   return palette;
 }
 
-const keywords = [
-  'marble texture',
-  'silk fabric',
-  'abstract',
-  'metallic surface',
-  'liquid metal',
-  'smoke art',
-  'black and white abstract',
-  'concrete texture',
-  'frosted glass',
-  'minimalist patterns',
-  'gradient light',
-  'velvet fabric',
-  'natural stone',
-  'glitter texture',
-  'neon abstract',
-  'gold foil',
-  'carbon fiber',
-  'cracked paint',
-  'light streaks',
-  'geometric patterns',
-  'nature',
-  'clouds',
-  'background',
-  'wall',
-];
-
 export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
   if (!hexIsValid) throw new Error('Invalid Hex Code');
-
-  const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
-
-  const photos = await getPhotosFromPexels({
-    orientation: 'landscape',
-    color: hexCode,
-    per_page: '40',
-    query: randomKeyword,
-  });
-
-  if (!photos)
-    throw new Error(`No results for ${randomKeyword} with code ${hexCode}`);
-
-  const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
 
   const palette = generatePalette(hexCode);
 
   return {
     palette,
-    photo: randomPhoto,
     hexCode,
   };
 }

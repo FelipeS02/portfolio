@@ -1,4 +1,4 @@
-import { RandomThemeContext } from '@/components/providers/RandomThemeProvider';
+import { RandomThemeContext } from '@/components/providers/random_theme';
 import { useContext } from 'react';
 import { useTheme as useNextThemes } from 'next-themes';
 

@@ -1,5 +1,3 @@
-import { Photo } from './photos';
-
 export type PaletteShade =
   | '50'
   | '100'
@@ -23,5 +21,4 @@ export type Palette = {
 export interface Theme {
   hexCode: string;
   palette: Palette;
-  photo: Photo;
 }

@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import { cn } from '@/lib/utils';
+
 import styles from './radar.module.css';
 
 const Lines: FC<{ className: string }> = ({ className = '' }) => {
@@ -69,12 +71,13 @@ const Radar: FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div
       className={cn(
-        'aspect-square overflow-hidden rounded-full relative border-2 border-palette-500 pointer-events-none',
+        'pointer-events-none relative aspect-square overflow-hidden rounded-full border-2 border-palette-500',
         styles.radar,
-        className
+        className,
       )}
       style={{
-        maskImage: 'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 35%)',
+        maskImage:
+          'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 35%)',
       }}
     >
       <Lines className='absolute size-full fill-palette-600/40 stroke-palette-600/20' />

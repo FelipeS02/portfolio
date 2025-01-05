@@ -1,0 +1,22 @@
+.orbit-ring {
+  @apply pointer-events-none relative flex aspect-square w-full rounded-full;
+}
+
+.orbit-ring::before {
+  @apply pointer-events-none absolute inset-0 size-full rounded-full;
+  background: conic-gradient(
+      rgba(109, 46, 255, 0) 6.7%,
+      hsl(var(--palette-500) / 35%) 20.8%,
+      hsl(var(--palette-600) / 70%) 34.9%,
+      hsl(var(--palette-700)) 49.99%,
+      rgba(255, 189, 122, 0) 50%
+    ),
+    hsl(var(--foreground) / 20%);
+  content: '';
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask-composite: exclude;
+  padding: 2px;
+}

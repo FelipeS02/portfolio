@@ -6,7 +6,7 @@ export const SERVICES_TRANSITION_IDS = {
 const Transition = () => {
   return (
     <div
-      className='h-screen w-full bg-background items-center justify-center inset-0 flex'
+      className='inset-0 flex h-screen w-full items-center justify-center bg-background'
       id={SERVICES_TRANSITION_IDS.WRAPPER}
     >
       <h4 className='text-[6rem] font-bold' id={SERVICES_TRANSITION_IDS.TEXT}>

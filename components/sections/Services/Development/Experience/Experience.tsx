@@ -1,10 +1,15 @@
-import { DevelopmentList, DevelopmentListTitle } from '@/components/layout';
-import Radar from './Radar';
-import { ArrowButton, ListItem } from '@/components/ui';
-import { BriefcaseBusiness } from 'lucide-react';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+
+import { BriefcaseBusiness } from 'lucide-react';
+
+import { ArrowButton } from '@/components/ui/arrow_button';
 import { Henry, Lilab } from '@/components/ui/icons';
+import { ListItem } from '@/components/ui/list_item';
+import { DevelopmentList, DevelopmentListTitle } from '@/components/layout';
+
+import { cn } from '@/lib/utils';
+
+import Radar from './radar';
 
 const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
   children,
@@ -12,8 +17,8 @@ const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
 }) => (
   <div
     className={cn(
-      'border-b border-palette-600/50 text-foreground py-1 text-left',
-      className
+      'border-b border-palette-600/50 py-1 text-left text-foreground',
+      className,
     )}
   >
     <p className='text-lg'>{children}</p>
@@ -21,17 +26,17 @@ const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
 );
 
 const ExperienceInfo: FC<{ children: ReactNode }> = ({ children }) => {
-  return <div className=' gap-2 lg:gap-6 flex flex-wrap'>{children}</div>;
+  return <div className='flex flex-wrap gap-2 lg:gap-6'>{children}</div>;
 };
 
 const StyledLilabIcon = () => (
-  <Lilab className='-translate-x-[5%] grayscale dark:invert w-40' />
+  <Lilab className='w-40 -translate-x-[5%] grayscale dark:invert' />
 );
 
 const Experience = () => {
   return (
     <DevelopmentList className='py-14'>
-      <DevelopmentListTitle className='flex gap-2 items-center'>
+      <DevelopmentListTitle className='flex items-center gap-2'>
         <BriefcaseBusiness
           size={30}
           strokeWidth={1.5}
@@ -40,19 +45,19 @@ const Experience = () => {
         Experiencia
       </DevelopmentListTitle>
 
-      <p className='text-xl max-w-[800px] text-balance mb-5'>
+      <p className='mb-5 max-w-[800px] text-balance text-xl'>
         Con mas de dos años de experiencia laboral, he tenido el privilegio de
         contribuir en todas las etapas de la creación de aplicaciones web
         dinámicas y altamente interactivas.
       </p>
 
       <ul className='size-full'>
-        <ListItem className='overflow-hidden relative justify-between flex-wrap'>
+        <ListItem className='relative flex-wrap justify-between overflow-hidden'>
           <div>
             <h6 className='text-2xl font-semibold tracking-wide'>
               En búsqueda de nuevos desafíos
             </h6>
-            <p className='text-lg max-w-[450px] text-balance font-light'>
+            <p className='max-w-[450px] text-balance text-lg font-light'>
               Si creés que mi perfil se alinea con los principios de tu empresa:
             </p>
           </div>
@@ -61,13 +66,13 @@ const Experience = () => {
             as='a'
             href='https://www.linkedin.com/in/felipe-saracho/'
             target='_blank'
-            className='border-palette-600/50 hover:border-palette-600 transition-colors'
+            className='border-palette-600/50 transition-colors hover:border-palette-600'
           >
             Contactame ahora
           </ArrowButton>
-          <Radar className='max-md:place-self-center absolute w-full md:w-[40%] md:-translate-x-5 opacity-70 bg-background z-[-1]' />
+          <Radar className='absolute z-[-1] w-full bg-background opacity-70 max-md:place-self-center md:w-[40%] md:-translate-x-5' />
         </ListItem>
-        <ListItem className='justify-between flex-wrap'>
+        <ListItem className='flex-wrap justify-between'>
           <StyledLilabIcon />
           <ExperienceInfo>
             <ExperienceBadge>
@@ -76,7 +81,7 @@ const Experience = () => {
             <ExperienceBadge>Dic. 2023 - Jun. 2024</ExperienceBadge>
           </ExperienceInfo>
         </ListItem>
-        <ListItem className='justify-between flex-wrap'>
+        <ListItem className='flex-wrap justify-between'>
           <StyledLilabIcon />
           <ExperienceInfo>
             <ExperienceBadge>
@@ -85,7 +90,7 @@ const Experience = () => {
             <ExperienceBadge>Nov. 2021 - Mar. 2023</ExperienceBadge>
           </ExperienceInfo>
         </ListItem>
-        <ListItem className='justify-between flex-wrap'>
+        <ListItem className='flex-wrap justify-between'>
           <Henry className='w-56 grayscale dark:invert' />
           <ExperienceInfo>
             <ExperienceBadge>

@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
-import FigmaToolbar from './FigmaToolbar/FigmaToolbar';
-import FiguresBoard from './FiguresBoard/FiguresBoard';
+
+import FigmaToolbar from './figma_toolbar/figma_toolbar';
+import FiguresBoard from './figures_board/board';
 
 const horizontalLines =
   'max-md:after:-left-6 after:min-h-full after:w-screen after:outline-foreground-secondary after:outline after:outline-1 after:absolute after:-left-20 ';
@@ -11,8 +12,8 @@ const verticalLines =
 const LineDot = ({ className = '' }: { className?: string }) => (
   <div
     className={cn(
-      'size-[13px] rounded-full bg-foreground absolute z-20',
-      className
+      'absolute z-20 size-[13px] rounded-full bg-foreground',
+      className,
     )}
   />
 );
@@ -27,23 +28,23 @@ const Design = () => {
   return (
     <section
       id={DESIGN_ELEMENTS_IDS.SECTION}
-      className='max-md:p-6 max-w-full overflow-hidden h-screen p-20 flex relative'
+      className='relative flex h-screen max-w-full overflow-hidden p-20 max-md:p-6'
     >
       <div
         className={cn(
-          'size-full relative flex items-center justify-center cuadriculado',
+          'cuadriculado relative flex size-full items-center justify-center',
           horizontalLines,
-          verticalLines
+          verticalLines,
         )}
         id={DESIGN_ELEMENTS_IDS.BOARD}
       >
         <LineDot className='-left-[0.450rem] -top-[0.450rem]' />
         <LineDot className='-right-[0.450rem] -top-[0.450rem]' />
-        <LineDot className='-left-[0.450rem] -bottom-[0.450rem]' />
-        <LineDot className='-right-[0.450rem] -bottom-[0.450rem]' />
+        <LineDot className='-bottom-[0.450rem] -left-[0.450rem]' />
+        <LineDot className='-bottom-[0.450rem] -right-[0.450rem]' />
         <FiguresBoard />
       </div>
-      <div className='max-md:-ml-6 absolute w-full -ml-20 z-10 flex items-center justify-center bottom-4'>
+      <div className='absolute bottom-4 z-10 -ml-20 flex w-full items-center justify-center max-md:-ml-6'>
         <FigmaToolbar className='max-md:scale-75' />
       </div>
     </section>

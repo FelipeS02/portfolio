@@ -1,6 +1,7 @@
 import { FC, memo, ReactNode } from 'react';
-import Header from './Header/Header';
-import HeroSection from './HeroSection';
+
+import Header from './header/header';
+import HeroSection from './hero_section';
 
 export const HOME_ELEMENT_IDS = {
   SECTION: 'home',
@@ -11,7 +12,7 @@ const Home: FC<{ children: ReactNode }> = memo(function Home({
 }) {
   return (
     <section
-      className='flex flex-col h-screen w-full justify-between p-4 overflow-hidden relative'
+      className='relative flex h-screen w-full flex-col justify-between overflow-hidden p-4'
       id={HOME_ELEMENT_IDS.SECTION}
     >
       <Header />

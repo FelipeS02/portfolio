@@ -8,7 +8,7 @@ export function getRootElement(): HTMLElement {
   return root;
 }
 
-export function applyPaletteIntoCSS(palette: Palette["hsl"]): void {
+export function applyPaletteIntoCSS(palette: Palette['hsl']): void {
   if (!palette) throw new Error('Palette is not defined');
 
   const root = getRootElement();

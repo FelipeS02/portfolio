@@ -1,5 +1,6 @@
-import Image from 'next/image';
 import { FC, memo } from 'react';
+import Image from 'next/image';
+
 import AboutImage from '@/public/assets/images/about_image.webp';
 
 export const ABOUT_ELEMENTS_IDS = {
@@ -15,15 +16,15 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
   if (mobile)
     return (
       <section
-        className='grid grid-rows-2 w-full h-screen lg:hidden'
+        className='grid h-screen w-full grid-rows-2 lg:hidden'
         id={ABOUT_ELEMENTS_IDS.SECTION}
       >
         <Image
           src={AboutImage}
           alt='about-image'
-          className='col-span-1 object-center object-cover h-full'
+          className='col-span-1 h-full object-cover object-center'
         />
-        <div className='items-start col-span-1 flex flex-col justify-center p-4 text-balance'>
+        <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
           <h1 className='text-[5rem] font-bold leading-[0.9]'>
             SOBRE <br /> MI.
           </h1>
@@ -42,19 +43,19 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
 
   return (
     <div
-      className='max-xl:hidden fixed w-full z-10 h-0 inset-0 m-auto after:content-["(DESLIZAR)"] after:text-md after:text-foreground after:tracking-wider after:right-0 after:absolute after:mt-2'
+      className='after:text-md fixed inset-0 z-10 m-auto h-0 w-full after:absolute after:right-0 after:mt-2 after:tracking-wider after:text-foreground after:content-["(DESLIZAR)"] max-xl:hidden'
       id={ABOUT_ELEMENTS_IDS.WRAPPER}
     >
-      <div className='size-full relative overflow-hidden bg-background '>
+      <div className='relative size-full overflow-hidden bg-background'>
         <div
-          className='absolute size-full inset-0 z-10'
+          className='absolute inset-0 z-10 size-full'
           id={ABOUT_ELEMENTS_IDS.OVERLAY}
         />
         <section
-          className='flex size-full inset-0 top-0 absolute'
+          className='absolute inset-0 top-0 flex size-full'
           id={ABOUT_ELEMENTS_IDS.SECTION}
         >
-          <div className='h-full relative grow'>
+          <div className='relative h-full grow'>
             <Image
               src={AboutImage}
               alt='about-section-image'
@@ -63,11 +64,11 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
             />
           </div>
           <div
-            className='items-center flex flex-col justify-center text-balance md:items-start overflow-hidden'
+            className='flex flex-col items-center justify-center overflow-hidden text-balance md:items-start'
             id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
             <div className='p-8'>
-              <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] static'>
+              <h1 className='static w-[5em] text-[8rem] font-bold leading-[0.9]'>
                 SOBRE MI.
               </h1>
               <p className='min-w-[250px] text-xl text-foreground-secondary'>
