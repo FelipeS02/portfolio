@@ -9,14 +9,12 @@ import figuresPatterns, { backupStyles } from '@/lib/figures_patterns';
 import { removeByIndex, timeout } from '@/lib/utils';
 import { useTheme } from '@/hooks/theme';
 import useVisibilityChecker from '@/hooks/use_visibility_checker';
-import { FiguresPatterns } from '@/models/figuresPatterns';
+import { FiguresPatterns } from '@/models/figures_patterns';
 import { Palette, PaletteShade } from '@/models/theme';
 
 import { DESIGN_ELEMENTS_IDS } from '../design';
 import Figures from './figures';
 import SelectableElement from './selectable_element';
-
-gsap.registerPlugin(Draggable);
 
 const SectionText = memo(function SectionText({
   selectedElement,

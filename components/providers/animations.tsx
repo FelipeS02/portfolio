@@ -4,11 +4,11 @@ import { memo } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { Draggable,ScrollTrigger } from 'gsap/all';
+import { Draggable, ScrollTrigger } from 'gsap/all';
 
 import { useScheme, useTheme } from '@/hooks/theme';
 
-import { ABOUT_ELEMENTS_IDS } from '../sections/about/about';
+import { ABOUT_ELEMENTS_IDS } from '../sections/about';
 import { HOME_ELEMENT_IDS } from '../sections/home/home';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
@@ -20,6 +20,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
   const {
     palette: { hex: palette },
+    fullfiled: isPaletteFullfiled,
   } = useTheme();
   const mm = gsap.matchMedia();
 
@@ -46,7 +47,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
         placeSelf: 'center',
         borderTop: 1,
         borderBottom: 1,
-        borderColor: '#CCCCCC',
       });
 
       gsap.set(aboutOverlay, {
@@ -101,6 +101,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
   });
 
   useGSAP(() => {
+
     const objectiveSection = document.getElementById(
       OBJECTIVE_ELEMENTS_IDS.SECTION,
     );
@@ -163,7 +164,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
   useGSAP(
     (_, contextSafe) => {
-      if (!contextSafe || !palette || !resolvedTheme) return;
+      if (!contextSafe || !isPaletteFullfiled || !resolvedTheme) return;
       const developmentSection = document.getElementById(
         DEVELOPMENT_ELEMENTS_IDS.SECTION,
       );
@@ -330,7 +331,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
         document.removeEventListener('mouseleave', restoreElementsPosition);
       };
     },
-    [palette, resolvedTheme],
+    [palette, resolvedTheme, isPaletteFullfiled],
   );
 
   return null;

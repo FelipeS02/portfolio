@@ -6,9 +6,10 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
 
 import LoadingScreen from '@/components/loading_screen';
-import AnimationsProvider from '@/components/providers/animations_provider';
+import AnimationsProvider from '@/components/providers/animations';
 import LenisProvider from '@/components/providers/lenis_provider';
 import RandomThemeProvider from '@/components/providers/random_theme';
+import ScanProvider from '@/components/providers/scan';
 import SchemeProvider from '@/components/providers/scheme';
 
 import './globals.css';
@@ -75,6 +76,7 @@ export default function RootLayout({
             <RandomThemeProvider>
               <LoadingScreen />
               <AnimationsProvider />
+              <ScanProvider />
               {children}
             </RandomThemeProvider>
           </SchemeProvider>
