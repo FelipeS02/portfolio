@@ -11,6 +11,7 @@ import LenisProvider from '@/components/providers/lenis_provider';
 import RandomThemeProvider from '@/components/providers/random_theme';
 import ScanProvider from '@/components/providers/scan';
 import SchemeProvider from '@/components/providers/scheme';
+import OgImage from '@/public/assets/images/og_image.webp';
 
 import './globals.css';
 
@@ -51,6 +52,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   title: 'FELIPE SARACHO',
   description: 'Desarrollador Full-Stack',
+  openGraph: { images: OgImage.src },
 };
 
 gsap.registerPlugin(useGSAP);
@@ -62,6 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <LenisProvider>
+      <ScanProvider />
       <html
         lang='es-ES'
         suppressHydrationWarning
@@ -76,7 +79,6 @@ export default function RootLayout({
             <RandomThemeProvider>
               <LoadingScreen />
               <AnimationsProvider />
-              <ScanProvider />
               {children}
             </RandomThemeProvider>
           </SchemeProvider>
