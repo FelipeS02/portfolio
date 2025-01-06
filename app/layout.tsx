@@ -52,7 +52,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   title: 'FELIPE SARACHO',
   description: 'Desarrollador Full-Stack',
-  openGraph: { images: OgImage.src },
+  openGraph: { images: OgImage.src,  },
 };
 
 gsap.registerPlugin(useGSAP);
