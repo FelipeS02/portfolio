@@ -12,7 +12,7 @@ const Home: FC<{ children: ReactNode }> = memo(function Home({
 }) {
   return (
     <section
-      className='relative flex h-dvh w-full flex-col justify-between overflow-hidden p-4 transition-[height]'
+      className='relative flex h-screen w-full flex-col justify-between overflow-hidden p-4 transition-[height]'
       id={HOME_ELEMENT_IDS.SECTION}
     >
       <Header />
