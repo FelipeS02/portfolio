@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
 import Experience from './experience/experience';
-import TechnologiesList from './technologies/technologies_list';
-import TechnologiesRings from './technologies/technologies_rings';
+import TechnologiesList from './technologies/technologies-list';
+import TechnologiesRings from './technologies/technologies-rings';
 
 export const DEVELOPMENT_ELEMENTS_IDS = {
   SECTION: 'development-section',
@@ -30,7 +30,7 @@ const Development = () => {
     >
       <TechnologiesRings />
 
-      <div id={DEVELOPMENT_ELEMENTS_IDS.CONTENT} className='relative z-10'>
+      <div id={DEVELOPMENT_ELEMENTS_IDS.CONTENT} className='relative z-10 text-palette-50'>
         <div
           className='relative flex w-full items-center justify-between border-t-2 border-palette-600 px-4 pb-12 pt-8 lg:px-14 lg:pb-20 lg:pt-10'
           id={DEVELOPMENT_ELEMENTS_IDS.HERO}

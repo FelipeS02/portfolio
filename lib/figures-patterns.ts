@@ -1,4 +1,4 @@
-import { FiguresPatterns } from '@/models/figures_patterns';
+import { FiguresPatterns } from '@/models/figures-patterns';
 import { PaletteShade } from '@/models/theme';
 
 function getRandomIntensity(): PaletteShade {

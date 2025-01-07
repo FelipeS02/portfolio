@@ -1,6 +1,6 @@
 import { FC, forwardRef } from 'react';
 
-import SelectableElement from './selectable_element';
+import SelectableElement from './selectable-element';
 
 interface FiguresProps {
   selectedElement?: string;

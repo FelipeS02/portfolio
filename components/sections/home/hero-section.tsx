@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { SplittedWord } from '@/components/ui/splitted_text';
+import { SplittedWord } from '@/components/ui/splitted-text';
 
 const HeroSection = memo(function HeroSection() {
   return (
@@ -10,7 +10,7 @@ const HeroSection = memo(function HeroSection() {
       </h4>
 
       <h1
-        className='relative -ml-[0.05em] flex w-fit flex-col text-left text-[18vw] font-bold leading-[0.8] text-palette-600 transition-[font-size] lg:text-[10vw] dark:text-palette-500'
+        className='relative -ml-[0.05em] flex w-fit flex-col text-left text-[18vw] font-bold leading-[0.8] text-palette-600 drop-shadow transition-[font-size] lg:text-[10vw] dark:text-palette-500 dark:drop-shadow-none'
         letter-slide-up='true'
       >
         <SplittedWord>FELIPE</SplittedWord>

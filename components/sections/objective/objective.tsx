@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { SplittedText } from '@/components/ui/splitted_text';
+import { SplittedText } from '@/components/ui/splitted-text';
 
 import ClockLines from './clock_lines';
 

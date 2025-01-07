@@ -3,13 +3,12 @@ import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import { useGSAP } from '@gsap/react';
-import { gsap } from 'gsap/gsap-core';
+import { gsap } from 'gsap/all';
 
 import LoadingScreen from '@/components/loading_screen';
 import AnimationsProvider from '@/components/providers/animations';
-import LenisProvider from '@/components/providers/lenis_provider';
-import RandomThemeProvider from '@/components/providers/random_theme';
-import ScanProvider from '@/components/providers/scan';
+import LenisProvider from '@/components/providers/lenis';
+import RandomThemeProvider from '@/components/providers/random-theme';
 import SchemeProvider from '@/components/providers/scheme';
 import OgImage from '@/public/assets/images/og_image.webp';
 
@@ -52,7 +51,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   title: 'FELIPE SARACHO',
   description: 'Desarrollador Full-Stack',
-  openGraph: { images: OgImage.src,  },
+  openGraph: { images: OgImage.src },
 };
 
 gsap.registerPlugin(useGSAP);
@@ -64,12 +63,12 @@ export default function RootLayout({
 }>) {
   return (
     <LenisProvider>
-      <ScanProvider />
+      {/* <ScanProvider /> */}
       <html
         lang='es-ES'
-        suppressHydrationWarning
         translate='no'
-        className='notranslate h-full max-h-full'
+        className='notranslate size-screen'
+        suppressHydrationWarning
       >
         <body
           className={`${ppNeueMontreal.variable} ${archivo.variable} h-full bg-background font-neue text-foreground antialiased md:transition-colors`}

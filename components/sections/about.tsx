@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import Image from 'next/image';
 
-import AboutImage from '@/public/assets/images/about_image.webp';
+import AboutImage from '@/public/assets/images/about-image.webp';
 
 export const ABOUT_ELEMENTS_IDS = {
   WRAPPER: 'about-wrapper',
@@ -43,7 +43,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
 
   return (
     <div
-      className='after:text-md fixed inset-0 z-10 m-auto h-0 w-full after:absolute after:right-0 after:mt-2 after:tracking-wider after:text-foreground after:content-["(DESLIZAR)"] max-xl:hidden'
+      className='after:text-md fixed inset-0 z-10 m-auto h-0 w-full after:absolute after:right-2 after:mt-2 after:tracking-widest after:text-foreground after:content-["(DESLIZAR)"] max-xl:hidden'
       id={ABOUT_ELEMENTS_IDS.WRAPPER}
     >
       <div className='relative size-full overflow-hidden bg-background'>

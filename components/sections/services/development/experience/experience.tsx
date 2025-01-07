@@ -2,9 +2,9 @@ import { FC, PropsWithChildren, ReactNode } from 'react';
 
 import { BriefcaseBusiness } from 'lucide-react';
 
-import { ArrowButton } from '@/components/ui/arrow_button';
+import { ArrowButton } from '@/components/ui/arrow-button';
 import { Henry, Lilab } from '@/components/ui/icons';
-import { ListItem } from '@/components/ui/list_item';
+import { ListItem } from '@/components/ui/list-item';
 import { DevelopmentList, DevelopmentListTitle } from '@/components/layout';
 
 import { cn } from '@/lib/utils';
@@ -17,7 +17,7 @@ const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
 }) => (
   <div
     className={cn(
-      'border-b border-palette-600/50 py-1 text-left text-foreground',
+      'border-b border-palette-600/50 py-1 text-left text-palette-50',
       className,
     )}
   >
@@ -30,7 +30,7 @@ const ExperienceInfo: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const StyledLilabIcon = () => (
-  <Lilab className='w-40 -translate-x-[5%] grayscale dark:invert' />
+  <Lilab className='w-40 -translate-x-[5%] grayscale invert' />
 );
 
 const Experience = () => {
@@ -70,7 +70,7 @@ const Experience = () => {
           >
             Contactame ahora
           </ArrowButton>
-          <Radar className='absolute z-[-1] w-full bg-background opacity-70 max-md:place-self-center md:w-[40%] md:-translate-x-5' />
+          <Radar className='absolute z-[-1] w-full opacity-70 max-md:place-self-center md:w-[40%] md:-translate-x-5' />
         </ListItem>
         <ListItem className='flex-wrap justify-between'>
           <StyledLilabIcon />
@@ -91,7 +91,7 @@ const Experience = () => {
           </ExperienceInfo>
         </ListItem>
         <ListItem className='flex-wrap justify-between'>
-          <Henry className='w-56 grayscale dark:invert' />
+          <Henry className='w-56 grayscale invert' />
           <ExperienceInfo>
             <ExperienceBadge>
               Bootcamp / Practica Profesional Full-Stack

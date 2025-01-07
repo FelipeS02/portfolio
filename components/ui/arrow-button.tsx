@@ -3,7 +3,7 @@ import { ElementType } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import ComposedComponent from '@/models/composed_component';
+import ComposedComponent from '@/models/composed-component';
 
 const ArrowButton = <T extends ElementType = 'button'>({
   as,

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useTheme as useNextThemes } from 'next-themes';
 
-import { RandomThemeContext } from '@/components/providers/random_theme';
+import { RandomThemeContext } from '@/components/providers/random-theme';
 
 export const useTheme = () => useContext(RandomThemeContext);
 

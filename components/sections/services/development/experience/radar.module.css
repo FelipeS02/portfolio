@@ -1,11 +1,3 @@
-/* .radar {
-  background: radial-gradient(
-    circle,
-    hsl(var(--palette-700) / 50%),
-    transparent
-  );
-} */
-
 .radar::before {
   @apply absolute inset-0 size-full animate-radar;
   content: '';

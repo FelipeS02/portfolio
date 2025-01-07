@@ -5,16 +5,16 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
 
-import figuresPatterns, { backupStyles } from '@/lib/figures_patterns';
+import figuresPatterns, { backupStyles } from '@/lib/figures-patterns';
 import { removeByIndex, timeout } from '@/lib/utils';
 import { useTheme } from '@/hooks/theme';
-import useVisibilityChecker from '@/hooks/use_visibility_checker';
-import { FiguresPatterns } from '@/models/figures_patterns';
+import useVisibilityChecker from '@/hooks/use-visibility-checker';
+import { FiguresPatterns } from '@/models/figures-patterns';
 import { Palette, PaletteShade } from '@/models/theme';
 
 import { DESIGN_ELEMENTS_IDS } from '../design';
 import Figures from './figures';
-import SelectableElement from './selectable_element';
+import SelectableElement from './selectable-element';
 
 const SectionText = memo(function SectionText({
   selectedElement,

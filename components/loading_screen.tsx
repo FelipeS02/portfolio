@@ -4,7 +4,7 @@ import { TransitionEvent, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/theme';
-import useHandleLoadingAnimations from '@/hooks/use_handle_loading_animations';
+import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 
 const BASE_STYLES =
   'col-span-1 transition-loading h-screen min-w-full group-data-[loading=false]/container:h-0 ease-in-out duration-350 will-change-auto';

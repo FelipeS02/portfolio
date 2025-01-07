@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
-import FigmaToolbar from './figma_toolbar/figma_toolbar';
-import FiguresBoard from './figures_board/board';
+import FigmaToolbar from './figma-toolbar/toolbar';
+import FiguresBoard from './figures-board/board';
 
 const horizontalLines =
   'max-md:after:-left-6 after:min-h-full after:w-screen after:outline-foreground-secondary after:outline after:outline-1 after:absolute after:-left-20 ';

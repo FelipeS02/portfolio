@@ -5,7 +5,7 @@ import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
 
-import HTMLComment from '@/components/ui/html_comment';
+import HTMLComment from '@/components/ui/html-comment';
 import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
 
 import { cn } from '@/lib/utils';

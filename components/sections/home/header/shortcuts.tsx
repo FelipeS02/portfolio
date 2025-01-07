@@ -5,8 +5,8 @@ import { memo } from 'react';
 import { Separator } from '@radix-ui/react-separator';
 import { Download } from 'lucide-react';
 
-import { ColorPicker } from '@/components/ui/color_picker';
-import ThemeSwitch from '@/components/ui/theme_switch';
+import { ColorPicker } from '@/components/ui/color-picker';
+import ThemeSwitch from '@/components/ui/theme-switch';
 
 import { useScheme, useTheme } from '@/hooks/theme';
 
