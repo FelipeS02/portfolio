@@ -1,12 +1,12 @@
 'use client';
 
-import { memo, useRef } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
+import { useDebounceValue } from 'usehooks-ts';
 
-import { persistedTimeline } from '@/lib/animations';
 import { useScheme, useTheme } from '@/hooks/theme';
 
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
@@ -24,351 +24,386 @@ const AnimationsProvider = memo(function AnimationProvider() {
     fullfiled: isPaletteFullfiled,
   } = useTheme();
 
-  const mm = gsap.matchMedia();
+  const masterTimeline = useRef<GSAPTimeline>(gsap.timeline({ paused: true }));
 
-  const homeTimeline = useRef<GSAPTimeline | null>(null);
-  const developmentTimeline = useRef<GSAPTimeline | null>(null);
+  const clearTimeline = useCallback(() => {
+    ScrollTrigger.getAll().forEach((st) => st.kill());
+  }, []);
 
-  // #region Home
-  useGSAP(() => {
-    const el = {
-      homeSection: document.getElementById(HOME_ELEMENT_IDS.SECTION),
-      aboutWrapper: document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER),
-      aboutOverlay: document.getElementById(ABOUT_ELEMENTS_IDS.OVERLAY),
-      aboutSection: document.getElementById(ABOUT_ELEMENTS_IDS.SECTION),
-      aboutContent: document.getElementById(ABOUT_ELEMENTS_IDS.CONTENT),
-    } as Record<string, HTMLElement>;
+  const [willUpdate, setWillUpdate] = useDebounceValue<boolean>(true, 250);
 
-    if (!Object.entries(el).every((el) => Boolean(el)) || !isPaletteFullfiled)
-      return;
-
-    const borderByTheme =
-      resolvedTheme === 'dark' ? palette[300] : palette[600];
-
-    mm.add('(min-width: 1280px)', () => {
-      gsap.set(el.aboutWrapper, {
-        height: 0,
-        willChange: 'height',
-        placeSelf: 'center',
-        borderColor: borderByTheme,
-        borderTop: 1,
-        borderBottom: 1,
-      });
-
-      gsap.set(el.aboutOverlay, {
-        background: '#000000',
-        opacity: 1,
-        willChange: 'opacity',
-      });
-
-      gsap.set(el.aboutSection, {
-        scale: 0.75,
-        willChange: 'transform',
-      });
-
-      gsap.set(el.aboutContent, {
-        width: 0,
-        willChange: 'width',
-      });
-
-      const timeline = persistedTimeline(homeTimeline, {
-        scrollTrigger: {
-          trigger: el.homeSection,
-          start: 'top top',
-          end: () => `+=${el.homeSection.offsetHeight * 2}`,
-          scrub: true,
-          pin: true,
-        },
-      });
-
-      // Clear old tweens
-      timeline.clear();
-
-      timeline
-        .to(el.aboutWrapper, {
-          height: '100%',
-          borderColor: `${borderByTheme}00`,
-        })
-        .to(
-          el.aboutOverlay,
-          {
-            opacity: 0,
-          },
-          '<',
-        )
-        .to(
-          el.aboutSection,
-          {
-            scale: 1,
-          },
-          '<',
-        )
-        .to(el.aboutContent, {
-          width: '40%',
-        });
-    });
-  }, [palette, isPaletteFullfiled, resolvedTheme]);
-  // #endregion
-
-  // #region Objective
-  useGSAP(() => {
-    const objectiveSection = document.getElementById(
-      OBJECTIVE_ELEMENTS_IDS.SECTION,
-    );
-    const objectiveSectionText = document.getElementById(
-      OBJECTIVE_ELEMENTS_IDS.TEXT,
-    );
-
-    if (!objectiveSection || !objectiveSectionText) return;
-
-    const objectiveChars = objectiveSectionText?.getElementsByClassName('char');
-
-    const objectiveWords = Array.from(
-      objectiveSectionText?.getElementsByClassName('word'),
-    ).filter((element) => {
-      const word = element.getAttribute('data-word');
-      return word === 'productos' || word === 'atemporales';
-    });
-
-    if (!objectiveChars) return;
-
-    gsap.set(objectiveChars, {
-      opacity: 0.5,
-      willChange: 'opacity',
-    });
-
-    gsap.set(objectiveWords, {
-      backgroundColor: 'transparent',
-      transitionProperty: 'background-color, filter',
-      transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
-      transitionDuration: '150ms',
-    });
-
-    const objectiveTriggerStart = objectiveSection.clientHeight * 0.4;
-
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: objectiveSection,
-        start: () => `${objectiveTriggerStart} bottom`,
-        end: () => `+=${objectiveSection.clientHeight - objectiveTriggerStart}`,
-        scrub: true,
-      },
-    });
-
-    timeline
-      .to(objectiveChars, {
-        opacity: 1,
-        ease: 'circ.inOut',
-        stagger: 0.07,
-      })
-      .to(objectiveWords, {
-        backgroundColor:
-          resolvedTheme === 'dark'
-            ? 'hsl(var(--palette-800))'
-            : 'hsl(var(--palette-200))',
-      });
-  }, [palette, isPaletteFullfiled, resolvedTheme]);
-  // #endregion
-
-  // #region Development
   useGSAP(
     (_, contextSafe) => {
-      if (!contextSafe || !isPaletteFullfiled || !resolvedTheme) return;
+      if (!contextSafe) return;
 
-      const el = {
-        developmentSection: document.getElementById(
-          DEVELOPMENT_ELEMENTS_IDS.SECTION,
+      const mm = gsap.matchMedia();
+
+      if (!isPaletteFullfiled || !resolvedTheme) return;
+
+      const borderByTheme =
+        resolvedTheme === 'dark' ? palette[300] : palette[600];
+      const bgByTheme = '#111111';
+
+      const elements = {
+        // Home elements
+        homeSection: document.getElementById(HOME_ELEMENT_IDS.SECTION),
+        aboutWrapper: document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER),
+        aboutOverlay: document.getElementById(ABOUT_ELEMENTS_IDS.OVERLAY),
+        aboutSection: document.getElementById(ABOUT_ELEMENTS_IDS.SECTION),
+        aboutContent: document.getElementById(ABOUT_ELEMENTS_IDS.CONTENT),
+
+        // Objective elements
+        objectiveSection: document.getElementById(
+          OBJECTIVE_ELEMENTS_IDS.SECTION,
         ),
-        developmentSectionContent: document.getElementById(
+        objectiveText: document.getElementById(OBJECTIVE_ELEMENTS_IDS.TEXT),
+
+        // Development elements
+        developmentContent: document.getElementById(
           DEVELOPMENT_ELEMENTS_IDS.CONTENT,
         ),
-        developmentSectionHero: document.getElementById(
-          DEVELOPMENT_ELEMENTS_IDS.HERO,
-        ),
+        developmentHero: document.getElementById(DEVELOPMENT_ELEMENTS_IDS.HERO),
         globe: document.getElementById('3d-globe'),
         ringsContainer: document.getElementById('rings-container'),
         planetOrbit: document.getElementById('planet-orbit'),
       } as Record<string, HTMLElement>;
 
-      if (!Object.entries(el).every((element) => Boolean(element))) return;
+      // Ensure all elements exist
+      if (!Object.values(elements).every(Boolean)) return;
 
-      // Development Section Styling
-      const bgByTheme = '#111111';
-      const sectionMargin =
-        window.innerHeight - el.developmentSectionHero.offsetHeight;
+      const {
+        homeSection,
+        aboutWrapper,
+        aboutOverlay,
+        aboutSection,
+        aboutContent,
+        objectiveSection,
+        objectiveText,
+        developmentContent,
+        developmentHero,
+        globe,
+        ringsContainer,
+      } = elements;
 
-      // Orbit Rings Configuration
-      const ringsRotation = gsap.to(el.ringsContainer, {
-        rotation: 360,
-        duration: 60,
-        transformOrigin: 'center center',
-        repeat: -1,
-        ease: 'linear',
+      const sectionMargin = window.innerHeight - developmentHero.offsetHeight;
+
+      clearTimeline();
+
+      // #region Home section animations
+
+      mm.add('(min-width: 1280px)', () => {
+        gsap.set(aboutWrapper, {
+          height: 0,
+          placeSelf: 'center',
+          borderColor: borderByTheme,
+          borderTop: 1,
+          borderBottom: 1,
+        });
+
+        gsap.set(aboutOverlay, {
+          background: '#000000',
+          opacity: 1,
+        });
+
+        gsap.set(aboutSection, {
+          scale: 0.75,
+        });
+
+        gsap.set(aboutContent, {
+          width: 0,
+        });
+
+        masterTimeline.current.add(
+          gsap
+            .timeline({
+              id: 'home',
+              scrollTrigger: {
+                trigger: homeSection,
+                start: 'top top',
+                end: () => `+=${homeSection.offsetHeight * 2}`,
+                scrub: true,
+                pin: true,
+              },
+            })
+            .set(aboutWrapper, { willChange: 'height' })
+            .set(aboutOverlay, { willChange: 'opacity' })
+            .set(aboutSection, { willChange: 'transform' })
+            .set(aboutContent, { willChange: 'width' })
+            .to(aboutWrapper, {
+              height: '100%',
+              borderColor: `${borderByTheme}00`,
+            })
+            .to(
+              aboutOverlay,
+              {
+                opacity: 0,
+              },
+              '<',
+            )
+            .to(
+              aboutSection,
+              {
+                scale: 1,
+              },
+              '<',
+            )
+            .to(aboutContent, {
+              width: '40%',
+            }),
+        );
       });
 
-      const rings = Array.from(
-        el.developmentSection.getElementsByClassName('orbit-ring'),
+      // #endregion
+
+      // #region Objective animations
+
+      const objectiveChars = objectiveText?.getElementsByClassName('char');
+      const objectiveWords = Array.from(
+        objectiveText?.getElementsByClassName('word'),
+      ).filter((element) => {
+        const word = element.getAttribute('data-word');
+        return word === 'productos' || word === 'atemporales';
+      });
+
+      gsap.set(objectiveChars, {
+        opacity: 0.5,
+      });
+      gsap.set(objectiveWords, {
+        backgroundColor: 'transparent',
+        transitionProperty: 'background-color, filter',
+        transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+        transitionDuration: '150ms',
+      });
+
+      masterTimeline.current.add(
+        gsap
+          .timeline({
+            id: 'objective',
+            scrollTrigger: {
+              trigger: objectiveSection,
+              start: () => `${objectiveSection.clientHeight * 0.4} bottom`,
+              end: () =>
+                `+=${objectiveSection.clientHeight - objectiveSection.clientHeight * 0.6}`,
+              scrub: true,
+            },
+          })
+          .set(objectiveChars, { willChange: 'opacity' })
+          .to(objectiveChars, {
+            opacity: 1,
+            ease: 'circ.inOut',
+            stagger: 0.07,
+          })
+          .to(objectiveWords, {
+            backgroundColor:
+              resolvedTheme === 'dark'
+                ? 'hsl(var(--palette-800))'
+                : 'hsl(var(--palette-200))',
+          }),
       );
 
-      if (!rings) return;
+      // #endregion
 
-      // Mobile Rings Setup
-      mm.add('(max-width: 768px)', () => {
-        rings.forEach((ring, index) => {
-          const rotate = '20deg';
-          if (index === rings.length - 1) {
-            gsap.set(ring, {
-              rotate,
-            });
-            return;
-          }
+      // #region Development animations
 
-          const opacity = Math.max(0, 90 + index * 2);
-          const paddingValue = Math.max(0, 10 - index * 0.25);
-
-          gsap.set(ring, {
-            padding: `${paddingValue}%`,
-            opacity: `${opacity}%`,
-            rotate,
-          });
-        });
-      });
-
-      // Desktop Rings Setup
-      mm.add('(min-width: 768px)', () => {
-        rings.forEach((ring, index) => {
-          const rotate = '20deg';
-          if (index === rings.length - 1) {
-            gsap.set(ring, {
-              rotate,
-            });
-            return;
-          }
-
-          const paddingValue = Math.max(0, 10 - index * 0.25);
-          const blur = Math.max(0, 0.05 + index * 0.15);
-
-          gsap.set(ring, {
-            padding: `${paddingValue}%`,
-            filter: `blur(${blur}px)`,
-            rotate,
-          });
-        });
-      });
-
-      // Globe Resize Handler
-      const resizeGlobe = contextSafe(() => {
-        const lastRing = rings.at(-1) as HTMLElement;
-
-        gsap.set(el.globe, {
-          width: `${lastRing.offsetWidth}px`,
-          height: `${lastRing.offsetHeight}px`,
-        });
-
-        gsap.set(el.globe.getElementsByTagName('canvas'), {
-          width: `${lastRing.offsetWidth}px`,
-          height: `${lastRing.offsetHeight}px`,
-        });
-      });
-
-      resizeGlobe();
-      window.addEventListener('resize', resizeGlobe);
-
-      // Parallax Effect Handlers
-      const handleMouseParallax = contextSafe((event: MouseEvent) => {
-        gsap.set(rings, { willChange: 'transform' });
-        gsap.set(el.globe, { willChange: 'transform' });
-
-        const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.01;
-        const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.01;
-
-        const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
-        const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
-
-        gsap.to(rings, { x: ringsDeltaX, y: ringsDeltaY, duration: 0.75 });
-        gsap.to(el.globe, { x: globeDeltaX, y: globeDeltaY, duration: 0.75 });
-      });
-
-      const restoreElementsPosition = contextSafe(() => {
-        gsap.to(rings, {
-          x: 0,
-          y: 0,
-          duration: 1,
-          ease: 'back.out',
-          willChange: 'none',
-        });
-        gsap.to(el.globe, {
-          x: 0,
-          y: 0,
-          duration: 1,
-          ease: 'back.out',
-          willChange: 'none',
-        });
-      });
-
-      // Desktop Parallax Setup
-
-      const observer = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) {
-          ringsRotation.pause();
-          document.removeEventListener('mousemove', handleMouseParallax);
-          document.removeEventListener('mouseleave', restoreElementsPosition);
-
-          return;
-        }
-
-        mm.add('(min-width: 768px)', () => {
-          document.addEventListener('mousemove', handleMouseParallax);
-          document.addEventListener('mouseleave', restoreElementsPosition);
-        });
-
-        ringsRotation.play();
-      });
-
-      observer.observe(el.developmentSection);
-
-      // Development Section Content Animation
-      gsap.set(el.developmentSectionContent, {
+      gsap.set(developmentContent, {
         marginTop: `${sectionMargin}px`,
         backgroundColor: `${bgByTheme}40`,
       });
 
-      const timeline = persistedTimeline(developmentTimeline, {
-        scrollTrigger: {
-          trigger: el.developmentSectionContent,
-          start: 'start center',
-          end: () => `+=${el.developmentSectionContent.offsetHeight * 0.2}`,
-          scrub: true,
-        },
-      });
+      masterTimeline.current.add(
+        gsap
+          .timeline({
+            id: 'development',
+            scrollTrigger: {
+              trigger: developmentContent,
+              start: 'start center',
+              end: () => `+=${developmentContent.offsetHeight * 0.2}`,
+              scrub: true,
+            },
+          })
+          .set(ringsContainer, { willChange: 'transform, opacity' })
+          .set(globe, { willChange: 'transform' })
+          .to(developmentContent, {
+            backgroundColor: `${bgByTheme}95`,
+          })
+          .to(
+            ringsContainer,
+            { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
+            '<',
+          )
+          .to(globe, { scale: 1.25, ease: 'power1.inOut' }, '<'),
+      );
 
-      // Clear old tweens
-      timeline.clear();
+      // #endregion
 
-      timeline
-        .set(el.ringsContainer, { willChange: 'transform, opacity' })
-        .set(el.globe, { willChange: 'transform' })
-        .to(el.developmentSectionContent, {
-          backgroundColor: `${bgByTheme}95`,
-        })
-        .to(
-          el.ringsContainer,
-          { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
-          '<',
-        )
-        .to(el.globe, { scale: 1.25, ease: 'power1.inOut' }, '<');
-
-      // Cleanup Function
       return () => {
-        window.removeEventListener('resize', resizeGlobe);
-        document.removeEventListener('mousemove', handleMouseParallax);
-        document.removeEventListener('mouseleave', restoreElementsPosition);
-        observer.unobserve(el.developmentSection);
+        clearTimeline();
       };
     },
-    [palette, resolvedTheme, isPaletteFullfiled],
+    [isPaletteFullfiled, palette, resolvedTheme, willUpdate],
   );
-  // #endregion
+
+  useEffect(() => {
+    const onResize = () => setWillUpdate(!willUpdate);
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [setWillUpdate, willUpdate]);
+
+  useGSAP((_, contextSafe) => {
+    if (!contextSafe) return;
+
+    const mm = gsap.matchMedia();
+
+    const elements = {
+      // Development elements
+      developmentSection: document.getElementById(
+        DEVELOPMENT_ELEMENTS_IDS.SECTION,
+      ),
+      globe: document.getElementById('3d-globe'),
+      ringsContainer: document.getElementById('rings-container'),
+    } as Record<string, HTMLElement>;
+
+    const rings = Array.from(document.getElementsByClassName('orbit-ring'));
+
+    if (!Object.entries(elements).every(Boolean) || rings.length === 0) return;
+
+    const { ringsContainer, globe, developmentSection } = elements;
+
+    // Mobile Rings Setup
+    mm.add('(max-width: 768px)', () => {
+      rings.forEach((ring, index) => {
+        const rotate = '20deg';
+        if (index === rings.length - 1) {
+          gsap.set(ring, {
+            rotate,
+          });
+          return;
+        }
+
+        const opacity = Math.max(0, 90 + index * 2);
+        const paddingValue = Math.max(0, 10 - index * 0.25);
+
+        gsap.set(ring, {
+          padding: `${paddingValue}%`,
+          opacity: `${opacity}%`,
+          rotate,
+        });
+      });
+    });
+
+    // Desktop Rings Setup
+    mm.add('(min-width: 768px)', () => {
+      rings.forEach((ring, index) => {
+        const rotate = '20deg';
+        if (index === rings.length - 1) {
+          gsap.set(ring, {
+            rotate,
+          });
+          return;
+        }
+
+        const paddingValue = Math.max(0, 10 - index * 0.25);
+        const blur = Math.max(0, 0.05 + index * 0.15);
+
+        gsap.set(ring, {
+          padding: `${paddingValue}%`,
+          filter: `blur(${blur}px)`,
+          rotate,
+        });
+      });
+    });
+
+    // Globe Resize Handler
+    const resizeGlobe = contextSafe(() => {
+      const lastRing = rings.at(-1) as HTMLElement;
+
+      gsap.set(globe, {
+        width: `${lastRing.offsetWidth}px`,
+        height: `${lastRing.offsetHeight}px`,
+      });
+
+      gsap.set(globe.getElementsByTagName('canvas'), {
+        width: `${lastRing.offsetWidth}px`,
+        height: `${lastRing.offsetHeight}px`,
+      });
+    });
+
+    resizeGlobe();
+    window.addEventListener('resize', resizeGlobe);
+
+    // Parallax Effect Handlers
+    const handleMouseParallax = contextSafe((event: MouseEvent) => {
+      gsap.set(rings, { willChange: 'transform' });
+      gsap.set(globe, { willChange: 'transform' });
+
+      const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.01;
+      const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.01;
+
+      const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
+      const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
+
+      gsap.to(rings, { x: ringsDeltaX, y: ringsDeltaY, duration: 0.75 });
+      gsap.to(globe, { x: globeDeltaX, y: globeDeltaY, duration: 0.75 });
+    });
+
+    const restoreElementsPosition = contextSafe(() => {
+      gsap.to(rings, {
+        x: 0,
+        y: 0,
+        duration: 1,
+        ease: 'back.out',
+        willChange: 'none',
+      });
+      gsap.to(globe, {
+        x: 0,
+        y: 0,
+        duration: 1,
+        ease: 'back.out',
+        willChange: 'none',
+      });
+    });
+
+    const ringsRotation = gsap.to(ringsContainer, {
+      rotation: 360,
+      duration: 60,
+      transformOrigin: 'center center',
+      repeat: -1,
+      ease: 'linear',
+    });
+
+    // Disable animations when development section is not in viewport
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        ringsRotation.pause();
+        document.removeEventListener('mousemove', handleMouseParallax);
+        document.removeEventListener('mouseleave', restoreElementsPosition);
+
+        return;
+      }
+
+      mm.add('(min-width: 768px)', () => {
+        document.addEventListener('mousemove', handleMouseParallax);
+        document.addEventListener('mouseleave', restoreElementsPosition);
+      });
+
+      ringsRotation.play();
+    });
+
+    observer.observe(developmentSection);
+
+    // Cleanup Function
+    return () => {
+      window.removeEventListener('resize', resizeGlobe);
+      document.removeEventListener('mousemove', handleMouseParallax);
+      document.removeEventListener('mouseleave', restoreElementsPosition);
+      observer.unobserve(developmentSection);
+    };
+  }, []);
+
   return null;
 });
 

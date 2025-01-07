@@ -30,6 +30,8 @@ export default {
           '0px 3px 8px rgba(0, 0, 0, .35), 0px 1px 3px rgba(0, 0, 0, .5), inset 0px 1px 0px rgba(255, 255, 255, .08), inset 0px 0px 1px rgba(255, 255, 255, .3)',
         'dev-mode-icon':
           '0px 0px .5px rgba(0, 0, 0, .5), 0px 1px 3px rgba(0, 0, 0, .4), inset 0px 1px 0px rgba(255, 255, 255, .1), inset 0px 0px 1px rgba(255, 255, 255, .3)',
+        'globe':
+          '0 0px 80px 15px hsl(var(--palette-500) / 20%), 0 4px 6px -3px hsl(var(--palette-500) / 50%)',
       },
       fontFamily: {
         neue: ['var(--font-ppNeueMontreal)'],
@@ -47,16 +49,11 @@ export default {
             opacity: '1',
           },
         },
-        earth: {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '355px 0' },
-        },
       },
       animation: {
         blink: 'blink 1s ease infinite',
         'orbit-rings': 'spin 60s linear infinite',
         radar: 'spin 8s linear infinite',
-        earth: 'earth 10s linear 0s infinite',
       },
       colors: {
         background: 'hsl(var(--background))',
