@@ -7,6 +7,7 @@ export const ABOUT_ELEMENTS_IDS = {
   WRAPPER: 'about-wrapper',
   OVERLAY: 'about-overlay',
   SECTION: 'about',
+  'MOBILE-SECTION': 'about-mobile',
   CONTENT: 'about-content',
 };
 
@@ -17,7 +18,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
     return (
       <section
         className='grid h-screen w-full grid-rows-2 lg:hidden'
-        id={ABOUT_ELEMENTS_IDS.SECTION}
+        id={ABOUT_ELEMENTS_IDS['MOBILE-SECTION']}
       >
         <Image
           src={AboutImage}

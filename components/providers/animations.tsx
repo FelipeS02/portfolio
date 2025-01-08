@@ -26,6 +26,7 @@ type ElementDictionaryKey =
   | 'objectiveSection'
   | 'objectiveText'
   | 'developmentContent'
+  | 'aboutMobileSection'
   | 'developmentHero'
   | 'globe'
   | 'ringsContainer'
@@ -62,6 +63,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
       aboutWrapper: document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER),
       aboutOverlay: document.getElementById(ABOUT_ELEMENTS_IDS.OVERLAY),
       aboutSection: document.getElementById(ABOUT_ELEMENTS_IDS.SECTION),
+      aboutMobileSection: document.getElementById(
+        ABOUT_ELEMENTS_IDS['MOBILE-SECTION'],
+      ),
       aboutContent: document.getElementById(ABOUT_ELEMENTS_IDS.CONTENT),
 
       // Objective elements
@@ -106,6 +110,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
       aboutOverlay,
       aboutSection,
       aboutContent,
+      aboutMobileSection,
       objectiveSection,
       objectiveText,
       developmentContent,
@@ -119,6 +124,29 @@ const AnimationsProvider = memo(function AnimationProvider() {
     clearTimeline();
 
     // #region Home section animations
+
+    mm.add('(max-width: 768px)', () => {
+      masterTimeline.current.add(
+        gsap
+          .timeline({
+            id: 'about-mobile',
+            onStart: () => {
+              gsap.set(aboutMobileSection, { willChange: 'opacity' });
+            },
+            scrollTrigger: {
+              trigger: aboutMobileSection,
+              end: () => `+=${aboutMobileSection.offsetHeight * 0.5}`,
+              start: 'bottom bottom',
+              scrub: true,
+              pin: true,
+              markers: true,
+            },
+          })
+          .to(aboutMobileSection, {
+            opacity: 0,
+          }),
+      );
+    });
 
     mm.add('(min-width: 1280px)', () => {
       gsap.set(aboutWrapper, {
@@ -146,18 +174,20 @@ const AnimationsProvider = memo(function AnimationProvider() {
         gsap
           .timeline({
             id: 'home',
+            onStart: () => {
+              gsap.set(aboutWrapper, { willChange: 'height' });
+              gsap.set(aboutOverlay, { willChange: 'opacity' });
+              gsap.set(aboutSection, { willChange: 'transform' });
+              gsap.set(aboutContent, { willChange: 'width' });
+            },
             scrollTrigger: {
               trigger: homeSection,
               start: 'top top',
-              end: () => `+=${homeSection.offsetHeight * 2}`,
+              end: () => `${homeSection.offsetHeight * 2}`,
               scrub: true,
               pin: true,
             },
           })
-          .set(aboutWrapper, { willChange: 'height' })
-          .set(aboutOverlay, { willChange: 'opacity' })
-          .set(aboutSection, { willChange: 'transform' })
-          .set(aboutContent, { willChange: 'width' })
           .to(aboutWrapper, {
             height: '100%',
             borderColor: `${borderByTheme}00`,
@@ -178,6 +208,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
           )
           .to(aboutContent, {
             width: '40%',
+          })
+          .to(aboutSection, {
+            opacity: 0,
           }),
       );
     });
@@ -216,25 +249,31 @@ const AnimationsProvider = memo(function AnimationProvider() {
       transitionDuration: '150ms',
     });
 
+    gsap.set(objectiveSection, { marginTop: '-1000px' });
+
     masterTimeline.current.add(
       gsap
         .timeline({
           id: 'objective',
+          onStart: () => {
+            gsap.set(clockLines, { willChange: 'transform' });
+            gsap.set(objectiveChars, { willChange: 'opacity' });
+          },
           scrollTrigger: {
             trigger: objectiveSection,
-            start: () => `bottom bottom`,
-            end: () => `+=${objectiveSection.offsetHeight * 2.25}`,
+            start: 'center center',
+            end: () => `+=${objectiveSection.offsetHeight * 1.5}`,
             scrub: true,
             pin: true,
           },
         })
-        .set(clockLines, { willChange: 'transform' })
-        .set(objectiveChars, { willChange: 'opacity' })
+
         .to(objectiveChars, {
           opacity: 1,
           ease: 'circ.inOut',
           stagger: 0.07,
           duration: 3,
+          delay: 2,
         })
         .to(
           clockLines,
@@ -271,6 +310,10 @@ const AnimationsProvider = memo(function AnimationProvider() {
       gsap
         .timeline({
           id: 'development',
+          onStart: () => {
+            gsap.set(ringsContainer, { willChange: 'transform, opacity' });
+            gsap.set(globe, { willChange: 'transform' });
+          },
           scrollTrigger: {
             trigger: developmentContent,
             start: 'start center',
@@ -278,8 +321,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
             scrub: true,
           },
         })
-        .set(ringsContainer, { willChange: 'transform, opacity' })
-        .set(globe, { willChange: 'transform' })
+
         .to(developmentContent, {
           backgroundColor: `${bgByTheme}95`,
         })

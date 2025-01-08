@@ -13,11 +13,11 @@ const Objective = memo(function Objective() {
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
-      className='flex h-dvh w-full flex-col items-center justify-between gap-8 px-4'
+      className='flex h-screen w-full flex-col items-center justify-between gap-8 px-4'
     >
       <ClockLines />
       <h3
-        className='w-full max-w-[1400px] text-balance text-[3rem] font-semibold leading-tight md:text-[4rem]'
+        className='w-full max-w-[1400px] text-balance text-[2.5rem] font-semibold leading-tight md:text-[3rem] lg:text-[4rem]'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
       >
         <SplittedText>
