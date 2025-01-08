@@ -139,7 +139,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
               start: 'bottom bottom',
               scrub: true,
               pin: true,
-              markers: true,
             },
           })
           .to(aboutMobileSection, {
