@@ -25,6 +25,13 @@ type RenderParams = {
   renderedPalette: string;
 };
 
+const renderParamsInitialState = {
+  renderer: null,
+  rendered: false,
+  renderedScheme: '',
+  renderedPalette: '',
+};
+
 const Globe: FC<{ className?: string }> = memo(function Globe({
   className = '',
 }) {
@@ -38,26 +45,32 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     fullfiled: paletteIsFullfiled,
   } = useTheme();
 
-  const [debouncedPaletteColor] = useDebounceValue(hexCode, 250);
-  const [debouncedShade] = useDebounceValue(resolvedTheme, 250);
+  const [debouncedPaletteColor] = useDebounceValue(hexCode, 2000);
+  const [debouncedScheme] = useDebounceValue(resolvedTheme, 500);
 
   // Current state of render
   const [
     { renderedPalette, rendered, renderer, renderedScheme },
     setRenderParams,
-  ] = useState<RenderParams>({
-    renderer: null,
-    rendered: false,
-    renderedScheme: '',
-    renderedPalette: '',
-  });
+  ] = useState<RenderParams>(renderParamsInitialState);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const setGlobeColor = useCallback(
+    (renderer: RenderParams['renderer']) => {
+      if (!renderer || !paletteIsFullfiled) return;
+
+      renderer.setClearColor(
+        resolvedTheme === 'dark' ? palette[200] : palette[50],
+      );
+    },
+    [resolvedTheme, palette, paletteIsFullfiled],
+  );
 
   const renderScene = useCallback(async (): Promise<GlobeUtils | void> => {
     const container = containerRef.current;
 
-    if (!container || !resolvedTheme || !paletteIsFullfiled) return;
+    if (!container || !resolvedTheme) return;
 
     const {
       renderer: newRenderer,
@@ -86,15 +99,15 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       const textureLoader = new THREE.TextureLoader();
       // #endregion
 
+      // Ensure smooth rendering on high-DPI screens
       renderer.setPixelRatio(
         isMobile
           ? Math.min(2, window.devicePixelRatio)
           : window.devicePixelRatio,
       );
-      // Ensure smooth rendering on high-DPI screens
-      renderer.setClearColor(
-        resolvedTheme === 'dark' ? palette[200] : palette[50],
-      );
+
+      setGlobeColor(renderer);
+
       container.appendChild(renderer.domElement);
 
       scene.add(globe);
@@ -147,7 +160,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     });
 
     return { renderer: newRenderer, scene, camera, globe };
-  }, [isMobile, palette, hexCode, resolvedTheme, paletteIsFullfiled]);
+  }, [isMobile, hexCode, resolvedTheme, setGlobeColor]);
 
   // DOM and renderer cleanup
   const cleanup = useCallback(() => {
@@ -156,7 +169,9 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     const container = containerRef?.current;
 
     renderer?.dispose();
-    setRenderParams((prev) => ({ ...prev, renderer: null }));
+
+    setRenderParams(renderParamsInitialState);
+
     container.removeChild(renderer.domElement);
   }, [renderer]);
 
@@ -164,33 +179,28 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   useEffect(() => {
     if (rendered || !containerRef?.current) return;
 
+    console.log('entre holaaa');
+
     renderScene();
 
     return () => cleanup();
-  }, [renderScene, rendered, renderer, cleanup]);
+  }, [renderScene, cleanup, rendered]);
 
   // Re render management
   useEffect(() => {
     const hasToReRender =
       renderer &&
-      rendered &&
       (renderedPalette !== debouncedPaletteColor ||
-        renderedScheme !== debouncedShade);
+        renderedScheme !== debouncedScheme);
 
-    if (hasToReRender) {
-      cleanup();
-
-      renderScene();
-    }
+    if (hasToReRender) setGlobeColor(renderer);
   }, [
-    renderScene,
-    rendered,
     renderedPalette,
     renderedScheme,
-    cleanup,
-    renderer,
     debouncedPaletteColor,
-    debouncedShade,
+    debouncedScheme,
+    renderer,
+    setGlobeColor,
   ]);
 
   return (

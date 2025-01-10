@@ -12,6 +12,7 @@ import { useScheme, useTheme } from '@/hooks/theme';
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
 import { HOME_ELEMENT_IDS } from '../sections/home/home';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
+import { DESIGN_ELEMENTS_IDS } from '../sections/services/design/design';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -31,7 +32,8 @@ type ElementDictionaryKey =
   | 'globe'
   | 'ringsContainer'
   | 'planetOrbit'
-  | 'developmentSection';
+  | 'developmentSection'
+  | 'designSection';
 
 const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
@@ -71,6 +73,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
       // Objective elements
       objectiveSection: document.getElementById(OBJECTIVE_ELEMENTS_IDS.SECTION),
       objectiveText: document.getElementById(OBJECTIVE_ELEMENTS_IDS.TEXT),
+
+      // Design element
+      designSection: document.getElementById(DESIGN_ELEMENTS_IDS.SECTION),
 
       // Development elements
       developmentContent: document.getElementById(
@@ -117,6 +122,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
       developmentHero,
       globe,
       ringsContainer,
+      designSection,
     } = elementsRef.current as Record<ElementDictionaryKey, HTMLElement>;
 
     const sectionMargin = window.innerHeight - developmentHero.offsetHeight;
@@ -297,6 +303,20 @@ const AnimationsProvider = memo(function AnimationProvider() {
     );
 
     // #endregion
+
+    // #region Design animations
+
+    masterTimeline.current.add(
+      gsap.timeline({
+        id: 'design',
+        scrollTrigger: {
+          trigger: designSection,
+          start: 'center center',
+          end: '+=25',
+          pin: true,
+        },
+      }),
+    );
 
     // #region Development animations
 

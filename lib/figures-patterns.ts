@@ -166,7 +166,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       },
       figure: {
         paletteBackground: '400',
-        translateY: '-50%',
+        yPercent: -50,
         borderRadius: '100%',
       },
     },
@@ -178,7 +178,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       },
       figure: {
         paletteBackground: '400',
-        translateY: '50%',
+        yPercent: 50,
         borderRadius: '100%',
       },
     },
@@ -190,7 +190,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       },
       figure: {
         paletteBackground: '600',
-        translateY: '50%',
+        yPercent: 50,
         borderRadius: '100%',
       },
     },
@@ -211,7 +211,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       },
       figure: {
         paletteBackground: '600',
-        translateY: '-50%',
+        yPercent: -50,
         borderRadius: '100%',
       },
     },
@@ -223,7 +223,7 @@ const figuresPatterns: FiguresPatterns[][] = [
       },
       figure: {
         paletteBackground: '400',
-        translateY: '-50%',
+        yPercent: -50,
         borderRadius: '100%',
       },
     },

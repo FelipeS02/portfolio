@@ -194,14 +194,17 @@ const FiguresBoard = () => {
 
           const styles = pattern[index];
 
+          const willChange =
+            'height, width, border-radius, background, top, left, right, bottom';
+
           // Reset styles to avoid conflicts
           gsap.set(figureContainer, {
             clearProps: 'all',
-            willChange: 'transform',
+            willChange,
           });
           gsap.set(figureElement, {
             clearProps: 'all',
-            willChange: 'height, backgroundColor',
+            willChange,
           });
 
           // Apply animations for container and figure elements
