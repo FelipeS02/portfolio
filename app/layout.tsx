@@ -14,6 +14,7 @@ import OgImage from '@/public/assets/images/og_image.webp';
 
 import './globals.css';
 
+
 const ppNeueMontreal = localFont({
   src: [
     {

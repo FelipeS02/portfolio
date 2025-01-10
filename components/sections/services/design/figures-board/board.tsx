@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
@@ -65,6 +65,8 @@ const FiguresBoard = () => {
     palette: { hex: pallete },
   } = useTheme();
 
+  const [isMounted, setIsMounted] = useState(false);
+
   // Refs to manage DOM elements and GSAP-related data
   const boardRef = useRef<HTMLDivElement>(null);
   const figureElementsList = useRef<HTMLElement[] | null>(null);
@@ -109,6 +111,7 @@ const FiguresBoard = () => {
       Draggable.create(sectionHero, {
         bounds: boardRef.current,
         onPress: () => handleDraggableSelection(sectionHero.id), // Handle selection on press
+      
       });
 
       // Create draggable for figure elements
@@ -118,6 +121,7 @@ const FiguresBoard = () => {
           onPress: function () {
             handleDraggableSelection(this?.target?.id); // Handle selection for this target
           },
+          
         }),
       );
 
@@ -245,6 +249,8 @@ const FiguresBoard = () => {
 
     // Re-enable draggables after animation
     alternateDraggables('enable');
+
+    setIsMounted(true);
   }, [
     getRandomPattern,
     alternateDraggables,
@@ -254,23 +260,15 @@ const FiguresBoard = () => {
 
   useInterval(
     () => setElementsRandomPosition(),
-    isSectionVisible ? 10000 : null,
+    !isMounted ? 500 : isSectionVisible ? 10000 : null,
   );
-
-  // Set a random pattern on first contact with section
-  useEffect(() => {
-    if (
-      patternsRef.current.length === figuresPatterns.length &&
-      isSectionVisible
-    )
-      setElementsRandomPosition();
-  }, [setElementsRandomPosition, isSectionVisible]);
 
   return (
     <div
-      className='absolute inset-0 z-10 flex size-full flex-col items-center justify-center p-4'
+      className='absolute inset-0 z-10 flex size-full max-h-full max-w-full flex-col items-center justify-center overflow-hidden p-4'
       ref={boardRef}
     >
+      {/* <RuleCursor /> */}
       <SectionText selectedElement={selectedElement} />
       <Figures ref={loadFiguresRef} selectedElement={selectedElement} />
     </div>
