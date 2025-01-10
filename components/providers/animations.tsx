@@ -312,7 +312,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
         scrollTrigger: {
           trigger: designSection,
           start: 'center center',
-          end: '+=25',
+          end: '+=50',
           pin: true,
         },
       }),
