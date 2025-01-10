@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
+import { useInterval } from 'usehooks-ts';
 
 import figuresPatterns, { backupStyles } from '@/lib/figures-patterns';
 import { removeByIndex, timeout } from '@/lib/utils';
@@ -139,9 +140,8 @@ const FiguresBoard = () => {
 
   // Get a random pattern and remove it from the patterns list
   const getRandomPattern = useCallback(() => {
-    if (patternsRef.current.length === 0) {
-      patternsRef.current = figuresPatterns; // Reset patterns if exhausted
-    }
+    // Reset pattenrs list when all patterns are used
+    if (patternsRef.current.length === 0) patternsRef.current = figuresPatterns;
 
     const randomIndex = Math.floor(Math.random() * patternsRef.current.length);
     const randomPositions = patternsRef.current[randomIndex];
@@ -252,26 +252,18 @@ const FiguresBoard = () => {
     cleanExistentTimeline,
   ]);
 
-  // Effect to handle automatic updates every 10 seconds
+  useInterval(
+    () => setElementsRandomPosition(),
+    isSectionVisible ? 10000 : null,
+  );
+
+  // Set a random pattern on first contact with section
   useEffect(() => {
-    // Cancel if section is not visible
-    let isCancelled = !isSectionVisible;
-
-    const executeWithDelay = async () => {
-      if (isCancelled) return;
-
-      await setElementsRandomPosition();
-
-      if (isCancelled) return;
-
-      setTimeout(executeWithDelay, 10000); // Repeat after 10 seconds
-    };
-
-    executeWithDelay();
-
-    return () => {
-      isCancelled = true; // Prevent further executions on unmount
-    };
+    if (
+      patternsRef.current.length === figuresPatterns.length &&
+      isSectionVisible
+    )
+      setElementsRandomPosition();
   }, [setElementsRandomPosition, isSectionVisible]);
 
   return (
