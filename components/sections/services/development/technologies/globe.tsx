@@ -179,8 +179,6 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   useEffect(() => {
     if (rendered || !containerRef?.current) return;
 
-    console.log('entre holaaa');
-
     renderScene();
 
     return () => cleanup();
