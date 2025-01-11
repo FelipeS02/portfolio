@@ -1,5 +1,6 @@
 .orbit-ring {
   @apply pointer-events-none relative flex aspect-square w-full rounded-full;
+  content-visibility: auto;
 }
 
 .orbit-ring::before {
