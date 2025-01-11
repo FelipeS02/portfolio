@@ -5,7 +5,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
-import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
+import { useMediaQuery } from 'usehooks-ts';
 
 import { useScheme, useTheme } from '@/hooks/theme';
 
