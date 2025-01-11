@@ -225,22 +225,19 @@ const AnimationsProvider = memo(function AnimationProvider() {
     // #region Objective animations
 
     const objectiveChars = objectiveText?.getElementsByClassName('char');
+
     const objectiveWords = Array.from(
       objectiveText?.getElementsByClassName('word'),
     ).filter((element) => {
       const word = element.getAttribute('data-word');
       return word === 'productos' || word === 'atemporales';
     });
+
     const clockLines = Array.from(
       document.getElementsByClassName('clock-line'),
     );
 
-    if (
-      objectiveChars.length === 0 ||
-      objectiveWords.length === 0 ||
-      clockLines.length === 0
-    )
-      return;
+    if (![objectiveWords, clockLines].every(Boolean)) return;
 
     gsap.set(clockLines[0], { yPercent: -100, opacity: 0 });
     gsap.set(clockLines[1], { yPercent: 100, opacity: 0 });
@@ -318,6 +315,8 @@ const AnimationsProvider = memo(function AnimationProvider() {
       }),
     );
 
+    // #endregion
+
     // #region Development animations
 
     gsap.set(developmentContent, {
@@ -349,7 +348,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
           { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
           '<',
         )
-        .to(globe, { scale: 1.25, ease: 'power1.inOut' }, '<'),
+        .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<'),
     );
 
     // #endregion
@@ -433,16 +432,17 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
       // Globe Resize Handler
       const resizeGlobe = contextSafe(() => {
-        const lastRing = rings.at(-1) as HTMLElement;
+        // Ring visual position
+        const ring = rings.at(-5) as HTMLElement;
 
         gsap.set(globe, {
-          width: `${lastRing.offsetWidth}px`,
-          height: `${lastRing.offsetHeight}px`,
+          width: `${ring.offsetWidth}px`,
+          height: `${ring.offsetHeight}px`,
         });
 
         gsap.set(globe.getElementsByTagName('canvas'), {
-          width: `${lastRing.offsetWidth}px`,
-          height: `${lastRing.offsetHeight}px`,
+          width: `${ring.offsetWidth}px`,
+          height: `${ring.offsetHeight}px`,
         });
       });
 

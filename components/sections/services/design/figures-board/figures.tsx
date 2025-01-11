@@ -16,7 +16,10 @@ export const Figure: FC<FigureProps> = ({ id, selectedElement }) => (
     selected={id === selectedElement}
     id={id}
   >
-    <div className='figure size-full bg-transparent transition-colors' />
+    <div
+      className='figure size-full bg-transparent transition-colors'
+      style={{ contentVisibility: 'auto' }}
+    />
   </SelectableElement>
 );
 

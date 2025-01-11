@@ -7,6 +7,7 @@ export function SplittedWord({ children: word }: { children: string }) {
     <span
       className='word mb-[-0.1em] inline-block pb-[0.1em] text-inherit'
       data-word={word}
+      aria-label={word}
     >
       {splittedWord.map((char, index) => (
         <span className='char inline-block' key={`${word}-${char}-${index}`}>

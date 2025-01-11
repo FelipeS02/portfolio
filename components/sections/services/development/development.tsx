@@ -27,6 +27,7 @@ const Development = () => {
     <section
       className='size-screen relative bg-palette-950'
       id={DEVELOPMENT_ELEMENTS_IDS.SECTION}
+      style={{ contentVisibility: 'auto' }}
     >
       <TechnologiesRings />
 

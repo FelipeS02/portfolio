@@ -74,7 +74,17 @@ const TechnologiesRings = memo(function TechnologiesRings() {
                       position='left'
                       className='size-12 lg:size-20'
                     />
-                    <Ring />
+                    <Ring>
+                      <Ring>
+                        <Ring>
+                          <Ring>
+                            <Ring>
+                              <Ring />
+                            </Ring>
+                          </Ring>
+                        </Ring>
+                      </Ring>
+                    </Ring>
                   </Ring>
                 </Ring>
               </Ring>
@@ -82,7 +92,7 @@ const TechnologiesRings = memo(function TechnologiesRings() {
           </Ring>
         </Ring>
       </div>
-      <Globe className='shadow-globe absolute m-auto max-w-full place-self-center overflow-hidden' />
+      <Globe className='absolute m-auto max-w-full place-self-center overflow-hidden shadow-globe' />
     </div>
   );
 });
