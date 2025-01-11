@@ -17,7 +17,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
   if (mobile)
     return (
       <section
-        className='grid h-screen w-full grid-rows-2 lg:hidden'
+        className='grid h-screen w-full grid-rows-2 xl:hidden'
         id={ABOUT_ELEMENTS_IDS['MOBILE-SECTION']}
       >
         <Image

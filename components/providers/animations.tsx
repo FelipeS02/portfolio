@@ -35,6 +35,11 @@ type ElementDictionaryKey =
   | 'developmentSection'
   | 'designSection';
 
+const mediaQueryOptions = {
+  initializeWithValue: false,
+  defaultValue: undefined,
+};
+
 const AnimationsProvider = memo(function AnimationProvider() {
   const { resolvedTheme } = useScheme();
   const {
@@ -46,15 +51,18 @@ const AnimationsProvider = memo(function AnimationProvider() {
     null,
   );
 
-  const isMobileDevice = useMediaQuery('(any-pointer: coarse)');
+  const isMaxLgDevice = useMediaQuery('(max-width: 1280px)', mediaQueryOptions);
+  const isXlDevice = useMediaQuery('(min-width: 1280px)', mediaQueryOptions);
+  const isMobileDevice = useMediaQuery(
+    '(any-pointer: coarse)',
+    mediaQueryOptions,
+  );
 
   const masterTimeline = useRef<GSAPTimeline>(gsap.timeline({ paused: true }));
 
   const clearTimeline = useCallback(() => {
     ScrollTrigger.getAll().forEach((st) => st.kill());
   }, []);
-
-  const [willUpdate, setWillUpdate] = useDebounceValue<boolean>(true, 150);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -99,11 +107,14 @@ const AnimationsProvider = memo(function AnimationProvider() {
   }, []);
 
   useGSAP(() => {
-    if (!isMounted) return;
-
-    const mm = gsap.matchMedia();
-
-    if (!isPaletteFullfiled || !resolvedTheme) return;
+    if (
+      !isPaletteFullfiled ||
+      !resolvedTheme ||
+      !isMounted ||
+      isMaxLgDevice === undefined ||
+      isXlDevice === undefined
+    )
+      return;
 
     const borderByTheme =
       resolvedTheme === 'dark' ? palette[700] : palette[400];
@@ -131,7 +142,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     // #region Home section animations
 
-    mm.add('(max-width: 768px)', () => {
+    if (isMaxLgDevice) {
       masterTimeline.current.add(
         gsap
           .timeline({
@@ -151,9 +162,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
             opacity: 0,
           }),
       );
-    });
+    }
 
-    mm.add('(min-width: 1280px)', () => {
+    if (isXlDevice) {
       gsap.set(aboutWrapper, {
         height: 0,
         placeSelf: 'center',
@@ -218,7 +229,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
             opacity: 0,
           }),
       );
-    });
+    }
 
     // #endregion
 
@@ -250,8 +261,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
       transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
       transitionDuration: '150ms',
     });
-
-    gsap.set(objectiveSection, { marginTop: '-1000px' });
 
     masterTimeline.current.add(
       gsap
@@ -356,28 +365,19 @@ const AnimationsProvider = memo(function AnimationProvider() {
     return () => {
       clearTimeline();
     };
-  }, [isPaletteFullfiled, palette, resolvedTheme, willUpdate, isMounted]);
-
-  // Handle resize to preserve timeline funcionality
-  useEffect(() => {
-    const onResize = () => {
-      if (isMobileDevice) return;
-      setWillUpdate(!willUpdate);
-    };
-
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
-  }, [setWillUpdate, willUpdate, isMobileDevice]);
+  }, [
+    isPaletteFullfiled,
+    palette,
+    resolvedTheme,
+    isMaxLgDevice,
+    isXlDevice,
+    isMounted,
+  ]);
 
   // Development section elements pointer interaction
   useGSAP(
     (_, contextSafe) => {
-      if (!contextSafe || !isMounted) return;
-
-      const mm = gsap.matchMedia();
+      if (!contextSafe || !isMounted || isMobileDevice === undefined) return;
 
       const rings = Array.from(document.getElementsByClassName('orbit-ring'));
 
@@ -387,9 +387,10 @@ const AnimationsProvider = memo(function AnimationProvider() {
         elementsRef.current as Record<ElementDictionaryKey, HTMLElement>;
 
       // Mobile Rings Setup
-      mm.add('(max-width: 768px)', () => {
+      if (isMobileDevice) {
         rings.forEach((ring, index) => {
           const rotate = '20deg';
+
           if (index === rings.length - 1) {
             gsap.set(ring, {
               rotate,
@@ -401,15 +402,14 @@ const AnimationsProvider = memo(function AnimationProvider() {
           const paddingValue = Math.max(0, 10 - index * 0.25);
 
           gsap.set(ring, {
+            clear: 'filter',
             padding: `${paddingValue}%`,
             opacity: `${opacity}%`,
             rotate,
           });
         });
-      });
-
-      // Desktop Rings Setup
-      mm.add('(min-width: 768px)', () => {
+      } else {
+        // Desktop Rings Setup
         rings.forEach((ring, index) => {
           const rotate = '20deg';
           if (index === rings.length - 1) {
@@ -423,12 +423,13 @@ const AnimationsProvider = memo(function AnimationProvider() {
           const blur = Math.max(0, 0.05 + index * 0.15);
 
           gsap.set(ring, {
+            clear: 'opacity',
             padding: `${paddingValue}%`,
             filter: `blur(${blur}px)`,
             rotate,
           });
         });
-      });
+      }
 
       // Globe Resize Handler
       const resizeGlobe = contextSafe(() => {
@@ -499,10 +500,10 @@ const AnimationsProvider = memo(function AnimationProvider() {
           return;
         }
 
-        mm.add('(min-width: 768px)', () => {
+        if (isMobileDevice) {
           document.addEventListener('mousemove', handleMouseParallax);
           document.addEventListener('mouseleave', restoreElementsPosition);
-        });
+        }
 
         ringsRotation.play();
       });
@@ -517,7 +518,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
         observer.unobserve(developmentSection);
       };
     },
-    [isMounted],
+    [isMounted, isMobileDevice],
   );
 
   return null;
