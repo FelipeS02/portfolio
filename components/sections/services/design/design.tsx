@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 
+import ObjectiveDivider from '../../objective/objective-divider';
 import FigmaToolbar from './figma-toolbar/toolbar';
 import FiguresBoard from './figures-board/board';
 
@@ -19,6 +20,7 @@ const LineDot = ({ className = '' }: { className?: string }) => (
 );
 
 export const DESIGN_ELEMENTS_IDS = {
+  WRAPPER: 'design-wrapper',
   SECTION: 'design',
   BOARD: 'design-board',
   HERO: 'design-section-hero',
@@ -26,28 +28,31 @@ export const DESIGN_ELEMENTS_IDS = {
 
 const Design = () => {
   return (
-    <section
-      id={DESIGN_ELEMENTS_IDS.SECTION}
-      className='relative flex h-screen max-w-full overflow-hidden p-20 max-md:p-6'
-    >
-      <div
-        className={cn(
-          'cuadriculado relative flex size-full items-center justify-center',
-          horizontalLines,
-          verticalLines,
-        )}
-        id={DESIGN_ELEMENTS_IDS.BOARD}
+    <div id={DESIGN_ELEMENTS_IDS.WRAPPER}>
+      <ObjectiveDivider />
+      <section
+        className='flex h-screen max-w-full overflow-hidden bg-background p-20 max-md:p-6'
+        id={DESIGN_ELEMENTS_IDS.SECTION}
       >
-        <LineDot className='-left-[0.450rem] -top-[0.450rem]' />
-        <LineDot className='-right-[0.450rem] -top-[0.450rem]' />
-        <LineDot className='-bottom-[0.450rem] -left-[0.450rem]' />
-        <LineDot className='-bottom-[0.450rem] -right-[0.450rem]' />
-        <FiguresBoard />
-      </div>
-      <div className='absolute bottom-4 z-10 -ml-20 flex w-full items-center justify-center max-md:-ml-6'>
-        <FigmaToolbar className='max-md:scale-75' />
-      </div>
-    </section>
+        <div
+          className={cn(
+            'cuadriculado relative flex size-full items-center justify-center',
+            horizontalLines,
+            verticalLines,
+          )}
+          id={DESIGN_ELEMENTS_IDS.BOARD}
+        >
+          <LineDot className='-left-[0.450rem] -top-[0.450rem]' />
+          <LineDot className='-right-[0.450rem] -top-[0.450rem]' />
+          <LineDot className='-bottom-[0.450rem] -left-[0.450rem]' />
+          <LineDot className='-bottom-[0.450rem] -right-[0.450rem]' />
+          <FiguresBoard />
+        </div>
+        <div className='absolute bottom-4 z-10 -ml-20 flex w-full items-center justify-center max-md:-ml-6'>
+          <FigmaToolbar className='max-md:scale-75' />
+        </div>
+      </section>
+    </div>
   );
 };
 

@@ -15,8 +15,7 @@ import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
 import { DESIGN_ELEMENTS_IDS } from '../sections/services/design/design';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(Draggable);
+gsap.registerPlugin(useGSAP, ScrollTrigger, Draggable);
 
 type ElementDictionaryKey =
   | 'homeSection'
@@ -33,7 +32,8 @@ type ElementDictionaryKey =
   | 'ringsContainer'
   | 'planetOrbit'
   | 'developmentSection'
-  | 'designSection';
+  | 'designSection'
+  | 'designWrapper';
 
 const mediaQueryOptions = {
   initializeWithValue: false,
@@ -83,7 +83,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
       objectiveText: document.getElementById(OBJECTIVE_ELEMENTS_IDS.TEXT),
 
       // Design element
-      designSection: document.getElementById(DESIGN_ELEMENTS_IDS.SECTION),
+      designWrapper: document.getElementById(DESIGN_ELEMENTS_IDS.WRAPPER),
 
       // Development elements
       developmentContent: document.getElementById(
@@ -93,7 +93,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
       developmentSection: document.getElementById(
         DEVELOPMENT_ELEMENTS_IDS.SECTION,
       ),
-
       globe: document.getElementById('3d-globe'),
       ringsContainer: document.getElementById('rings-container'),
       planetOrbit: document.getElementById('planet-orbit'),
@@ -133,7 +132,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
       developmentHero,
       globe,
       ringsContainer,
-      designSection,
+      designWrapper,
     } = elementsRef.current as Record<ElementDictionaryKey, HTMLElement>;
 
     const sectionMargin = window.innerHeight - developmentHero.offsetHeight;
@@ -261,24 +260,30 @@ const AnimationsProvider = memo(function AnimationProvider() {
       transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
       transitionDuration: '150ms',
     });
+    gsap.set(designWrapper, {
+      marginBottom: `-${designWrapper.clientHeight}px`,
+    });
 
     masterTimeline.current.add(
       gsap
         .timeline({
           id: 'objective',
           onStart: () => {
-            gsap.set(clockLines, { willChange: 'transform' });
-            gsap.set(objectiveChars, { willChange: 'opacity' });
+            gsap.set(
+              [objectiveSection, objectiveText, objectiveChars, clockLines],
+              {
+                willChange: 'transform, opacity',
+              },
+            );
           },
           scrollTrigger: {
             trigger: objectiveSection,
             start: 'center center',
-            end: () => `+=${objectiveSection.offsetHeight * 1.5}`,
+            end: () => `+=${objectiveSection.offsetHeight * 3}`,
             scrub: true,
             pin: true,
           },
         })
-
         .to(objectiveChars, {
           opacity: 1,
           ease: 'circ.inOut',
@@ -305,28 +310,40 @@ const AnimationsProvider = memo(function AnimationProvider() {
                 : 'hsl(var(--palette-200))',
           },
           '>-1',
+        )
+        .to(
+          objectiveSection,
+          {
+            opacity: 0.4,
+            duration: 6,
+            scale: 0.95,
+          },
+          '>+2',
+        )
+        .fromTo(
+          designWrapper,
+          { yPercent: -50 },
+          { yPercent: -100, duration: 10 },
+          '>-5',
         ),
     );
 
     // #endregion
 
-    // #region Design animations
-
-    masterTimeline.current.add(
-      gsap.timeline({
-        id: 'design',
-        scrollTrigger: {
-          trigger: designSection,
-          start: 'center center',
-          end: '+=50',
-          pin: true,
-        },
-      }),
-    );
-
-    // #endregion
-
     // #region Development animations
+
+    // masterTimeline.current.add(
+    //   gsap.timeline({
+    //     scrollTrigger: {
+    //       trigger: developmentSection,
+    //       start: 'top bottom',
+    //       end: '+=100',
+    //       pin: designSection,
+    //       scrub: true,
+    //       markers: true,
+    //     },
+    //   }),
+    // );
 
     gsap.set(developmentContent, {
       marginTop: `${sectionMargin}px`,
@@ -348,7 +365,6 @@ const AnimationsProvider = memo(function AnimationProvider() {
             scrub: true,
           },
         })
-
         .to(developmentContent, {
           backgroundColor: `${bgByTheme}95`,
         })

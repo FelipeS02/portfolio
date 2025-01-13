@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
 
-import { useGSAP } from '@gsap/react';
-import { gsap } from 'gsap/all';
-
 import LoadingScreen from '@/components/loading_screen';
 import AnimationsProvider from '@/components/providers/animations';
 import LenisProvider from '@/components/providers/lenis';
@@ -54,8 +51,6 @@ export const metadata: Metadata = {
   description: 'Desarrollador Full-Stack',
   openGraph: { images: OgImage.src },
 };
-
-gsap.registerPlugin(useGSAP);
 
 export default function RootLayout({
   children,
