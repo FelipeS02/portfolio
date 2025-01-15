@@ -15,7 +15,9 @@ import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
 import { DESIGN_ELEMENTS_IDS } from '../sections/services/design/design';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, Draggable);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(useGSAP, ScrollTrigger, Draggable);
+}
 
 type ElementDictionaryKey =
   | 'homeSection'
@@ -260,8 +262,13 @@ const AnimationsProvider = memo(function AnimationProvider() {
       transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
       transitionDuration: '150ms',
     });
+
+    // Margin applied to make pin (objectiveSection) section overflow animation possible
+    const designSectionMargin = designWrapper.clientHeight;
+
     gsap.set(designWrapper, {
-      marginBottom: `-${designWrapper.clientHeight}px`,
+      marginBottom: `-${designSectionMargin}px`,
+      yPercent: -50,
     });
 
     masterTimeline.current.add(
@@ -270,7 +277,13 @@ const AnimationsProvider = memo(function AnimationProvider() {
           id: 'objective',
           onStart: () => {
             gsap.set(
-              [objectiveSection, objectiveText, objectiveChars, clockLines],
+              [
+                objectiveSection,
+                objectiveText,
+                objectiveChars,
+                clockLines,
+                designWrapper,
+              ],
               {
                 willChange: 'transform, opacity',
               },
@@ -320,30 +333,12 @@ const AnimationsProvider = memo(function AnimationProvider() {
           },
           '>+2',
         )
-        .fromTo(
-          designWrapper,
-          { yPercent: -50 },
-          { yPercent: -100, duration: 10 },
-          '>-5',
-        ),
+        .to(designWrapper, { yPercent: -100, duration: 10 }, '>-5'),
     );
 
     // #endregion
 
     // #region Development animations
-
-    // masterTimeline.current.add(
-    //   gsap.timeline({
-    //     scrollTrigger: {
-    //       trigger: developmentSection,
-    //       start: 'top bottom',
-    //       end: '+=100',
-    //       pin: designSection,
-    //       scrub: true,
-    //       markers: true,
-    //     },
-    //   }),
-    // );
 
     gsap.set(developmentContent, {
       marginTop: `${sectionMargin}px`,

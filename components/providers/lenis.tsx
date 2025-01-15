@@ -29,7 +29,7 @@ const LenisProvider: FC<{ children: ReactNode }> = ({ children }) => {
       root
       options={{
         lerp: 0.15,
-        wheelMultiplier: 0.7,
+        wheelMultiplier: 0.6,
         gestureOrientation: 'vertical',
         smoothWheel: true,
         autoRaf: false,

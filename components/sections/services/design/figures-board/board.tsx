@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
@@ -63,6 +63,7 @@ const FiguresBoard = () => {
   const {
     // Extract palette hex values from the theme
     palette: { hex: pallete },
+    fullfiled: isPaletteFullfiled,
   } = useTheme();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -111,7 +112,6 @@ const FiguresBoard = () => {
       Draggable.create(sectionHero, {
         bounds: boardRef.current,
         onPress: () => handleDraggableSelection(sectionHero.id), // Handle selection on press
-      
       });
 
       // Create draggable for figure elements
@@ -121,7 +121,6 @@ const FiguresBoard = () => {
           onPress: function () {
             handleDraggableSelection(this?.target?.id); // Handle selection for this target
           },
-          
         }),
       );
 
@@ -258,17 +257,24 @@ const FiguresBoard = () => {
     cleanExistentTimeline,
   ]);
 
-  useInterval(
-    () => setElementsRandomPosition(),
-    !isMounted ? 500 : isSectionVisible ? 10000 : null,
-  );
+  const intervalDelay = useMemo(() => {
+    // If palette is not loaded cancel interval
+    if (!isPaletteFullfiled) return null;
+
+    // On first render
+    if (!isMounted && isSectionVisible) return 500;
+
+    // Interval of 10 seconds when section is visible
+    return isSectionVisible ? 10000 : null;
+  }, [isMounted, isSectionVisible, isPaletteFullfiled]);
+
+  useInterval(() => setElementsRandomPosition(), intervalDelay);
 
   return (
     <div
       className='absolute inset-0 z-10 flex size-full max-h-full max-w-full flex-col items-center justify-center overflow-hidden p-4'
       ref={boardRef}
     >
-      {/* <RuleCursor /> */}
       <SectionText selectedElement={selectedElement} />
       <Figures ref={loadFiguresRef} selectedElement={selectedElement} />
     </div>
