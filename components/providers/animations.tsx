@@ -372,7 +372,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           const { content, hero, ringsContainer, globe } = development;
 
           const developmentSectionMargin =
-            window.innerHeight - hero.offsetHeight;
+            window.innerHeight - hero.clientHeight * 0.7;
 
           const bg = '#111111';
 
@@ -524,8 +524,8 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           gsap.set(rings, { willChange: 'transform' });
           gsap.set(globe, { willChange: 'transform' });
 
-          const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.01;
-          const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.01;
+          const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.009;
+          const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.009;
 
           const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
           const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
@@ -569,7 +569,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             return;
           }
 
-          if (isMobileDevice) {
+          if (!isMobileDevice) {
             document.addEventListener('mousemove', handleMouseParallax);
             document.addEventListener('mouseleave', restoreElementsPosition);
           }
@@ -582,9 +582,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         // Cleanup Function
         return () => {
           window.removeEventListener('resize', resizeGlobe);
-          document.removeEventListener('mousemove', handleMouseParallax);
-          document.removeEventListener('mouseleave', restoreElementsPosition);
           observer.unobserve(section);
+          if (!isMobileDevice) {
+            document.removeEventListener('mousemove', handleMouseParallax);
+            document.removeEventListener('mouseleave', restoreElementsPosition);
+          }
         };
       },
       { dependencies: [isMounted, isMobileDevice], scope: containerRef },
