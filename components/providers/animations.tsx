@@ -69,7 +69,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const startTime = peformance.now()
+    const startTime = performance.now()
     const elements = {
       // Home elements
       homeSection: document.getElementById(HOME_ELEMENT_IDS.SECTION),
