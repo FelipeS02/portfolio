@@ -107,12 +107,12 @@ const AnimationsProvider = memo(function AnimationProvider() {
     elementsRef.current = elements;
 
     setIsMounted(true);
-    const endTime = peformance.now()
+    const endTime = performance.now()
     console.log(`Ejecucion elementos: ${endTime - startTime}`)
   }, []);
 
   useGSAP(() => {
-    const startTime = peformance.now()
+    const startTime = performance.now()
     if (
       !isPaletteFullfiled ||
       !resolvedTheme ||
@@ -378,7 +378,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     // #endregion
 
-    const endTime = peformance.now()
+    const endTime = performance.now()
     console.log(`Ejecucion animaciones: ${endTime - startTime}`)
 
     return () => {
