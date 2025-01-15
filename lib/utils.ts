@@ -19,3 +19,7 @@ export function removeByIndex<T>(arr: readonly T[], index: number): T[] {
 
   return newArr;
 }
+
+// Check if al values are truthy
+export const validateObject = (obj: Record<string, unknown>) =>
+  Object.values(obj).every(Boolean);

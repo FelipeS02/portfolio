@@ -204,7 +204,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   return (
     <div
       ref={containerRef}
-      id='3d-globe'
+      id='globe'
       className={cn('aspect-square size-full rounded-full', className)}
     >
       <HTMLComment text='Props to sohrabzia https://codepen.io/sohrabzia' />

@@ -1,3 +1,4 @@
+import AnimationsProvider from '@/components/providers/animations';
 import About from '@/components/sections/about';
 import Home from '@/components/sections/home/home';
 import Objective from '@/components/sections/objective/objective';
@@ -6,18 +7,20 @@ import Development from '@/components/sections/services/development/development'
 
 export default function Page() {
   return (
-    <main className='block size-full' id='#main'>
-      <Home>
-        <About />
-      </Home>
+    <AnimationsProvider>
+      <main className='block size-full' id='#main'>
+        <Home>
+          <About />
+        </Home>
 
-      <About mobile />
+        <About mobile />
 
-      <Objective />
+        <Objective />
 
-      <Design />
+        <Design />
 
-      <Development />
-    </main>
+        <Development />
+      </main>
+    </AnimationsProvider>
   );
 }

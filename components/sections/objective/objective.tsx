@@ -15,7 +15,9 @@ const Objective = memo(function Objective() {
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
       className='-mt-[70vh] flex h-screen w-full flex-col items-center justify-between gap-8 px-4'
     >
-      <ClockLines />
+      <div className='clock-lines z-0 w-full'>
+        <ClockLines />
+      </div>
       <h3
         className='w-full max-w-[1400px] text-balance text-[2.5rem] font-semibold leading-tight md:text-[3rem] lg:text-[4rem]'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
@@ -25,7 +27,9 @@ const Objective = memo(function Objective() {
           actuales, sino que también sean atemporales y perduren en el tiempo.
         </SplittedText>
       </h3>
-      <ClockLines side='bottom' />
+      <div className='clock-lines z-0 w-full'>
+        <ClockLines side='bottom' />
+      </div>
     </section>
   );
 });

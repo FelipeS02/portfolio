@@ -3,14 +3,12 @@ import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import LoadingScreen from '@/components/loading_screen';
-import AnimationsProvider from '@/components/providers/animations';
 import LenisProvider from '@/components/providers/lenis';
 import RandomThemeProvider from '@/components/providers/random-theme';
 import SchemeProvider from '@/components/providers/scheme';
 import OgImage from '@/public/assets/images/og_image.webp';
 
 import './globals.css';
-
 
 const ppNeueMontreal = localFont({
   src: [
@@ -59,7 +57,6 @@ export default function RootLayout({
 }>) {
   return (
     <LenisProvider>
-      {/* <ScanProvider /> */}
       <html
         lang='es-ES'
         translate='no'
@@ -73,7 +70,7 @@ export default function RootLayout({
           <SchemeProvider attribute='class' defaultTheme='system' enableSystem>
             <RandomThemeProvider>
               <LoadingScreen />
-              <AnimationsProvider />
+
               {children}
             </RandomThemeProvider>
           </SchemeProvider>

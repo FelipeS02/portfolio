@@ -95,13 +95,11 @@ const LineIterations: FC<{ className?: string }> = ({ className = '' }) => (
   </svg>
 );
 
-const ClockLines: FC<{ side?: 'top' | 'bottom'; id?: string }> = ({
-  side = 'top',
-}) => {
+const ClockLines: FC<{ side?: 'top' | 'bottom' }> = ({ side = 'top' }) => {
   return (
     <Marquee
       autoFill
-      className='z-0 w-full clock-line'
+      className='w-full'
       direction={side === 'bottom' ? 'right' : 'left'}
       speed={20}
       gradient
