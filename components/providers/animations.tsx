@@ -69,6 +69,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const startTime = peformance.now()
     const elements = {
       // Home elements
       homeSection: document.getElementById(HOME_ELEMENT_IDS.SECTION),
@@ -102,12 +103,16 @@ const AnimationsProvider = memo(function AnimationProvider() {
 
     if (!Object.values(elements).every(Boolean)) return;
 
+
     elementsRef.current = elements;
 
     setIsMounted(true);
+    const endTime = peformance.now()
+    console.log(`Ejecucion elementos: ${endTime - startTime}`)
   }, []);
 
   useGSAP(() => {
+    const startTime = peformance.now()
     if (
       !isPaletteFullfiled ||
       !resolvedTheme ||
@@ -116,7 +121,7 @@ const AnimationsProvider = memo(function AnimationProvider() {
       isXlDevice === undefined
     )
       return;
-
+    
     const borderByTheme =
       resolvedTheme === 'dark' ? palette[700] : palette[400];
     const bgByTheme = '#111111';
@@ -372,6 +377,9 @@ const AnimationsProvider = memo(function AnimationProvider() {
     );
 
     // #endregion
+
+    const endTime = peformance.now()
+    console.log(`Ejecucion animaciones: ${endTime - startTime}`)
 
     return () => {
       clearTimeline();
