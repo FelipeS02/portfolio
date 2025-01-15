@@ -13,10 +13,10 @@ import {
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
-import { useMediaQuery } from 'usehooks-ts';
 
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
+import { useMediaQueries } from '@/hooks/use-media-queries';
 
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
 import { HOME_ELEMENT_IDS } from '../sections/home/home';
@@ -81,13 +81,10 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const isMaxLgDevice = useMediaQuery(
-      '(max-width: 1280px)',
-      mediaQueryOptions,
-    );
-    const isXlDevice = useMediaQuery('(min-width: 1280px)', mediaQueryOptions);
-    const isMobileDevice = useMediaQuery(
-      '(any-pointer: coarse)',
+    const isAnimating = useRef(false);
+
+    const [isMaxLgDevice, isXlDevice, isMobileDevice] = useMediaQueries(
+      ['(max-width: 1280px)', '(min-width: 1280px)', '(any-pointer: coarse)'],
       mediaQueryOptions,
     );
 
@@ -103,8 +100,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const { contextSafe } = useGSAP(
       () => {
-        const startTime = performance.now();
-
         const objectiveText = document.getElementById(
           OBJECTIVE_ELEMENTS_IDS.TEXT,
         ) as HTMLElement;
@@ -129,7 +124,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           },
 
           about: {
-            wrapper: aboutWrapper,
+            wrapper: document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER),
             overlay: aboutSelector(`#${ABOUT_ELEMENTS_IDS.OVERLAY}`)[0],
             section: aboutSelector(`#${ABOUT_ELEMENTS_IDS.SECTION}`)[0],
             mobileSection: document.getElementById(
@@ -180,9 +175,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         elementsRef.current = e;
 
         setIsMounted(true);
-
-        const endTime = performance.now();
-        console.log(`Tiempo elementos ${endTime - startTime}`);
       },
       { scope: containerRef },
     );
@@ -421,13 +413,13 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
     );
 
     useEffect(() => {
-      const startTime = performance.now();
       if (
         !isPaletteFullfiled ||
         !resolvedTheme ||
         !isMounted ||
         isMaxLgDevice === undefined ||
-        isXlDevice === undefined
+        isXlDevice === undefined ||
+        isAnimating.current
       )
         return;
 
@@ -438,9 +430,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       setObjectiveAnimations();
 
       setDevelopmentAnimations();
-
-      const endTime = performance.now();
-      console.log(`Tiempo animaciones ${endTime - startTime}`);
 
       return () => {
         clearTimeline();
