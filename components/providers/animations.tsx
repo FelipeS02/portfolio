@@ -15,6 +15,7 @@ import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
 import { useMediaQuery } from 'usehooks-ts';
 
+import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
@@ -22,7 +23,6 @@ import { HOME_ELEMENT_IDS } from '../sections/home/home';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
 import { DESIGN_ELEMENTS_IDS } from '../sections/services/design/design';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
-import { validateObject } from '@/lib/utils';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(useGSAP, ScrollTrigger, Draggable);
