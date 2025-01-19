@@ -12,7 +12,7 @@ const TechnologiesRings = memo(function TechnologiesRings() {
       id='planet-orbit'
     >
       <div
-        className='absolute flex aspect-square h-full md:h-fit md:w-full'
+        className='absolute flex aspect-square h-full lg:h-fit lg:w-full'
         id='rings-container'
       >
         <Ring>

@@ -57,6 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <LenisProvider>
+      {/* <ScanProvider /> */}
       <html
         lang='es-ES'
         translate='no'

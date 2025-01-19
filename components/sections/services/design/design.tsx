@@ -31,7 +31,7 @@ const Design = () => {
     <div id={DESIGN_ELEMENTS_IDS.WRAPPER}>
       <ObjectiveDivider />
       <section
-        className='flex h-screen max-w-full overflow-hidden bg-background p-20 max-md:p-6'
+        className='relative flex h-screen max-w-full overflow-hidden bg-background p-20 max-md:p-6'
         id={DESIGN_ELEMENTS_IDS.SECTION}
       >
         <div

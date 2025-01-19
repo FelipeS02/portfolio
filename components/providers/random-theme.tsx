@@ -28,7 +28,10 @@ export const themeInitialState: ThemeState = {
 };
 
 export const RandomThemeContext = createContext<
-  ThemeState & { getNewTheme?: () => Promise<void> }
+  ThemeState & {
+    getNewTheme?: () => Promise<void>;
+    applyPalette?: VoidFunction;
+  }
 >(themeInitialState);
 
 const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -54,9 +57,6 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       const newTheme = data.theme;
 
-      // Apply the theme into CSS variables
-      applyPaletteIntoCSS(newTheme.palette.hsl);
-
       setTheme((prev) => ({
         ...prev,
         ...newTheme,
@@ -69,6 +69,11 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
+  // Manually apply the theme into CSS variables
+  const applyPalette = useCallback(() => {
+    applyPaletteIntoCSS(theme.palette.hsl);
+  }, [theme]);
+
   // Initial theme loading
   useEffect(() => {
     if (!mounted) return setMounted(true);
@@ -77,8 +82,8 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [mounted, getNewTheme]);
 
   const memoizedValue = useMemo(
-    () => ({ ...theme, getNewTheme }),
-    [getNewTheme, theme],
+    () => ({ ...theme, getNewTheme, applyPalette }),
+    [getNewTheme, theme, applyPalette],
   );
 
   return (

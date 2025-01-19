@@ -13,6 +13,7 @@ import {
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
+import { useDebounceCallback } from 'usehooks-ts';
 
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
@@ -83,8 +84,12 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const isAnimating = useRef(false);
 
-    const [isMaxLgDevice, isXlDevice, isMobileDevice] = useMediaQueries(
-      ['(max-width: 1280px)', '(min-width: 1280px)', '(any-pointer: coarse)'],
+    const [isMaxLgDevice, isLgDevice, isMobileDevice] = useMediaQueries(
+      [
+        '(max-width: 1280px)',
+        '(min-width: 1280px)',
+        '(any-pointer: coarse) and (max-width: 768px)',
+      ],
       mediaQueryOptions,
     );
 
@@ -187,6 +192,14 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           const { about: a, home } = elementsRef.current as ElementDictionary;
 
+          if (isMobileDevice) {
+            gsap.set([a.wrapper, a.overlay, a.section, a.content], {
+              clearProps: 'all ',
+            });
+
+            return;
+          }
+
           if (isMaxLgDevice) {
             masterTimeline.current.add(
               gsap
@@ -209,7 +222,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             );
           }
 
-          if (isXlDevice) {
+          if (isLgDevice) {
             gsap.set(a.wrapper, {
               height: 0,
               placeSelf: 'center',
@@ -276,7 +289,14 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             );
           }
         })(),
-      [isMaxLgDevice, isXlDevice, palette, resolvedTheme, contextSafe],
+      [
+        isMaxLgDevice,
+        isLgDevice,
+        palette,
+        resolvedTheme,
+        contextSafe,
+        isMobileDevice,
+      ],
     );
 
     const setObjectiveAnimations = useCallback(
@@ -284,6 +304,14 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         contextSafe(() => {
           const { objective: o, design: d } =
             elementsRef.current as ElementDictionary;
+
+          if (isMobileDevice) {
+            gsap.set([o.clockLines, o.chars, o.words, d.wrapper], {
+              clearProps: 'all',
+            });
+
+            return;
+          }
 
           gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
           gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
@@ -362,7 +390,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5'),
           );
         })(),
-      [resolvedTheme, contextSafe],
+      [resolvedTheme, contextSafe, isMobileDevice],
     );
 
     const setDevelopmentAnimations = useCallback(
@@ -412,13 +440,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       [contextSafe],
     );
 
-    useEffect(() => {
+    const loadAnimations = useCallback(() => {
       if (
         !isPaletteFullfiled ||
         !resolvedTheme ||
         !isMounted ||
-        isMaxLgDevice === undefined ||
-        isXlDevice === undefined ||
         isAnimating.current
       )
         return;
@@ -430,21 +456,27 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       setObjectiveAnimations();
 
       setDevelopmentAnimations();
-
-      return () => {
-        clearTimeline();
-      };
     }, [
       clearTimeline,
+      isMounted,
+      isPaletteFullfiled,
+      resolvedTheme,
       setDevelopmentAnimations,
       setHomeAnimations,
       setObjectiveAnimations,
-      isMounted,
-      isPaletteFullfiled,
-      isMaxLgDevice,
-      isXlDevice,
-      resolvedTheme,
     ]);
+
+    const debouncedLoad = useDebounceCallback(loadAnimations, 500);
+
+    useEffect(() => {
+      loadAnimations();
+
+      document.addEventListener('resize', debouncedLoad);
+
+      return () => {
+        document.removeEventListener('resize', debouncedLoad);
+      };
+    }, [loadAnimations, clearTimeline, debouncedLoad]);
 
     // Development section elements pointer interaction
     useGSAP(
@@ -471,7 +503,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             const paddingValue = Math.max(0, 10 - index * 0.25);
 
             gsap.set(ring, {
-              clear: 'filter',
+              clearProps: 'filter',
               padding: `${paddingValue}%`,
               opacity: `${opacity}%`,
               rotate,
@@ -492,7 +524,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             const blur = Math.max(0, 0.05 + index * 0.15);
 
             gsap.set(ring, {
-              clear: 'opacity',
+              clearProps: 'opacity',
               padding: `${paddingValue}%`,
               filter: `blur(${blur}px)`,
               rotate,

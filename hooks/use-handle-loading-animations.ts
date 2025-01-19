@@ -4,6 +4,7 @@ import { gsap } from 'gsap/gsap-core';
 export default function useHandleLoadingAnimations() {
   const { contextSafe } = useGSAP(() => {
     const el = document.querySelector('[letter-slide-up]');
+    
     if (el) {
       gsap.set(el.getElementsByClassName('char'), {
         yPercent: 100,
