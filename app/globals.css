@@ -69,13 +69,6 @@
       @apply hidden;
     }
 
-    
-
-    /* Handle */
-    /* ::-webkit-scrollbar-thumb {
-      @apply bg-foreground/20;
-    } */
-
     p {
       @apply font-archivo;
     }

@@ -44,6 +44,7 @@ const LoadingScreen = () => {
       },
     });
 
+    // Build colors switch animation
     loadingLines.current?.forEach((line, index) => {
       const linePosition = index + 1;
 
@@ -62,8 +63,10 @@ const LoadingScreen = () => {
       );
     });
 
+    // Add to timeline
     tl.current.add(linesTl, '>');
 
+    // On switch colors end, hide lines and logo
     tl.current.add(
       gsap.to(loadingLines.current, {
         yPercent: -100,
@@ -79,11 +82,13 @@ const LoadingScreen = () => {
         },
         onComplete: () => {
           gsap.set(container.current, { display: 'none' });
-          onPageLoading();
         },
       }),
       '>',
     );
+
+    // 0.5s before line animation end, show onLoading animations
+    tl.current.add(onPageLoading(), '>-=0.5');
   });
 
   const onLoading = contextSafe(() => {
@@ -135,7 +140,6 @@ const LoadingScreen = () => {
   return (
     <div
       className='fixed inset-0 z-50 grid h-fit w-full grid-cols-9'
-      // data-loading={isPageLoading}
       ref={loadElements}
     >
       {initialColorValues.map((color, index) => {

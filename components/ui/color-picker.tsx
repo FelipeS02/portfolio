@@ -59,7 +59,12 @@ const ColorPicker: FC<
           <div />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align='end' className='mt-2 flex w-full flex-col gap-2'>
+      <PopoverContent
+        align='end'
+        className='mt-2 flex w-full flex-col gap-2'
+        // Prevent input autofocus
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <div>
           <p className='font-semibold leading-none'>Crear nuevo tema</p>
           <div className='inline-flex w-full items-center text-sm font-semibold'>

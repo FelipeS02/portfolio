@@ -60,11 +60,9 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     (renderer: RenderParams['renderer']) => {
       if (!renderer || !paletteIsFullfiled) return;
 
-      renderer.setClearColor(
-        resolvedTheme === 'dark' ? palette[200] : palette[50],
-      );
+      renderer.setClearColor(palette[200]);
     },
-    [resolvedTheme, palette, paletteIsFullfiled],
+    [palette, paletteIsFullfiled],
   );
 
   const renderScene = useCallback(async (): Promise<GlobeUtils | void> => {
