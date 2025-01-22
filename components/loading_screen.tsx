@@ -154,7 +154,7 @@ const LoadingScreen = () => {
       })}
 
       <h3
-        className='fixed place-self-center text-[4rem] font-bold text-foreground mix-blend-luminosity duration-500 group-data-[loading=false]/container:opacity-0 md:text-[6rem]'
+        className='fixed place-self-center text-[4rem] font-bold text-foreground drop-shadow-lg duration-500 group-data-[loading=false]/container:opacity-0 md:text-[6rem]'
         id='loading-logo'
       >
         FSARACHO
