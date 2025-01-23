@@ -573,6 +573,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             duration: 1,
             ease: 'back.out',
             willChange: 'none',
+            
           });
           gsap.to(globe, {
             x: 0,
