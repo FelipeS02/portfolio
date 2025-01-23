@@ -318,11 +318,16 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           gsap.set(o.chars, {
             opacity: 0,
           });
+
           gsap.set(o.words, {
             backgroundColor: 'transparent',
-            transitionProperty: 'background-color, filter',
+            transitionProperty: 'background-color, color',
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
             transitionDuration: '150ms',
+            color: 'inherit',
+            // Word spacing to make better highlight
+            margin: 'auto -0.1em',
+            padding: 'auto 0.1em',
           });
 
           // Margin applied to make pin (objectiveSection) section overflow animation possible
@@ -368,13 +373,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                 },
                 '>-2',
               )
-              .to(
+              .set(
                 o.words,
                 {
-                  backgroundColor:
-                    resolvedTheme === 'dark'
-                      ? 'hsl(var(--palette-800))'
-                      : 'hsl(var(--palette-200))',
+                  backgroundColor: palette[700],
+                  color: palette[50],
                 },
                 '>-1',
               )
@@ -390,7 +393,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5'),
           );
         })(),
-      [resolvedTheme, contextSafe, isMobileDevice],
+      [contextSafe, isMobileDevice, palette],
     );
 
     const setDevelopmentAnimations = useCallback(
@@ -573,7 +576,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             duration: 1,
             ease: 'back.out',
             willChange: 'none',
-            
           });
           gsap.to(globe, {
             x: 0,
