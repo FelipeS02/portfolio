@@ -184,264 +184,256 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       { scope: containerRef },
     );
 
-    const setHomeAnimations = useCallback(
-      () =>
-        contextSafe(() => {
-          const borderByTheme =
-            resolvedTheme === 'dark' ? palette[700] : palette[400];
+    const setHomeAnimations = contextSafe(() => {
+      const borderByTheme =
+        resolvedTheme === 'dark' ? palette[500] : palette[600];
 
-          const { about: a, home } = elementsRef.current as ElementDictionary;
+      const { about: a, home } = elementsRef.current as ElementDictionary;
 
-          if (isMobileDevice) {
-            gsap.set([a.wrapper, a.overlay, a.section, a.content], {
-              clearProps: 'all ',
+      if (isMobileDevice) {
+        gsap.set([a.wrapper, a.overlay, a.section, a.content], {
+          clearProps: 'all ',
+        });
+
+        return;
+      }
+
+      if (isMaxLgDevice) {
+        masterTimeline.current.add(
+          gsap
+            .timeline({
+              id: 'about-mobile',
+              onStart: () => {
+                gsap.set(a.mobileSection, { willChange: 'opacity' });
+              },
+              scrollTrigger: {
+                trigger: a.mobileSection,
+                end: () => `+=${a.mobileSection.offsetHeight * 0.5}`,
+                start: 'bottom bottom',
+                scrub: true,
+                pin: true,
+              },
+            })
+            .to(a.mobileSection, {
+              opacity: 0,
+            }),
+        );
+      }
+
+      if (isLgDevice) {
+        gsap.set(a.wrapper, {
+          height: 0,
+          placeSelf: 'center',
+          borderColor: borderByTheme,
+          borderTop: 1,
+          borderBottom: 1,
+        });
+
+        gsap.set(a.overlay, {
+          background: '#000000',
+          opacity: 1,
+        });
+
+        gsap.set(a.section, {
+          scale: 0.75,
+        });
+
+        gsap.set(a.content, {
+          width: 0,
+        });
+
+        masterTimeline.current.add(
+          gsap
+            .timeline({
+              id: 'home',
+              onStart: () => {
+                gsap.set(a.wrapper, { willChange: 'height' });
+                gsap.set(a.overlay, { willChange: 'opacity' });
+                gsap.set(a.section, { willChange: 'transform' });
+                gsap.set(a.content, { willChange: 'width' });
+              },
+              scrollTrigger: {
+                trigger: home.section,
+                start: 'top top',
+                end: () => `${home.section.offsetHeight * 2}`,
+                scrub: true,
+                pin: true,
+              },
+            })
+            .to(a.wrapper, {
+              height: '100%',
+              borderColor: `${borderByTheme}00`,
+            })
+            .to(
+              a.overlay,
+              {
+                opacity: 0,
+              },
+              '<',
+            )
+            .to(
+              a.section,
+              {
+                scale: 1,
+              },
+              '<',
+            )
+            .to(a.content, {
+              width: '40%',
+            })
+            .to(a.section, {
+              opacity: 0,
+            }),
+        );
+      }
+    });
+
+    const setObjectiveAnimations = contextSafe(() => {
+      const { objective: o, design: d } =
+        elementsRef.current as ElementDictionary;
+
+      if (!isMobileDevice) {
+        gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
+        gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
+
+        // Margin applied to make pin (objectiveSection) section overflow animation possible
+        gsap.set(d.wrapper, {
+          marginBottom: `-${d.wrapper.clientHeight}px`,
+          yPercent: -50,
+        });
+      }
+      gsap.set(o.chars, {
+        opacity: 0,
+      });
+
+      gsap.set(o.words, {
+        backgroundColor: 'transparent',
+        transitionProperty: 'background-color, color',
+        transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+        transitionDuration: '150ms',
+        color: 'inherit',
+        // Word spacing to make better highlight
+        margin: 'auto -0.1em',
+        padding: 'auto 0.1em',
+      });
+
+      const getScrollTriggerByDevice = () => {
+        if (isMobileDevice)
+          return {
+            trigger: o.section,
+            start: 'top center',
+            end: 'bottom bottom',
+            scrub: true,
+          };
+
+        return {
+          trigger: o.section,
+          start: 'center center',
+          end: () => `+=${o.section.offsetHeight * 3}`,
+          scrub: true,
+          pin: true,
+        };
+      };
+
+      const objectiveTimeline = gsap
+        .timeline({
+          id: 'objective',
+          onStart: () => {
+            gsap.set([o.section, o.text, o.chars, o.clockLines, d.wrapper], {
+              willChange: 'transform, opacity',
             });
+          },
+          scrollTrigger: getScrollTriggerByDevice(),
+        })
+        .to(o.chars, {
+          opacity: 1,
+          ease: 'circ.inOut',
+          stagger: 0.07,
+          duration: 3,
+          delay: 2,
+        })
+        .to(
+          o.clockLines,
+          {
+            opacity: 1,
+            yPercent: 0,
+            ease: 'linear',
+            duration: 1,
+          },
+          '>-2',
+        )
+        .set(
+          o.words,
+          {
+            backgroundColor: palette[700],
+            color: palette[50],
+          },
+          '>-1',
+        );
 
-            return;
-          }
-
-          if (isMaxLgDevice) {
-            masterTimeline.current.add(
-              gsap
-                .timeline({
-                  id: 'about-mobile',
-                  onStart: () => {
-                    gsap.set(a.mobileSection, { willChange: 'opacity' });
-                  },
-                  scrollTrigger: {
-                    trigger: a.mobileSection,
-                    end: () => `+=${a.mobileSection.offsetHeight * 0.5}`,
-                    start: 'bottom bottom',
-                    scrub: true,
-                    pin: true,
-                  },
-                })
-                .to(a.mobileSection, {
-                  opacity: 0,
-                }),
-            );
-          }
-
-          if (isLgDevice) {
-            gsap.set(a.wrapper, {
-              height: 0,
-              placeSelf: 'center',
-              borderColor: borderByTheme,
-              borderTop: 1,
-              borderBottom: 1,
-            });
-
-            gsap.set(a.overlay, {
-              background: '#000000',
-              opacity: 1,
-            });
-
-            gsap.set(a.section, {
-              scale: 0.75,
-            });
-
-            gsap.set(a.content, {
-              width: 0,
-            });
-
-            masterTimeline.current.add(
-              gsap
-                .timeline({
-                  id: 'home',
-                  onStart: () => {
-                    gsap.set(a.wrapper, { willChange: 'height' });
-                    gsap.set(a.overlay, { willChange: 'opacity' });
-                    gsap.set(a.section, { willChange: 'transform' });
-                    gsap.set(a.content, { willChange: 'width' });
-                  },
-                  scrollTrigger: {
-                    trigger: home.section,
-                    start: 'top top',
-                    end: () => `${home.section.offsetHeight * 2}`,
-                    scrub: true,
-                    pin: true,
-                  },
-                })
-                .to(a.wrapper, {
-                  height: '100%',
-                  borderColor: `${borderByTheme}00`,
-                })
-                .to(
-                  a.overlay,
-                  {
-                    opacity: 0,
-                  },
-                  '<',
-                )
-                .to(
-                  a.section,
-                  {
-                    scale: 1,
-                  },
-                  '<',
-                )
-                .to(a.content, {
-                  width: '40%',
-                })
-                .to(a.section, {
-                  opacity: 0,
-                }),
-            );
-          }
-        })(),
-      [
-        isMaxLgDevice,
-        isLgDevice,
-        palette,
-        resolvedTheme,
-        contextSafe,
-        isMobileDevice,
-      ],
-    );
-
-    const setObjectiveAnimations = useCallback(
-      () =>
-        contextSafe(() => {
-          const { objective: o, design: d } =
-            elementsRef.current as ElementDictionary;
-
-          if (isMobileDevice) {
-            gsap.set([o.clockLines, o.chars, o.words, d.wrapper], {
-              clearProps: 'all',
-            });
-
-            return;
-          }
-
-          gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
-          gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
-          gsap.set(o.chars, {
-            opacity: 0,
-          });
-
-          gsap.set(o.words, {
-            backgroundColor: 'transparent',
-            transitionProperty: 'background-color, color',
-            transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
-            transitionDuration: '150ms',
-            color: 'inherit',
-            // Word spacing to make better highlight
-            margin: 'auto -0.1em',
-            padding: 'auto 0.1em',
-          });
-
-          // Margin applied to make pin (objectiveSection) section overflow animation possible
-          gsap.set(d.wrapper, {
-            marginBottom: `-${d.wrapper.clientHeight}px`,
-            yPercent: -50,
-          });
-
-          masterTimeline.current.add(
-            gsap
-              .timeline({
-                id: 'objective',
-                onStart: () => {
-                  gsap.set(
-                    [o.section, o.text, o.chars, o.clockLines, d.wrapper],
-                    {
-                      willChange: 'transform, opacity',
-                    },
-                  );
-                },
-                scrollTrigger: {
-                  trigger: o.section,
-                  start: 'center center',
-                  end: () => `+=${o.section.offsetHeight * 3}`,
-                  scrub: true,
-                  pin: true,
-                },
-              })
-              .to(o.chars, {
-                opacity: 1,
-                ease: 'circ.inOut',
-                stagger: 0.07,
-                duration: 3,
-                delay: 2,
-              })
-              .to(
-                o.clockLines,
-                {
-                  opacity: 1,
-                  yPercent: 0,
-                  ease: 'linear',
-                  duration: 1,
-                },
-                '>-2',
-              )
-              .set(
-                o.words,
-                {
-                  backgroundColor: palette[700],
-                  color: palette[50],
-                },
-                '>-1',
-              )
-              .to(
-                o.section,
-                {
-                  opacity: 0.4,
-                  duration: 6,
-                  scale: 0.95,
-                },
-                '>+2',
-              )
-              .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5'),
+      if (!isMobileDevice) {
+        objectiveTimeline
+          .to(
+            o.section,
+            {
+              opacity: 0.4,
+              duration: 6,
+              scale: 0.95,
+            },
+            '>+2',
+          )
+          .to(
+            d.wrapper,
+            !isMobileDevice ? { yPercent: -100, duration: 10 } : {},
+            '>-5',
           );
-        })(),
-      [contextSafe, isMobileDevice, palette],
-    );
+      }
 
-    const setDevelopmentAnimations = useCallback(
-      () =>
-        contextSafe(() => {
-          const { development } = elementsRef.current as ElementDictionary;
-          const { content, hero, ringsContainer, globe } = development;
+      masterTimeline.current.add(objectiveTimeline);
+    });
 
-          const developmentSectionMargin =
-            window.innerHeight - hero.clientHeight * 0.7;
+    const setDevelopmentAnimations = contextSafe(() => {
+      const { development } = elementsRef.current as ElementDictionary;
+      const { content, hero, ringsContainer, globe } = development;
 
-          const bg = '#111111';
+      const developmentSectionMargin =
+        window.innerHeight - hero.clientHeight * 0.7;
 
-          gsap.set(content, {
-            marginTop: `${developmentSectionMargin}px`,
-            backgroundColor: `${bg}40`,
-          });
+      const bg = '#111111';
 
-          masterTimeline.current.add(
-            gsap
-              .timeline({
-                id: 'development',
-                onStart: () => {
-                  gsap.set(ringsContainer, {
-                    willChange: 'transform, opacity',
-                  });
-                  gsap.set(globe, { willChange: 'transform' });
-                },
-                scrollTrigger: {
-                  trigger: content,
-                  start: 'start center',
-                  end: () => `+=${content.offsetHeight * 0.2}`,
-                  scrub: true,
-                },
-              })
-              .to(content, {
-                backgroundColor: `${bg}95`,
-              })
-              .to(
-                ringsContainer,
-                { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
-                '<',
-              )
-              .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<'),
-          );
-        })(),
-      [contextSafe],
-    );
+      gsap.set(content, {
+        marginTop: `${developmentSectionMargin}px`,
+        backgroundColor: `${bg}40`,
+      });
+
+      masterTimeline.current.add(
+        gsap
+          .timeline({
+            id: 'development',
+            onStart: () => {
+              gsap.set(ringsContainer, {
+                willChange: 'transform, opacity',
+              });
+              gsap.set(globe, { willChange: 'transform' });
+            },
+            scrollTrigger: {
+              trigger: content,
+              start: 'start center',
+              end: () => `+=${content.offsetHeight * 0.2}`,
+              scrub: true,
+            },
+          })
+          .to(content, {
+            backgroundColor: `${bg}95`,
+          })
+          .to(
+            ringsContainer,
+            { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
+            '<',
+          )
+          .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<'),
+      );
+    });
 
     const loadAnimations = useCallback(() => {
       if (

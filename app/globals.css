@@ -123,14 +123,20 @@
   }
 }
 
-.cuadriculado {
-  background: linear-gradient(
-      to right,
-      hsl(var(--foreground) / 5%) 1px,
-      transparent 1px
-    ),
-    linear-gradient(to bottom, hsl(var(--foreground) / 5%) 1px, transparent 1px);
+@layer utilities {
+  .bg-grid {
+    background: linear-gradient(
+        to right,
+        hsl(var(--foreground) / 5%) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--foreground) / 5%) 1px,
+        transparent 1px
+      );
 
-  background-size: 1.5rem 1.5rem; /* Tamaño del grid */
-  background-position: center;
+    background-size: 1.5rem 1.5rem; /* Tamaño del grid */
+    background-position: center;
+  }
 }

@@ -13,7 +13,7 @@ const Objective = memo(function Objective() {
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
-      className='flex h-screen w-full flex-col items-center justify-between gap-8 px-4 lg:mt-[-70vh]'
+      className='max-md:mb-[13vh] flex h-screen w-full flex-col items-center justify-between gap-8 px-4 lg:mt-[-70vh]'
     >
       <div className='clock-lines z-0 w-full'>
         <ClockLines />

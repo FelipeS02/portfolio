@@ -20,34 +20,34 @@ const TechnologiesRings = memo(function TechnologiesRings() {
             <RingItem
               Icon={Icons.NodeJs}
               position='top'
-              className='size-[4.5rem] lg:size-[6.5rem]'
+              className='size-16 lg:size-[6.5rem]'
             />
             <RingItem
               Icon={Icons.NestJS}
               position='left'
-              className='size-[4.5rem] lg:size-[6.5rem]'
+              className='size-16 lg:size-[6.5rem]'
             />
             <RingItem
               Icon={Icons.Gsap}
               position='bottom'
-              className='size-[4.5rem] lg:size-[6.5rem]'
+              className='size-16 lg:size-[6.5rem]'
               viewBox='0 0 82 30'
             />
             <Ring>
               <RingItem
                 Icon={Icons.ReactJS}
                 position='left'
-                className='size-[4rem] lg:size-24'
+                className='size-14 lg:size-24'
               />
               <RingItem
                 Icon={Icons.MySQL}
                 position='right'
-                className='size-[4rem] lg:size-24'
+                className='size-14 lg:size-24'
               />
               <RingItem
                 Icon={Icons.CSharp}
                 position='bottom'
-                className='size-[4rem] p-4 lg:size-24'
+                className='size-14 p-4 lg:size-24'
                 viewBox='0 0 256 288'
               />
               <Ring>
@@ -55,24 +55,24 @@ const TechnologiesRings = memo(function TechnologiesRings() {
                   <RingItem
                     Icon={Icons.Typescript}
                     position='bottom'
-                    className='size-14 p-4 lg:size-[5.5rem]'
+                    className='size-12 p-4 lg:size-[5.5rem]'
                   />
                   <RingItem
                     Icon={Icons.Css}
                     position='top'
-                    className='size-14 p-5 lg:size-[5.5rem]'
+                    className='size-12 p-5 lg:size-[5.5rem]'
                     viewBox='0 0 1000 1000'
                   />
                   <Ring>
                     <RingItem
                       Icon={Icons.TailwindCSS}
                       position='right'
-                      className='size-12 lg:size-20'
+                      className='size-10 lg:size-20'
                     />
                     <RingItem
                       Icon={Icons.Html5}
                       position='left'
-                      className='size-12 lg:size-20'
+                      className='size-10 lg:size-20'
                     />
                     <Ring>
                       <Ring>

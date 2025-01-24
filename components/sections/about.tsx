@@ -26,7 +26,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           className='col-span-1 h-full object-cover object-center'
         />
         <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
-          <h1 className='text-[5rem] font-bold leading-[0.9]'>
+          <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
             SOBRE <br /> MI.
           </h1>
           <p className='text-xl'>
@@ -69,13 +69,13 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
             id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
             <div className='p-8'>
-              <h1 className='static w-[5em] text-[8rem] font-bold leading-[0.9]'>
+              <h1 className='static w-[5em] text-[8rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
                 SOBRE MI.
               </h1>
-              <p className='min-w-[250px] text-xl text-foreground-secondary'>
+              <p className='min-w-[250px] text-xl'>
                 Soy Felipe, desarrollador Full-Stack especializado en Front-end
                 actualmente viviendo en{' '}
-                <span className='font-semibold text-foreground'>
+                <span className='font-semibold'>
                   Buenos Aires, <span className='text-[#75AADB]'>Arg</span>
                   <span className='text-[#FCBF49]'>en</span>
                   <span className='text-[#75AADB]'>tina</span>

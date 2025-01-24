@@ -1,4 +1,5 @@
 import { memo, ReactNode } from 'react';
+import Link from 'next/link';
 
 import HeaderShortcuts from './shortcuts';
 
@@ -31,7 +32,14 @@ const Header = memo(function Header() {
           subtitle='FELIPESARACHO02@GMAIL.COM'
         />
         <HeaderText
-          title='34º 45’ 43.20” S 58º 12’ 40.63” W'
+          title={
+            <Link
+              href='https://maps.app.goo.gl/iutWWLmzkCWbjGz6A'
+              target='_blank'
+            >
+              34° 45’ 46.02” S 58° 12’ 41.20” W
+            </Link>
+          }
           subtitle='BUENOS AIRES'
         />
         <HeaderShortcuts />
