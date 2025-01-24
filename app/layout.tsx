@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
 
+import { Analytics } from '@vercel/analytics/react';
+
 import LoadingScreen from '@/components/loading_screen';
 import LenisProvider from '@/components/providers/lenis';
 import RandomThemeProvider from '@/components/providers/random-theme';
@@ -75,6 +77,7 @@ export default function RootLayout({
               {children}
             </RandomThemeProvider>
           </SchemeProvider>
+          <Analytics />
         </body>
       </html>
     </LenisProvider>
