@@ -348,19 +348,41 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           duration: 3,
           delay: 2,
         })
-        .to(
-          o.clockLines,
-          {
-            opacity: 1,
-            yPercent: 0,
-            ease: 'linear',
-            duration: 1,
-          },
-          '>-2',
-        )
+        // .to(
+        //   o.clockLines,
+        //   {
+        //     opacity: 1,
+        //     yPercent: 0,
+        //     ease: 'linear',
+        //     duration: 1,
+        //   },
+        //   '>-2',
+        // )
         .set(
           o.words,
           {
+            onReverseComplete: () => {
+              gsap.to(o.clockLines[0], {
+                yPercent: -100,
+                opacity: 0,
+                duration: 0.35,
+                ease: 'back.out',
+              });
+              gsap.to(o.clockLines[1], {
+                yPercent: 100,
+                opacity: 0,
+                duration: 0.5,
+                ease: 'back.out',
+              });
+            },
+            onComplete: () => {
+              gsap.to(o.clockLines, {
+                opacity: 1,
+                yPercent: 0,
+                ease: 'expo.out',
+                duration: 0.35,
+              });
+            },
             backgroundColor: palette[700],
             color: palette[50],
           },
@@ -472,50 +494,27 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
         const { rings, globe, ringsContainer, section } = development;
 
-        // Mobile Rings Setup
-        if (isMobileDevice) {
-          rings.forEach((ring, index) => {
-            const rotate = '20deg';
+        // Opacity and padding settings
+        rings.forEach((ring, index) => {
+          const rotate = '20deg';
 
-            if (index === rings.length - 1) {
-              gsap.set(ring, {
-                rotate,
-              });
-              return;
-            }
-
-            const opacity = Math.max(0, 90 + index * 2);
-            const paddingValue = Math.max(0, 10 - index * 0.25);
-
+          if (index === rings.length - 1) {
             gsap.set(ring, {
-              clearProps: 'filter',
-              padding: `${paddingValue}%`,
-              opacity: `${opacity}%`,
               rotate,
             });
-          });
-        } else {
-          // Desktop Rings Setup
-          rings.forEach((ring, index) => {
-            const rotate = '20deg';
-            if (index === rings.length - 1) {
-              gsap.set(ring, {
-                rotate,
-              });
-              return;
-            }
+            return;
+          }
 
-            const paddingValue = Math.max(0, 10 - index * 0.25);
-            const blur = Math.max(0, 0.05 + index * 0.15);
+          const opacity = Math.max(0, 80 + index * 2);
+          const paddingValue = Math.max(0, 10 - index * 0.25);
 
-            gsap.set(ring, {
-              clearProps: 'opacity',
-              padding: `${paddingValue}%`,
-              filter: `blur(${blur}px)`,
-              rotate,
-            });
+          gsap.set(ring, {
+            clearProps: 'filter',
+            padding: `${paddingValue}%`,
+            opacity: `${opacity}%`,
+            rotate,
           });
-        }
+        });
 
         // Globe Resize Handler
         const resizeGlobe = contextSafe(() => {

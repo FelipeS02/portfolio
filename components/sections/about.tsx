@@ -27,6 +27,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           src={AboutImage}
           alt='about-image'
           className='relative col-span-1 h-full object-cover object-center'
+          priority
         />
         <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
           <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
@@ -65,6 +66,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
               alt='about-section-image'
               fill
               className='object-cover'
+              priority
             />
           </div>
           <div

@@ -117,10 +117,17 @@ function generatePalette(hexColor: string): Palette {
 
   // Define saturation adjustments
   const getSaturation = (lightness: number): number => {
-    if (lightness > 90) return baseSaturation * 0.8; // Very light colors have slightly reduced saturation
-    if (lightness > 70) return baseSaturation * 0.9; // Light colors have slightly reduced saturation
-    if (lightness < 30) return baseSaturation * 1.1; // Dark colors have slightly increased saturation
-    return baseSaturation; // Default saturation for mid-range colors
+    // Very light colors have slightly reduced saturation
+    if (lightness > 90) return baseSaturation * 0.8;
+    
+    // Light colors have slightly reduced saturation
+    if (lightness > 70) return baseSaturation * 0.9;
+
+    // Dark colors have slightly increased saturation
+    if (lightness < 30) return baseSaturation * 1.1;
+    
+    // Default saturation for mid-range colors
+    return baseSaturation;
   };
 
   // Generate the color scale
