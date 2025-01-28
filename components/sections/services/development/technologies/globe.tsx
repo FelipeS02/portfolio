@@ -6,7 +6,8 @@ import * as THREE from 'three';
 import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
 
 import HTMLComment from '@/components/ui/html-comment';
-import GlobeDark from '@/public/assets/images/globe-map-dark.webp';
+import GlobeTexture from '@/public/assets/images/globe.png';
+import GlobeMobileTexture from '@/public/assets/images/globe_mobile.png';
 
 import { cn } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
@@ -60,7 +61,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     (renderer: RenderParams['renderer']) => {
       if (!renderer || !paletteIsFullfiled) return;
 
-      renderer.setClearColor(palette[200]);
+      renderer.setClearColor(palette[100]);
     },
     [palette, paletteIsFullfiled],
   );
@@ -85,7 +86,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       const scene = new THREE.Scene();
 
       // Configure the camera with a perspective projection
-      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+      const camera = new THREE.PerspectiveCamera(73, 1, 0.1, 1000);
       camera.position.z = 165; // Adjust the z-position for the desired view
 
       const material = new THREE.MeshBasicMaterial({ transparent: true });
@@ -98,11 +99,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       // #endregion
 
       // Ensure smooth rendering on high-DPI screens
-      renderer.setPixelRatio(
-        isMobile
-          ? Math.min(2, window.devicePixelRatio)
-          : window.devicePixelRatio,
-      );
+      renderer.setPixelRatio(window.devicePixelRatio);
 
       setGlobeColor(renderer);
 
@@ -112,12 +109,24 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
       // Load and apply the texture to the globe
       textureLoader.load(
-        GlobeDark.src, // Texture
+        // Get smaller texture source to smaller devices 
+        !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
         (texture) => {
-          // Set texture properties for improved rendering
-          if (!isMobile)
+
+          // Desktop tweaks
+          if (!isMobile) {
+            // Set texture properties for improved rendering
             texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+            // Disable mipmaps for sharper look at the cost of performance
+            texture.generateMipmaps = false;
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+          }
+
           globe.material.map = texture;
+
+          globe.material.blending = THREE.SubtractiveBlending;
 
           globe.material.needsUpdate = true;
 
