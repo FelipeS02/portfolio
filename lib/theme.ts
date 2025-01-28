@@ -55,12 +55,45 @@ function hexToHsl(hex: string): [number, number, number] {
   return [h, s * 100, l * 100]; // HSL values as percentages
 }
 
-function generatePalette(hexColor: string): Palette {
-  // Get base HSL values
-  const [baseHue, baseSaturation] = hexToHsl(hexColor);
+// Function to generate a dynamic lightness scale based on base lightness
+function getDynamicLightnessScale(
+  baseLightness: number,
+): Record<PaletteShade, number> {
+  if (baseLightness < 20) {
+    // Very dark base color
+    return {
+      50: 95,
+      100: 90,
+      200: 80,
+      300: 70,
+      400: 60,
+      500: 50,
+      600: 40,
+      700: 30,
+      800: 20,
+      900: 10,
+      950: 5,
+    };
+  }
+  if (baseLightness > 80) {
+    // Very light base color
+    return {
+      50: 99,
+      100: 95,
+      200: 90,
+      300: 80,
+      400: 70,
+      500: 60,
+      600: 50,
+      700: 40,
+      800: 30,
+      900: 20,
+      950: 10,
+    };
+  }
 
-  // Define lightness values for each step (similar to uicolors.app)
-  const lightnessScale = {
+  // Mid-range base color
+  return {
     50: 97,
     100: 94,
     200: 86,
@@ -73,22 +106,34 @@ function generatePalette(hexColor: string): Palette {
     900: 11,
     950: 5,
   };
+}
 
-  // Define saturation adjustments (increases for darker colors)
+function generatePalette(hexColor: string): Palette {
+  // Get base HSL values
+  const [baseHue, baseSaturation, baseLightness] = hexToHsl(hexColor);
+
+  // Define dynamic lightness scale based on base lightness
+  const lightnessScale = getDynamicLightnessScale(baseLightness);
+
+  // Define saturation adjustments
   const getSaturation = (lightness: number): number => {
-    const saturationIncrease = Math.max(0, (50 - lightness) * 0.8);
-    return Math.min(100, baseSaturation + saturationIncrease);
+    if (lightness > 90) return baseSaturation * 0.8; // Very light colors have slightly reduced saturation
+    if (lightness > 70) return baseSaturation * 0.9; // Light colors have slightly reduced saturation
+    if (lightness < 30) return baseSaturation * 1.1; // Dark colors have slightly increased saturation
+    return baseSaturation; // Default saturation for mid-range colors
   };
 
   // Generate the color scale
   const palette = initialPalette;
 
   Object.entries(lightnessScale).forEach(([step, lightness]) => {
-    const saturation = getSaturation(lightness);
-
-    const hslValues = `${baseHue} ${saturation}% ${lightness}%`;
-
     const parsedStep = String(step) as PaletteShade;
+
+    // Adjust saturation and keep hue constant
+    const saturation = getSaturation(lightness);
+    const hue = baseHue; // Keep hue constant
+
+    const hslValues = `${hue} ${saturation}% ${lightness}%`;
 
     palette.hex[parsedStep] = `#${tinycolor(`hsl(${hslValues})`).toHex()}`;
     palette.hsl[parsedStep] = hslValues;
