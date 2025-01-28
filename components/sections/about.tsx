@@ -11,19 +11,22 @@ export const ABOUT_ELEMENTS_IDS = {
   CONTENT: 'about-content',
 };
 
+const advice =
+  'after:absolute after:left-1 after:top-1 after:font-medium after:text-white after:opacity-40 after:content-["REFERENCIA"] relative';
+
 const About: FC<{ mobile?: boolean }> = memo(function About({
   mobile = false,
 }) {
   if (mobile)
     return (
       <section
-        className='grid h-screen w-full grid-rows-2 xl:hidden'
+        className={`grid h-screen w-full grid-rows-2 xl:hidden ${advice}`}
         id={ABOUT_ELEMENTS_IDS['MOBILE-SECTION']}
       >
         <Image
           src={AboutImage}
           alt='about-image'
-          className='col-span-1 h-full object-cover object-center'
+          className='relative col-span-1 h-full object-cover object-center'
         />
         <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
           <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
@@ -56,7 +59,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           className='absolute inset-0 top-0 flex size-full'
           id={ABOUT_ELEMENTS_IDS.SECTION}
         >
-          <div className='relative h-full grow'>
+          <div className={`relative h-full grow ${advice}`}>
             <Image
               src={AboutImage}
               alt='about-section-image'

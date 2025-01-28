@@ -82,8 +82,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const isAnimating = useRef(false);
-
     const [isMaxLgDevice, isLgDevice, isMobileDevice] = useMediaQueries(
       [
         '(max-width: 1280px)',
@@ -97,13 +95,9 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       gsap.timeline({ paused: true }),
     );
 
-    const clearTimeline = useCallback(() => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    }, []);
-
     const [isMounted, setIsMounted] = useState(false);
 
-    const { contextSafe } = useGSAP(
+    const { contextSafe, context } = useGSAP(
       () => {
         const objectiveText = document.getElementById(
           OBJECTIVE_ELEMENTS_IDS.TEXT,
@@ -183,6 +177,8 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       },
       { scope: containerRef },
     );
+
+    const clearTimeline = useCallback(() => context.revert(), [context]);
 
     const setHomeAnimations = contextSafe(() => {
       const borderByTheme =
@@ -436,13 +432,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
     });
 
     const loadAnimations = useCallback(() => {
-      if (
-        !isPaletteFullfiled ||
-        !resolvedTheme ||
-        !isMounted ||
-        isAnimating.current
-      )
-        return;
+      if (!isPaletteFullfiled || !resolvedTheme || !isMounted) return;
 
       clearTimeline();
 
@@ -551,14 +541,16 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           gsap.set(rings, { willChange: 'transform' });
           gsap.set(globe, { willChange: 'transform' });
 
-          const ringsDeltaX = (event.clientX - window.innerWidth / 2) * 0.009;
-          const ringsDeltaY = (event.clientY - window.innerHeight / 2) * 0.009;
+          const baseDeltaX = event.clientX - window.innerWidth / 2;
+          const baseDeltaY = event.clientY - window.innerHeight / 2;
 
-          const globeDeltaX = (event.clientX - window.innerWidth / 2) * 0.05;
-          const globeDeltaY = (event.clientY - window.innerHeight / 2) * 0.05;
+          const getDeltaValues = (multiplicator: number) => ({
+            x: baseDeltaX * multiplicator,
+            y: baseDeltaY * multiplicator,
+          });
 
-          gsap.to(rings, { x: ringsDeltaX, y: ringsDeltaY, duration: 0.75 });
-          gsap.to(globe, { x: globeDeltaX, y: globeDeltaY, duration: 0.75 });
+          gsap.to(rings, { ...getDeltaValues(0.009), duration: 0.75 });
+          gsap.to(globe, { ...getDeltaValues(0.05), duration: 0.75 });
         });
 
         const restoreElementsPosition = contextSafe(() => {
@@ -609,7 +601,9 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         // Cleanup Function
         return () => {
           window.removeEventListener('resize', resizeGlobe);
+
           observer.unobserve(section);
+
           if (!isMobileDevice) {
             document.removeEventListener('mousemove', handleMouseParallax);
             document.removeEventListener('mouseleave', restoreElementsPosition);
