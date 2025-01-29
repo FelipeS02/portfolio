@@ -42,3 +42,9 @@ export function getRelativeXY(container: HTMLElement, target: HTMLElement) {
 
   return { x, y, targetRect };
 }
+
+export function mediaQueryMatches(query: string) {
+  if (typeof window === 'undefined' || !query) return false;
+
+  return window.matchMedia(query).matches;
+}

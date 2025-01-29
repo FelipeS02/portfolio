@@ -13,11 +13,15 @@ import {
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
-import { useDebounceCallback, useEventListener } from 'usehooks-ts';
+import {
+  useDebounceCallback,
+  useEventListener,
+  useMediaQuery,
+} from 'usehooks-ts';
 
+import { mediaQueryMatches } from '@/lib/dom';
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
-import { useMediaQueries } from '@/hooks/use-media-queries';
 
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
 import { HOME_ELEMENT_IDS } from '../sections/home/home';
@@ -65,9 +69,10 @@ type ElementDictionary = {
   };
 };
 
-const mediaQueryOptions = {
-  initializeWithValue: false,
-  defaultValue: undefined,
+const query = {
+  sm: '(max-width: 768px)',
+  maxLg: '(max-width: 1280px)',
+  lg: '(min-width: 1280px)',
 };
 
 const AnimationsProvider: FC<{ children: ReactNode }> = memo(
@@ -82,14 +87,10 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const [isMaxLgDevice, isLgDevice, isMobileDevice] = useMediaQueries(
-      [
-        '(max-width: 1280px)',
-        '(min-width: 1280px)',
-        '(any-pointer: coarse) and (max-width: 768px)',
-      ],
-      mediaQueryOptions,
-    );
+    const isMobileDevice = useMediaQuery(query.sm, {
+      initializeWithValue: false,
+      defaultValue: undefined,
+    });
 
     const masterTimeline = useRef<GSAPTimeline>(
       gsap.timeline({ paused: true }),
@@ -190,6 +191,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             resolvedTheme === 'dark' ? palette[500] : palette[600];
 
           const { about: a } = elementsRef.current as ElementDictionary;
+
           const tl =
             timeline ?? masterTimeline.current.getById('about-transition');
 
@@ -201,7 +203,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             borderColor: aboutBorderByTheme,
             borderTop: 1,
             borderBottom: 1,
-            overwrite: true,
+            // overwrite: true,
           });
 
           (tl as GSAPTimeline).add(
@@ -287,7 +289,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         contextSafe(() => {
           const { about: a, home } = elementsRef.current as ElementDictionary;
 
-          if (isMobileDevice) {
+          if (mediaQueryMatches(query.sm)) {
             gsap.set([a.wrapper, a.overlay, a.section, a.content], {
               clearProps: 'all ',
             });
@@ -295,7 +297,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             return;
           }
 
-          if (isMaxLgDevice) {
+          if (mediaQueryMatches(query.maxLg)) {
             masterTimeline.current.add(
               gsap
                 .timeline({
@@ -317,63 +319,65 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             );
           }
 
-          gsap.set(a.overlay, {
-            background: '#000000',
-            opacity: 1,
-          });
-
-          gsap.set(a.section, {
-            scale: 0.75,
-          });
-
-          gsap.set(a.content, {
-            width: 0,
-          });
-
-          const aboutTransition = gsap
-            .timeline({
-              id: 'about-transition',
-              onStart: () => {
-                gsap.set(a.wrapper, { willChange: 'height' });
-                gsap.set(a.overlay, { willChange: 'opacity' });
-                gsap.set(a.section, { willChange: 'transform' });
-                gsap.set(a.content, { willChange: 'width' });
-              },
-              scrollTrigger: {
-                trigger: home.section,
-                start: 'top top',
-                end: () => `${home.section.offsetHeight * 2}`,
-                scrub: true,
-                pin: true,
-              },
-            })
-            .add('border-transition')
-            .to(
-              a.overlay,
-              {
-                opacity: 0,
-              },
-              '<',
-            )
-            .to(
-              a.section,
-              {
-                scale: 1,
-              },
-              '<',
-            )
-            .to(a.content, {
-              width: '40%',
-            })
-            .to(a.section, {
-              opacity: 0,
+          if (mediaQueryMatches(query.lg)) {
+            gsap.set(a.overlay, {
+              background: '#000000',
+              opacity: 1,
             });
 
-          getAboutTransitions(aboutTransition);
+            gsap.set(a.section, {
+              scale: 0.75,
+            });
 
-          masterTimeline.current.add(aboutTransition);
+            gsap.set(a.content, {
+              width: 0,
+            });
+
+            const aboutTransition = gsap
+              .timeline({
+                id: 'about-transition',
+                onStart: () => {
+                  gsap.set(a.wrapper, { willChange: 'height' });
+                  gsap.set(a.overlay, { willChange: 'opacity' });
+                  gsap.set(a.section, { willChange: 'transform' });
+                  gsap.set(a.content, { willChange: 'width' });
+                },
+                scrollTrigger: {
+                  trigger: home.section,
+                  start: 'top top',
+                  end: () => `${home.section.offsetHeight * 2}`,
+                  scrub: true,
+                  pin: true,
+                },
+              })
+              .add('border-transition')
+              .to(
+                a.overlay,
+                {
+                  opacity: 0,
+                },
+                '<',
+              )
+              .to(
+                a.section,
+                {
+                  scale: 1,
+                },
+                '<',
+              )
+              .to(a.content, {
+                width: '40%',
+              })
+              .to(a.section, {
+                opacity: 0,
+              });
+
+            getAboutTransitions(aboutTransition);
+
+            masterTimeline.current.add(aboutTransition);
+          }
         })(),
-      [contextSafe, getAboutTransitions, isMaxLgDevice, isMobileDevice],
+      [contextSafe, getAboutTransitions],
     );
 
     const setObjectiveAnimations = useCallback(
@@ -382,7 +386,9 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           const { objective: o, design: d } =
             elementsRef.current as ElementDictionary;
 
-          if (!isMobileDevice) {
+          const sm = mediaQueryMatches(query.sm);
+
+          if (!sm) {
             gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
             gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
 
@@ -398,7 +404,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           });
 
           const getScrollTriggerByDevice = () => {
-            if (isMobileDevice)
+            if (sm)
               return {
                 trigger: o.section,
                 start: 'top center',
@@ -439,7 +445,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           getObjectiveTransitions(objectiveTimeline);
 
-          if (!isMobileDevice) {
+          if (!sm) {
             objectiveTimeline
               .to(
                 o.section,
@@ -450,16 +456,12 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                 },
                 '>+2',
               )
-              .to(
-                d.wrapper,
-                !isMobileDevice ? { yPercent: -100, duration: 10 } : {},
-                '>-5',
-              );
+              .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5');
           }
 
           masterTimeline.current.add(objectiveTimeline);
         })(),
-      [contextSafe, getObjectiveTransitions, isMobileDevice],
+      [contextSafe, getObjectiveTransitions],
     );
 
     const setDevelopmentAnimations = useCallback(
@@ -500,7 +502,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<')
             .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<');
 
-          if (isLgDevice)
+          if (mediaQueryMatches(query.lg))
             developmentTimeline.to(
               ringsContainer,
               { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
@@ -509,7 +511,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           masterTimeline.current.add(developmentTimeline);
         })(),
-      [contextSafe, isLgDevice],
+      [contextSafe],
     );
 
     const loadAnimations = useCallback(
@@ -544,7 +546,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
     const debouncedLoad = useDebounceCallback(() => {
       clearTimeline();
       loadAnimations(true);
-    }, 500);
+    }, 250);
 
     useEventListener('resize', debouncedLoad);
 
