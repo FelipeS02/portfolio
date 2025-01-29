@@ -7,9 +7,9 @@ import gsap from 'gsap';
 
 import { initialPalette } from '@/lib/theme';
 import { useTheme } from '@/hooks/theme';
+import useDisableScroll from '@/hooks/use-disable-scroll';
 import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 import { PaletteShade } from '@/models/theme';
-import useDisableScroll from '@/hooks/use-disable-scroll';
 
 const BASE_STYLES = 'col-span-1 h-screen min-w-full loading-line';
 
