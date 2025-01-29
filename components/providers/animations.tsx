@@ -225,8 +225,19 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           if (!tl) return;
 
+          gsap.set(o.words, {
+            backgroundColor: 'transparent',
+            transitionProperty: 'background-color, color',
+            transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+            transitionDuration: '150ms',
+            color: 'inherit',
+            // Word spacing to make better highlight
+            margin: 'auto -0.1em',
+            padding: 'auto 0.1em',
+          });
+
           (tl as GSAPTimeline).add(
-            gsap.to(o.words, {
+            gsap.timeline({
               onReverseComplete: () => {
                 gsap.to(o.clockLines[0], {
                   yPercent: -100,
@@ -240,6 +251,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                   duration: 0.5,
                   ease: 'back.out',
                 });
+
+                gsap.set(o.words, {
+                  color: 'inherit',
+                  backgroundColor: 'transparent',
+                });
               },
               onComplete: () => {
                 gsap.to(o.clockLines, {
@@ -248,10 +264,13 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                   ease: 'expo.out',
                   duration: 0.35,
                 });
+
+                gsap.set(o.words, {
+                  color: palette[50],
+                  backgroundColor: palette[700],
+                });
               },
-              backgroundColor: palette[700],
-              color: palette[50],
-              duration: 0.5,
+
               overwrite: true,
             }),
             'words-transition-=1',
@@ -383,13 +402,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           gsap.set(o.chars, {
             opacity: 0,
-          });
-
-          gsap.set(o.words, {
-            color: 'inherit',
-            // Word spacing to make better highlight
-            margin: 'auto -0.1em',
-            padding: 'auto 0.1em',
           });
 
           const getScrollTriggerByDevice = () => {
