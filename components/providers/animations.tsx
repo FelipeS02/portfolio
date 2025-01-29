@@ -201,6 +201,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             borderColor: aboutBorderByTheme,
             borderTop: 1,
             borderBottom: 1,
+            overwrite: true,
           });
 
           (tl as GSAPTimeline).add(
@@ -316,71 +317,63 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             );
           }
 
-          if (isLgDevice) {
-            gsap.set(a.overlay, {
-              background: '#000000',
-              opacity: 1,
-            });
+          gsap.set(a.overlay, {
+            background: '#000000',
+            opacity: 1,
+          });
 
-            gsap.set(a.section, {
-              scale: 0.75,
-            });
+          gsap.set(a.section, {
+            scale: 0.75,
+          });
 
-            gsap.set(a.content, {
-              width: 0,
-            });
+          gsap.set(a.content, {
+            width: 0,
+          });
 
-            const aboutTransition = gsap
-              .timeline({
-                id: 'about-transition',
-                onStart: () => {
-                  gsap.set(a.wrapper, { willChange: 'height' });
-                  gsap.set(a.overlay, { willChange: 'opacity' });
-                  gsap.set(a.section, { willChange: 'transform' });
-                  gsap.set(a.content, { willChange: 'width' });
-                },
-                scrollTrigger: {
-                  trigger: home.section,
-                  start: 'top top',
-                  end: () => `${home.section.offsetHeight * 2}`,
-                  scrub: true,
-                  pin: true,
-                },
-              })
-              .add('border-transition')
-              .to(
-                a.overlay,
-                {
-                  opacity: 0,
-                },
-                '<',
-              )
-              .to(
-                a.section,
-                {
-                  scale: 1,
-                },
-                '<',
-              )
-              .to(a.content, {
-                width: '40%',
-              })
-              .to(a.section, {
+          const aboutTransition = gsap
+            .timeline({
+              id: 'about-transition',
+              onStart: () => {
+                gsap.set(a.wrapper, { willChange: 'height' });
+                gsap.set(a.overlay, { willChange: 'opacity' });
+                gsap.set(a.section, { willChange: 'transform' });
+                gsap.set(a.content, { willChange: 'width' });
+              },
+              scrollTrigger: {
+                trigger: home.section,
+                start: 'top top',
+                end: () => `${home.section.offsetHeight * 2}`,
+                scrub: true,
+                pin: true,
+              },
+            })
+            .add('border-transition')
+            .to(
+              a.overlay,
+              {
                 opacity: 0,
-              });
+              },
+              '<',
+            )
+            .to(
+              a.section,
+              {
+                scale: 1,
+              },
+              '<',
+            )
+            .to(a.content, {
+              width: '40%',
+            })
+            .to(a.section, {
+              opacity: 0,
+            });
 
-            getAboutTransitions(aboutTransition);
+          getAboutTransitions(aboutTransition);
 
-            masterTimeline.current.add(aboutTransition);
-          }
+          masterTimeline.current.add(aboutTransition);
         })(),
-      [
-        contextSafe,
-        getAboutTransitions,
-        isLgDevice,
-        isMaxLgDevice,
-        isMobileDevice,
-      ],
+      [contextSafe, getAboutTransitions, isMaxLgDevice, isMobileDevice],
     );
 
     const setObjectiveAnimations = useCallback(
@@ -505,7 +498,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               backgroundColor: `${bg}95`,
             })
             .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<')
-            .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, "<");
+            .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<');
 
           if (isLgDevice)
             developmentTimeline.to(
