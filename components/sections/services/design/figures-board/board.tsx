@@ -67,6 +67,7 @@ const FiguresBoard = () => {
   } = useTheme();
 
   const [isMounted, setIsMounted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Refs to manage DOM elements and GSAP-related data
   const boardRef = useRef<HTMLDivElement>(null);
@@ -236,6 +237,9 @@ const FiguresBoard = () => {
   const setElementsRandomPosition = useCallback(async () => {
     if (!figureElementsList.current || !boardRef.current) return;
 
+    // Pause interval replay until animations finish
+    setIsPlaying(true);
+
     alternateDraggables('disable'); // Disable draggables during animation
     setSelectedElement(''); // Clear the selected element
 
@@ -250,6 +254,8 @@ const FiguresBoard = () => {
     alternateDraggables('enable');
 
     setIsMounted(true);
+
+    setIsPlaying(false);
   }, [
     getRandomPattern,
     alternateDraggables,
@@ -259,14 +265,14 @@ const FiguresBoard = () => {
 
   const intervalDelay = useMemo(() => {
     // If palette is not loaded cancel interval
-    if (!isPaletteFullfiled) return null;
+    if (!isPaletteFullfiled || isPlaying) return null;
 
     // On first render
     if (!isMounted && isSectionVisible) return 500;
 
     // Interval of 10 seconds when section is visible
     return isSectionVisible ? 10000 : null;
-  }, [isMounted, isSectionVisible, isPaletteFullfiled]);
+  }, [isMounted, isSectionVisible, isPaletteFullfiled, isPlaying]);
 
   useInterval(() => setElementsRandomPosition(), intervalDelay);
 

@@ -546,7 +546,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
     const debouncedLoad = useDebounceCallback(() => {
       clearTimeline();
       loadAnimations(true);
-    }, 250);
+    }, 100);
 
     useEventListener('resize', debouncedLoad);
 
