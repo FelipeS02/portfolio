@@ -15,10 +15,11 @@ export const Figure: FC<FigureProps> = ({ id, selectedElement }) => (
     className='figure-container absolute flex aspect-square h-[20%] items-center justify-center max-md:h-[10%]'
     selected={id === selectedElement}
     id={id}
+    
   >
     <div
       className='figure size-full bg-transparent transition-colors'
-      style={{ contentVisibility: 'auto' }}
+      
     />
   </SelectableElement>
 );

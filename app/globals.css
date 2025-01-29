@@ -65,8 +65,14 @@
 
     --radius: 0.5rem;
 
+    /* Hide to better experience */
     ::-webkit-scrollbar {
       @apply hidden;
+    }
+
+    /* Highlight color */
+    ::selection {
+      @apply bg-palette-200;
     }
 
     p {
@@ -120,6 +126,10 @@
     --chart-4: 280 65% 60%;
 
     --chart-5: 340 75% 55%;
+
+    ::selection {
+      @apply bg-palette-700;
+    }
   }
 }
 

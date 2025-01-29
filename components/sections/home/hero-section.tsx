@@ -5,7 +5,7 @@ import { SplittedWord } from '@/components/ui/splitted-text';
 const HeroSection = memo(function HeroSection() {
   return (
     <div className='hero-container flex w-full select-none flex-col gap-1'>
-      <h4 className='text-md after:contents-["-"] after:ml-2 after:h-4 after:animate-blink after:border after:border-palette-800 lg:text-xl'>
+      <h4 className='text-md after:contents-["-"] after:ml-2 after:h-4 after:animate-blink after:border after:border-palette-700 lg:text-xl after:dark:border-palette-600'>
         Desarrollador <b className='font-semibold'>Full-Stack</b>
       </h4>
 

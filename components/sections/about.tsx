@@ -26,7 +26,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
         <Image
           src={AboutImage}
           alt='about-image'
-          className='relative col-span-1 h-full object-cover object-center'
+          className='relative col-span-1 h-full object-cover object-center select-none'
           priority
         />
         <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
@@ -60,7 +60,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           className='absolute inset-0 top-0 flex size-full'
           id={ABOUT_ELEMENTS_IDS.SECTION}
         >
-          <div className={`relative h-full grow ${advice}`}>
+          <div className={`relative h-full grow ${advice} select-none`}>
             <Image
               src={AboutImage}
               alt='about-section-image'
