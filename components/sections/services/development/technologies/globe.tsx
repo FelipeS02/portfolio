@@ -61,7 +61,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     (renderer: RenderParams['renderer']) => {
       if (!renderer || !paletteIsFullfiled) return;
 
-      renderer.setClearColor(palette[100]);
+      renderer.setClearColor(palette[100], 0.9);
     },
     [palette, paletteIsFullfiled],
   );
