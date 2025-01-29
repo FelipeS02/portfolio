@@ -9,6 +9,7 @@ import { initialPalette } from '@/lib/theme';
 import { useTheme } from '@/hooks/theme';
 import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 import { PaletteShade } from '@/models/theme';
+import useDisableScroll from '@/hooks/use-disable-scroll';
 
 const BASE_STYLES = 'col-span-1 h-screen min-w-full loading-line';
 
@@ -17,6 +18,9 @@ const LoadingScreen = () => {
   const loadingLines = useRef<HTMLElement[] | null>(null);
 
   const { onPageLoading } = useHandleLoadingAnimations();
+
+  const [, setDisabled] = useDisableScroll();
+
   const tl = useRef<GSAPTimeline>(gsap.timeline());
 
   const {
@@ -82,6 +86,7 @@ const LoadingScreen = () => {
         },
         onComplete: () => {
           gsap.set(container.current, { display: 'none' });
+          setDisabled(false);
         },
       }),
       '>',
@@ -92,6 +97,8 @@ const LoadingScreen = () => {
   });
 
   const onLoading = contextSafe(() => {
+    setDisabled(true);
+
     tl.current.add(
       gsap.to(loadingLines.current, {
         yPercent: 0,

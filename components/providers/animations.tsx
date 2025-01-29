@@ -193,6 +193,8 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           const tl =
             timeline ?? masterTimeline.current.getById('about-transition');
 
+          if (!tl) return;
+
           gsap.set(a.wrapper, {
             height: 0,
             placeSelf: 'center',
@@ -220,6 +222,8 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
           const tl =
             timeline ?? masterTimeline.current.getById('objective-transition');
+
+          if (!tl) return;
 
           (tl as GSAPTimeline).add(
             gsap.to(o.words, {
@@ -538,10 +542,9 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     // Update only pallete-dependent tweens on scheme or pallete change
     useEffect(() => {
-      if (!timelineIsMounted) return;
       getAboutTransitions();
       getObjectiveTransitions();
-    }, [getAboutTransitions, getObjectiveTransitions, timelineIsMounted]);
+    }, [getAboutTransitions, getObjectiveTransitions]);
 
     // Development section elements pointer interaction
     useGSAP(
