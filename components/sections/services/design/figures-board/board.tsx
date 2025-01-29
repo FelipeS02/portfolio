@@ -264,7 +264,7 @@ const FiguresBoard = () => {
   ]);
 
   const intervalDelay = useMemo(() => {
-    // If palette is not loaded cancel interval
+    // If palette is not loaded or animations are playing STOP THE COUNT
     if (!isPaletteFullfiled || isPlaying) return null;
 
     // On first render
