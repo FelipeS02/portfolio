@@ -122,11 +122,11 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
             texture.generateMipmaps = false;
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
+            globe.material.blending = THREE.SubtractiveBlending;
           }
 
           globe.material.map = texture;
 
-          globe.material.blending = THREE.SubtractiveBlending;
 
           globe.material.needsUpdate = true;
 

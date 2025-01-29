@@ -485,35 +485,38 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             backgroundColor: `${bg}40`,
           });
 
-          masterTimeline.current.add(
-            gsap
-              .timeline({
-                id: 'development',
-                onStart: () => {
-                  gsap.set(ringsContainer, {
-                    willChange: 'transform, opacity',
-                  });
-                  gsap.set(globe, { willChange: 'transform' });
-                },
-                scrollTrigger: {
-                  trigger: content,
-                  start: 'start center',
-                  end: () => `+=${content.offsetHeight * 0.2}`,
-                  scrub: true,
-                },
-              })
-              .to(content, {
-                backgroundColor: `${bg}95`,
-              })
-              .to(
-                ringsContainer,
-                { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
-                '<',
-              )
-              .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<'),
-          );
+          const developmentTimeline = gsap
+            .timeline({
+              id: 'development',
+              onStart: () => {
+                gsap.set(ringsContainer, {
+                  willChange: 'transform, opacity',
+                });
+                gsap.set(globe, { willChange: 'transform' });
+              },
+              scrollTrigger: {
+                trigger: content,
+                start: 'start center',
+                end: () => `+=${content.offsetHeight * 0.2}`,
+                scrub: true,
+              },
+            })
+            .to(content, {
+              backgroundColor: `${bg}95`,
+            })
+            .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<')
+            .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, "<");
+
+          if (isLgDevice)
+            developmentTimeline.to(
+              ringsContainer,
+              { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
+              '<',
+            );
+
+          masterTimeline.current.add(developmentTimeline);
         })(),
-      [contextSafe],
+      [contextSafe, isLgDevice],
     );
 
     const loadAnimations = useCallback(
