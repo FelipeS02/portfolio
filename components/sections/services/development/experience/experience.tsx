@@ -3,9 +3,12 @@ import { FC, PropsWithChildren, ReactNode } from 'react';
 import { BriefcaseBusiness } from 'lucide-react';
 
 import { ArrowButton } from '@/components/ui/arrow-button';
+import {
+  DevelopmentList,
+  DevelopmentListTitle,
+} from '@/components/ui/development_list';
 import { Henry, Lilab } from '@/components/ui/icons';
 import { ListItem } from '@/components/ui/list-item';
-import { DevelopmentList, DevelopmentListTitle } from '@/components/layout';
 
 import { cn } from '@/lib/utils';
 

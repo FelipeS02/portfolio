@@ -242,17 +242,19 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           (tl as GSAPTimeline).add(
             gsap.timeline({
               onReverseComplete: () => {
-                gsap.to(o.clockLines[0], {
-                  yPercent: -100,
+                const transitionProps = {
                   opacity: 0,
                   duration: 0.35,
                   ease: 'back.out',
+                };
+
+                gsap.to(o.clockLines[0], {
+                  yPercent: -100,
+                  ...transitionProps,
                 });
                 gsap.to(o.clockLines[1], {
                   yPercent: 100,
-                  opacity: 0,
-                  duration: 0.5,
-                  ease: 'back.out',
+                  ...transitionProps,
                 });
 
                 gsap.set(o.words, {

@@ -22,6 +22,7 @@ export default {
         'hero-dark': '0 0px 8px hsl(var(--palette-800) / 30%)',
         'hero-light': '0 0px 8px hsl(var(--palette-300) / 30%)',
         current: '0 0px 4px currentColor',
+        
       },
       boxShadow: {
         'loading-line':

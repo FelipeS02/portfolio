@@ -1,7 +1,10 @@
 import { Boxes } from 'lucide-react';
 
+import {
+  DevelopmentList,
+  DevelopmentListTitle,
+} from '@/components/ui/development_list';
 import { ListItem } from '@/components/ui/list-item';
-import { DevelopmentList, DevelopmentListTitle } from '@/components/layout';
 
 const technologies = [
   'NextJS',

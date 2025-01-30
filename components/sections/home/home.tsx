@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 
-import Header from './header/header';
+import Header from '../header/header';
 import HeroSection from './hero-section';
 
 export const HOME_ELEMENT_IDS = {

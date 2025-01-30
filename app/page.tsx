@@ -8,7 +8,7 @@ import Development from '@/components/sections/services/development/development'
 export default function Page() {
   return (
     <AnimationsProvider>
-      <main className='block size-full' id='#main'>
+      <main className='block size-full'>
         <Home>
           <About />
         </Home>
@@ -20,6 +20,7 @@ export default function Page() {
         <Design />
 
         <Development />
+
       </main>
     </AnimationsProvider>
   );
