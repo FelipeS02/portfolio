@@ -14,7 +14,6 @@ const TechnologiesRings = memo(function TechnologiesRings() {
       <div
         className='absolute flex aspect-square h-full lg:h-fit lg:w-full'
         id='rings-container'
-        style={{ contentVisibility: 'auto' }}
       >
         <Ring>
           <Ring>

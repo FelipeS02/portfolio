@@ -14,11 +14,12 @@ const Development = () => {
   // Using random hero text
   const texts = [
     <Fragment key='development-section-1'>
-      <span className='-ml-[0.78em] text-palette-600'>{'<'}</span> Desarrollo
+      <span className='md:ml-[-0.78em] text-palette-600'>{'<'}</span> Desarrollo
       Web <span className='text-palette-600'>{'/>'}</span>
     </Fragment>,
+
     <span className='-ml-[0.05em]' key='development-section-2'>
-      Desarrollo.Web{' '}
+      Desarrollo.web{' '}
       <span className='tracking-widest text-palette-600'>()</span>
     </span>,
   ];
@@ -27,7 +28,6 @@ const Development = () => {
     <section
       className='size-screen relative bg-palette-950'
       id={DEVELOPMENT_ELEMENTS_IDS.SECTION}
-      style={{ contentVisibility: 'auto' }}
     >
       <TechnologiesRings />
 

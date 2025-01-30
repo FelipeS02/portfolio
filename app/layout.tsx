@@ -3,6 +3,7 @@ import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import LoadingScreen from '@/components/loading_screen';
 import LenisProvider from '@/components/providers/lenis';
@@ -77,6 +78,7 @@ export default function RootLayout({
             </RandomThemeProvider>
           </SchemeProvider>
           <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </LenisProvider>
