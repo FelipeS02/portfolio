@@ -13,11 +13,7 @@ import {
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
-import {
-  useDebounceCallback,
-  useEventListener,
-  useMediaQuery,
-} from 'usehooks-ts';
+import { useDebounceCallback, useMediaQuery } from 'usehooks-ts';
 
 import { mediaQueryMatches } from '@/lib/dom';
 import { validateObject } from '@/lib/utils';
@@ -550,7 +546,27 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       loadAnimations(true);
     }, 100);
 
-    useEventListener('resize', debouncedLoad);
+    // Rebuild animations only on width change, to prevent lag on phones
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+
+      let prevWidth = window.innerWidth;
+
+      const onResize = () => {
+        const width = window.innerWidth;
+
+        if (width !== prevWidth) {
+          prevWidth = width;
+          debouncedLoad();
+        }
+      };
+
+      window.addEventListener('resize', onResize);
+
+      return () => {
+        window.removeEventListener('resize', onResize);
+      };
+    }, [debouncedLoad]);
 
     // Update only pallete-dependent tweens on scheme or pallete change
     useEffect(() => {
@@ -569,23 +585,12 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
         // Opacity and padding settings
         rings.forEach((ring, index) => {
-          const rotate = '20deg';
-
-          if (index === rings.length - 1) {
-            gsap.set(ring, {
-              rotate,
-            });
-            return;
-          }
-
           const opacity = Math.max(0, 80 + index * 2);
           const paddingValue = Math.max(0, 10 - index * 0.25);
 
           gsap.set(ring, {
-            clearProps: 'filter',
             padding: `${paddingValue}%`,
             opacity: `${opacity}%`,
-            rotate,
           });
         });
 

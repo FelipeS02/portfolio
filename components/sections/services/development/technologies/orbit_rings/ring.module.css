@@ -2,6 +2,11 @@
   @apply pointer-events-none relative flex aspect-square w-full rounded-full;
 }
 
+/* Rotate children to give vortex effect */
+.orbit-ring > .orbit-ring {
+  transform: rotate(20deg);
+}
+
 .orbit-ring::before {
   @apply pointer-events-none absolute inset-0 size-full rounded-full;
   background: conic-gradient(

@@ -35,7 +35,6 @@ const SelectableElement: FC<Props> = ({
       )}
       data-selected={selected}
       id={id}
-      style={{ contentVisibility: 'auto' }}
     >
       <SelectableElementSquare className='-left-2 -top-2' />
       <SelectableElementSquare className='-right-2 -top-2' />
