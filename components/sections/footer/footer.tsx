@@ -1,41 +1,48 @@
-import { ComponentProps, FC } from 'react';
-import Link from 'next/link';
+import { FC, HTMLAttributes } from 'react';
+
+import { ArrowButton } from '@/components/ui/arrow-button';
 
 import { cn } from '@/lib/utils';
 
 import FooterText from './text';
 
-const FooterLink: FC<ComponentProps<typeof Link>> = ({
-  className,
+const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
+  className = '',
+  id = 'footer',
   ...rest
 }) => {
-  return (
-    <Link
-      className={cn('font-archivo text-xl font-medium', className)}
-      {...rest}
-    />
-  );
-};
+  const currentYear = new Date().getFullYear();
 
-const Footer = () => {
   return (
-    <footer className='flex h-[70vh] flex-col justify-between bg-[#111111] text-palette-50'>
-      <div className='flex items-center justify-between px-2 py-3'>
-        <div className='inline-flex gap-2' id='socials'>
-          <FooterLink
+    <footer
+      className={cn(
+        'flex h-[60vh] flex-col items-center justify-between overflow-hidden bg-[#111111] text-palette-50',
+        className,
+      )}
+      id={id}
+      {...rest}
+    >
+      <div className='flex w-full flex-wrap items-start justify-between px-4 py-3'>
+        <h6 className='text-xl'>
+          ©{currentYear} <span className='font-semibold'>FSARACHO.</span>
+        </h6>
+
+        <div className='inline-flex flex-col gap-4' id='socials'>
+          <ArrowButton
+            as='a'
             href='https://www.linkedin.com/in/felipe-saracho/'
             target='_blank'
           >
-            LinkedIn
-          </FooterLink>
-          <FooterLink href='https://github.com/FelipeS02' target='_blank'>
-            GitHub
-          </FooterLink>
+            Linkedin
+          </ArrowButton>
+          <ArrowButton
+            as='a'
+            href='https://www.linkedin.com/in/felipe-saracho/'
+            target='_blank'
+          >
+            Github
+          </ArrowButton>
         </div>
-
-        <h6>
-          ©2025 <span className='font-semibold'>FSARACHO.</span>
-        </h6>
       </div>
 
       <FooterText />

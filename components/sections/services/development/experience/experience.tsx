@@ -38,7 +38,7 @@ const StyledLilabIcon = () => (
 
 const Experience = () => {
   return (
-    <DevelopmentList className='py-14'>
+    <DevelopmentList className='py-14' id='experience'>
       <DevelopmentListTitle className='flex items-center gap-2'>
         <BriefcaseBusiness
           size={30}

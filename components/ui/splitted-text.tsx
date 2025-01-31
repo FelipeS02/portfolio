@@ -30,7 +30,11 @@ export const SplittedWord: FC<SplittedWordProps> = ({
       {...rest}
     >
       {splittedWord.map((char, index) => (
-        <span className='char inline-block' key={`${word}-${index}`}>
+        <span
+          className='char inline-block'
+          data-char={char}
+          key={`${word}-${index}`}
+        >
           {char}
         </span>
       ))}

@@ -62,7 +62,10 @@ type ElementDictionary = {
     ringsContainer: HTMLElement;
     planetOrbit: HTMLElement;
     rings: HTMLElement[];
+    experience: HTMLElement;
   };
+
+  footer: HTMLElement;
 };
 
 const query = {
@@ -158,7 +161,10 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             ringsContainer: developmentSelector('#rings-container')[0],
             planetOrbit: developmentSelector('#planet-orbit')[0],
             rings: developmentSelector('.orbit-ring'),
+            experience: developmentSelector('#experience')[0],
           },
+
+          footer: document.getElementById('footer'),
         } as ElementDictionary;
 
         if (
@@ -465,16 +471,17 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
     const setDevelopmentAnimations = useCallback(
       () =>
         contextSafe(() => {
-          const { development } = elementsRef.current as ElementDictionary;
-          const { content, hero, ringsContainer, globe } = development;
+          const { development, footer } =
+            elementsRef.current as ElementDictionary;
+          const { content, hero, ringsContainer, globe, experience } =
+            development;
 
-          const developmentSectionMargin =
-            window.innerHeight - hero.clientHeight * 0.7;
+          const developmentSectionMargin = hero.clientHeight * 0.7;
 
           const bg = '#111111';
 
           gsap.set(content, {
-            marginTop: `${developmentSectionMargin}px`,
+            marginTop: `-${developmentSectionMargin}px`,
             backgroundColor: `${bg}40`,
           });
 
@@ -508,6 +515,28 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             );
 
           masterTimeline.current.add(developmentTimeline);
+
+          const sm = mediaQueryMatches(query.sm);
+
+          const endTimeline = gsap
+            .timeline({
+              id: 'end',
+              scrollTrigger: {
+                trigger: experience,
+                start: sm ? 'top bottom' : 'top bottom-=300',
+                endTrigger: footer,
+                end: 'bottom bottom',
+                scrub: true,
+              },
+            })
+            .to(globe, {
+              yPercent: sm ? 250 : 150,
+              scale: 2.5,
+              duration: 10,
+            })
+            .to(content, { opacity: 0, duration: 0.5 }, '>');
+
+          masterTimeline.current.add(endTimeline);
         })(),
       [contextSafe],
     );

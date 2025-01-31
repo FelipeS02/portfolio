@@ -1,5 +1,6 @@
 import AnimationsProvider from '@/components/providers/animations';
 import About from '@/components/sections/about';
+import Footer from '@/components/sections/footer/footer';
 import Home from '@/components/sections/home/home';
 import Objective from '@/components/sections/objective/objective';
 import Design from '@/components/sections/services/design/design';
@@ -21,6 +22,7 @@ export default function Page() {
 
         <Development />
 
+        <Footer />
       </main>
     </AnimationsProvider>
   );

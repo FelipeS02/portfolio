@@ -9,14 +9,15 @@ const ArrowButton = <T extends ElementType = 'button'>({
   as,
   className = '',
   children,
+
   ...props
-}: ComposedComponent<T>) => {
+}: ComposedComponent<T> & { asChildren?: boolean }) => {
   const Component = as ?? 'button';
 
   return (
     <Component
       className={cn(
-        'group flex items-center gap-1 border-b border-palette-500 pb-1',
+        'group inline-flex items-center justify-between gap-1 border-b border-palette-500 pb-1',
         className,
       )}
       {...props}

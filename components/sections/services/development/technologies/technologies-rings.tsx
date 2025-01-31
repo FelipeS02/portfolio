@@ -8,7 +8,7 @@ import Ring, { RingItem } from './orbit_rings/ring';
 const TechnologiesRings = memo(function TechnologiesRings() {
   return (
     <div
-      className='sticky top-0 -mb-[100vh] flex h-screen w-full items-center justify-center overflow-hidden'
+      className='sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden'
       id='planet-orbit'
     >
       <div

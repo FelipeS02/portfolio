@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import { SplittedWord } from '@/components/ui/splitted-text';
 
 import { useTheme } from '@/hooks/theme';
+import { useMediaQueries } from '@/hooks/use-media-queries';
 
 import styles from './text.module.css';
 
@@ -16,54 +17,89 @@ const FooterText = () => {
     palette: { hsl: palette },
   } = useTheme();
 
+  const [md, mobile] = useMediaQueries([
+    '(max-width: 768px)',
+    '(any-pointer: coarse)',
+  ]);
+
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
+      if (mobile) return;
+
       const letters = gsap.utils.toArray<HTMLSpanElement>('.char');
 
-      document.addEventListener('mousemove', (e) => {
-        const mouseX = e.clientX;
+      gsap.set(letters, { color: 'hsla(0, 0%, 7%, 100%)' });
 
+      // Range of activation
+      const threshold = md ? 150 : 400;
+
+      const updateBackground = ({ clientX }: MouseEvent) => {
         letters.forEach((letter) => {
-          const rect = letter.getBoundingClientRect();
-          const letterX = rect.left + rect.width / 2; // Centro de la letra
-          const distance = Math.abs(mouseX - letterX); // Distancia del cursor
+          const { left, width } = letter.getBoundingClientRect();
 
-          // Definir el rango de efecto (puedes ajustarlo según tu diseño)
-          const maxDistance = 250;
-          const intensity = Math.max(0, 1 - distance / maxDistance); // Cuanto más cerca, más brillante
+          const center = left + width / 2;
+          const distance = Math.abs(clientX - center);
 
-          // Aplicar color según la intensidad
+          // Distance mapping
+          const opacity = gsap.utils.mapRange(0, threshold, 1, 0, distance);
+          const clampedOpacity = gsap.utils.clamp(0, 1, opacity);
+
+          gsap.set(letter, { willChange: 'color' });
+
           gsap.to(letter, {
-            color:
-              intensity > 0
-                ? `hsl(${palette[50]}, ${intensity * 100}%)`
-                : 'hsl(0, 0%, 7%)',
+            color: `hsla(0, 0%, 100%, ${clampedOpacity})`, // Fondo blanco con opacidad
             duration: 0.3,
-            ease: intensity > 0 ? 'power2.out' : 'back.out',
+            ease: 'power2.out',
           });
         });
-      });
+      };
+
+      // Clear effect when cursor is out window
+      const resetBackground = () => {
+        letters.forEach((letter) => {
+          gsap.to(letter, {
+            color: 'transparent',
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        });
+      };
+
+      document.addEventListener('mousemove', updateBackground);
+      document.addEventListener('mouseleave', resetBackground);
+
+      // Clear listeners on unmount
+      return () => {
+        document.removeEventListener('mousemove', updateBackground);
+        document.removeEventListener('mouseleave', resetBackground);
+      };
     },
-    { scope: container, dependencies: [palette[50]], revertOnUpdate: true },
+    {
+      scope: container,
+      dependencies: [palette[50], mobile, md],
+      revertOnUpdate: true,
+    },
   );
 
   return (
     <div ref={container}>
-      <SplittedWord
-        className={`text-stroke-3 select-none text-[11.8vw] font-black leading-none max-md:hidden ${styles.stroke}`}
-        id='text'
-      >
-        FELIPESARACHO
-      </SplittedWord>
-
-      <span
-        className='select-none text-[18vw] font-black leading-none md:hidden'
-        aria-hidden='true'
-      >
-        FSARACHO
-      </span>
+      {!mobile ? (
+        <SplittedWord
+          className={`relative z-[2] select-none text-[11.8vw] font-black leading-none max-md:text-[17.6vw] ${styles.stroke}`}
+          id='text'
+        >
+          {md ? 'FSARACHO' : 'FELIPESARACHO'}
+        </SplittedWord>
+      ) : (
+        <span
+          className='select-none text-[16.5vw] font-black leading-none'
+          aria-hidden='true'
+        >
+          FSARACHO
+        </span>
+      )}
     </div>
   );
 };
