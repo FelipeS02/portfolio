@@ -87,14 +87,14 @@ const FooterText = () => {
     <div ref={container}>
       {!mobile ? (
         <SplittedWord
-          className={`relative z-[2] select-none text-[11.8vw] font-black leading-none max-md:text-[17.6vw] ${styles.stroke}`}
+          className={`relative z-[2] select-none text-[11.8vw] font-black leading-[0.8] max-md:text-[17.6vw] ${styles.stroke}`}
           id='text'
         >
           {md ? 'FSARACHO' : 'FELIPESARACHO'}
         </SplittedWord>
       ) : (
         <span
-          className='select-none text-[16.5vw] font-black leading-none'
+          className='select-none text-[16.5vw] font-black'
           aria-hidden='true'
         >
           FSARACHO

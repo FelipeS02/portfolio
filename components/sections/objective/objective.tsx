@@ -13,7 +13,7 @@ const Objective = memo(function Objective() {
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
-      className='max-md:mb-[13vh] flex h-screen w-full flex-col items-center justify-between gap-8 px-4 lg:mt-[-70vh]'
+      className='flex h-screen w-full flex-col items-center justify-between gap-8 px-4 max-md:mb-[13vh] lg:mt-[-70vh]'
     >
       <div className='clock-lines z-0 w-full'>
         <ClockLines />
@@ -22,7 +22,7 @@ const Objective = memo(function Objective() {
         className='w-full max-w-[1400px] text-balance text-[2.5rem] font-semibold leading-tight md:text-[3rem] lg:text-[4rem]'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
       >
-        <SplittedText>
+        <SplittedText className='mb-[-0.1em] pb-[0.1em]'>
           Mi objetivo es crear productos que no solo sigan las tendencias
           actuales, sino que también sean atemporales y perduren en el tiempo.
         </SplittedText>

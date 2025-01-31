@@ -21,10 +21,7 @@ export const SplittedWord: FC<SplittedWordProps> = ({
 
   return (
     <span
-      className={cn(
-        'word mb-[-0.1em] inline-block pb-[0.1em] text-inherit',
-        className,
-      )}
+      className={cn('word inline-block text-inherit', className)}
       data-word={word}
       aria-label={word}
       {...rest}
@@ -42,7 +39,11 @@ export const SplittedWord: FC<SplittedWordProps> = ({
   );
 };
 
-export function SplittedText({ children: text }: { children: string }) {
+export const SplittedText: FC<SplittedWordProps> = ({
+  children: text,
+  className = '',
+  ...rest
+}) => {
   if (!text) return null;
 
   const splittedText = text.split(' ');
@@ -51,11 +52,13 @@ export function SplittedText({ children: text }: { children: string }) {
     <>
       {splittedText.map((word, index) => (
         <Fragment key={`${word}-splitted-${index}`}>
-          <SplittedWord>{word}</SplittedWord>
+          <SplittedWord className={className} {...rest}>
+            {word}
+          </SplittedWord>
           {/* Add space between words */}
           {index < splittedText.length - 1 && ' '}
         </Fragment>
       ))}
     </>
   );
-}
+};
