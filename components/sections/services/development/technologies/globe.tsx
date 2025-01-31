@@ -3,7 +3,6 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import * as THREE from 'three';
-import { WebGPURenderer } from 'three/webgpu';
 import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
 
 import HTMLComment from '@/components/ui/html-comment';
@@ -14,14 +13,14 @@ import { cn } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
 type GlobeUtils = {
-  renderer: THREE.WebGLRenderer | WebGPURenderer;
+  renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   globe: THREE.Mesh;
 };
 
 type RenderParams = {
-  renderer: THREE.WebGLRenderer | WebGPURenderer | null;
+  renderer: THREE.WebGLRenderer | null;
   rendered: boolean;
   renderedScheme: string;
   renderedPalette: string;
@@ -34,18 +33,6 @@ const renderParamsInitialState = {
   renderedPalette: '',
 };
 
-async function isWebGPUSupported() {
-  try {
-    if (typeof WebGPURenderer !== 'undefined' && navigator.gpu) {
-      const adapter = await navigator.gpu.requestAdapter();
-      return !!adapter;
-    }
-    return false;
-  } catch {
-    return false;
-  }
-}
-
 const Globe: FC<{ className?: string }> = memo(function Globe({
   className = '',
 }) {
@@ -56,7 +43,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   const {
     palette: { hex: palette },
     hexCode,
-    fullfiled: isPaletteFullfilled,
+    fullfiled: paletteIsFullfiled,
   } = useTheme();
 
   const [debouncedPaletteColor] = useDebounceValue(hexCode, 2000);
@@ -72,11 +59,11 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
   const setGlobeColor = useCallback(
     (renderer: RenderParams['renderer']) => {
-      if (!renderer || !isPaletteFullfilled) return;
+      if (!renderer || !paletteIsFullfiled) return;
 
-      renderer.setClearColor(new THREE.Color(palette[100]));
+      renderer.setClearColor(palette[100], 0.9);
     },
-    [palette, isPaletteFullfilled],
+    [palette, paletteIsFullfiled],
   );
 
   const renderScene = useCallback(async (): Promise<GlobeUtils | void> => {
@@ -89,77 +76,63 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
       scene,
       camera,
       globe,
-    } = await new Promise<GlobeUtils>(async (resolve, reject) => {
-      try {
-        // 1. Create render by disponibility
-        let renderer: THREE.WebGLRenderer | WebGPURenderer;
+    } = await new Promise<GlobeUtils>((resolve) => {
+      // #region Initialize ThreeJs utils
 
-        if (await isWebGPUSupported()) {
-          renderer = new WebGPURenderer({ alpha: true, antialias: true });
-          await renderer.init();
-        } else {
-          renderer = new THREE.WebGLRenderer({ alpha: true });
-        }
+      // Create the WebGL renderer with transparency (alpha: true)
+      const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-        // 2. Initial config
-        renderer.setPixelRatio(window.devicePixelRatio);
+      // Initialize the Three.js scene
+      const scene = new THREE.Scene();
 
-        setGlobeColor(renderer);
+      // Configure the camera with a perspective projection
+      const camera = new THREE.PerspectiveCamera(73, 1, 0.1, 1000);
+      camera.position.z = 165; // Adjust the z-position for the desired view
 
-        container.appendChild(renderer.domElement);
+      const material = new THREE.MeshBasicMaterial({ transparent: true });
 
-        // 3. Three.JS Settings
-        const scene = new THREE.Scene();
+      // Initialize the sphere globe
+      const geometry = new THREE.SphereGeometry(100, 32, 16);
+      const globe = new THREE.Mesh(geometry, material);
 
-        const camera = new THREE.PerspectiveCamera(73, 1, 0.1, 1000);
-        camera.position.z = 165;
+      const textureLoader = new THREE.TextureLoader();
+      // #endregion
 
-        const material = new THREE.MeshBasicMaterial({
-          transparent: true,
-        });
+      // Ensure smooth rendering on high-DPI screens
+      renderer.setPixelRatio(window.devicePixelRatio);
 
-        const geometry = new THREE.SphereGeometry(100, 32, 16);
+      setGlobeColor(renderer);
 
-        const globe = new THREE.Mesh(geometry, material);
+      container.appendChild(renderer.domElement);
 
-        // 4. Texture loading
-        const textureLoader = new THREE.TextureLoader();
+      scene.add(globe);
 
-        const texture = await new Promise<THREE.Texture>((resolve, reject) => {
-          textureLoader.load(
-            !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
-            resolve,
-            undefined,
-            () => reject(new Error('Error loading texture')),
-          );
-        });
-
-        // 5. Aditional tweakings for faster devices
-        if (!isMobile) {
-          if (renderer instanceof THREE.WebGLRenderer) {
+      // Load and apply the texture to the globe
+      textureLoader.load(
+        // Get smaller texture source to smaller devices
+        !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
+        (texture) => {
+          // Desktop tweaks
+          if (!isMobile) {
+            // Set texture properties for improved rendering
             texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+            // Disable mipmaps for sharper look at the cost of performance
+            texture.generateMipmaps = false;
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
             globe.material.blending = THREE.SubtractiveBlending;
           }
 
-          if (renderer instanceof WebGPURenderer) {
-            texture.anisotropy = renderer.getMaxAnisotropy();
-          }
+          globe.material.map = texture;
 
-          texture.generateMipmaps = false;
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-        }
+          globe.material.needsUpdate = true;
 
-        globe.material.map = texture;
-
-        globe.material.needsUpdate = true;
-
-        scene.add(globe);
-
-        resolve({ renderer, scene, camera, globe });
-      } catch (error) {
-        reject(error);
-      }
+          resolve({ renderer, scene, camera, globe });
+        },
+        undefined,
+        (error) => console.error('Failed to load texture:', error),
+      );
     });
 
     // Resize renderer and update camera aspect ratio
@@ -174,13 +147,10 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     // Initialize renderer size on mount
     resizeRenderer();
 
+    // Animation loop
     const animate = () => {
-      globe.rotation.y += 0.002;
-      if (newRenderer instanceof WebGPURenderer) {
-        newRenderer.renderAsync(scene, camera);
-      } else {
-        newRenderer.render(scene, camera);
-      }
+      globe.rotation.y += 0.002; // Control rotation speed
+      newRenderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
 
@@ -212,12 +182,12 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
   // First render
   useEffect(() => {
-    if (rendered || !containerRef?.current || !isPaletteFullfilled) return;
+    if (rendered || !containerRef?.current) return;
 
     renderScene();
 
     return () => cleanup();
-  }, [renderScene, cleanup, rendered, isPaletteFullfilled]);
+  }, [renderScene, cleanup, rendered]);
 
   // Re render management
   useEffect(() => {

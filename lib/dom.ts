@@ -3,7 +3,7 @@ import { Palette } from '@/models/theme';
 export function getRootElement(): HTMLElement {
   const root = document.documentElement;
 
-  if (!root) throw new Error('Root element not exists (?)');
+  if (!root) throw new Error('Root element not exists');
 
   return root;
 }
@@ -47,4 +47,14 @@ export function mediaQueryMatches(query: string) {
   if (typeof window === 'undefined' || !query) return false;
 
   return window.matchMedia(query).matches;
+}
+
+export function isSafariAgent(): boolean {
+  return (
+    Boolean(navigator.vendor) &&
+    navigator.vendor.indexOf('Apple') > -1 &&
+    Boolean(navigator.userAgent) &&
+    navigator.userAgent.indexOf('CriOS') === -1 &&
+    navigator.userAgent.indexOf('FxiOS') === -1
+  );
 }

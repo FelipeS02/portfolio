@@ -16,6 +16,7 @@ const LenisProvider: FC<{ children: ReactNode }> = ({ children }) => {
     function update(time: number) {
       lenisRef.current?.lenis?.raf(time * 1000);
     }
+
     gsap.ticker.add(update);
 
     // Disable lag smoothing in GSAP to prevent any delay in scroll animations

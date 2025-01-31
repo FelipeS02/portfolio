@@ -7,7 +7,6 @@ import gsap from 'gsap';
 
 import { initialPalette } from '@/lib/theme';
 import { useTheme } from '@/hooks/theme';
-import useDisableScroll from '@/hooks/use-disable-scroll';
 import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 import { PaletteShade } from '@/models/theme';
 
@@ -18,8 +17,6 @@ const LoadingScreen = () => {
   const loadingLines = useRef<HTMLElement[] | null>(null);
 
   const { onPageLoading } = useHandleLoadingAnimations();
-
-  const [, setDisabled] = useDisableScroll();
 
   const tl = useRef<GSAPTimeline>(gsap.timeline());
 
@@ -42,6 +39,7 @@ const LoadingScreen = () => {
     const linesTl = gsap.timeline({
       onStart: () => {
         if (applyPalette) applyPalette();
+
         gsap.set(loadingLines.current, {
           willChange: 'height, background-color',
         });
@@ -62,7 +60,10 @@ const LoadingScreen = () => {
 
       linesTl.to(
         line,
-        { backgroundColor: palette[paletteShade], duration: 0.2 },
+        {
+          backgroundColor: palette[paletteShade],
+          duration: 0.2,
+        },
         timelinePositionByIndex,
       );
     });
@@ -77,6 +78,7 @@ const LoadingScreen = () => {
         stagger: 0.05,
         duration: 0.2,
         delay: 0.5,
+
         onStart: () => {
           gsap.to('#loading-logo', {
             opacity: 0,
@@ -85,8 +87,9 @@ const LoadingScreen = () => {
           });
         },
         onComplete: () => {
-          gsap.set(container.current, { display: 'none' });
-          setDisabled(false);
+          gsap.set(container.current, {
+            display: 'none',
+          });
         },
       }),
       '>',
@@ -97,13 +100,12 @@ const LoadingScreen = () => {
   });
 
   const onLoading = contextSafe(() => {
-    setDisabled(true);
-
     tl.current.add(
       gsap.to(loadingLines.current, {
         yPercent: 0,
         stagger: 0.05,
         duration: 0.2,
+
         onStart: () => {
           gsap.to('#loading-logo', {
             opacity: 1,
@@ -146,7 +148,7 @@ const LoadingScreen = () => {
 
   return (
     <div
-      className='fixed inset-0 z-50 grid h-fit w-full grid-cols-9'
+      className='fixed inset-0 z-50 grid h-fit w-full grid-cols-9 items-center justify-center'
       ref={loadElements}
     >
       {initialColorValues.map((color, index) => {
@@ -161,7 +163,7 @@ const LoadingScreen = () => {
       })}
 
       <h3
-        className='fixed place-self-center text-[4rem] font-bold text-palette-50 drop-shadow-lg duration-500 group-data-[loading=false]/container:opacity-0 md:text-[6rem]'
+        className='absolute justify-self-center text-[4rem] font-bold text-white drop-shadow-lg md:text-[6rem]'
         id='loading-logo'
       >
         FSARACHO
