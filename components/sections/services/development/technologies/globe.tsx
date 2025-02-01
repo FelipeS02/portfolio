@@ -3,12 +3,13 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import * as THREE from 'three';
-import { useDebounceValue, useMediaQuery } from 'usehooks-ts';
+import { useDebounceValue } from 'usehooks-ts';
 
 import HTMLComment from '@/components/ui/html-comment';
 import GlobeTexture from '@/public/assets/images/globe.png';
 import GlobeMobileTexture from '@/public/assets/images/globe_mobile.png';
 
+import { mediaQueryMatches } from '@/lib/dom';
 import { cn } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
@@ -21,15 +22,19 @@ type GlobeUtils = {
 
 type RenderParams = {
   renderer: THREE.WebGLRenderer | null;
+  scene: THREE.Scene | null;
+  camera: THREE.PerspectiveCamera | null;
+  globe: THREE.Mesh | null;
   rendered: boolean;
-  renderedScheme: string;
   renderedPalette: string;
 };
 
-const renderParamsInitialState = {
+const renderParamsInitialState: RenderParams = {
   renderer: null,
+  camera: null,
+  globe: null,
+  scene: null,
   rendered: false,
-  renderedScheme: '',
   renderedPalette: '',
 };
 
@@ -50,12 +55,8 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   const [debouncedScheme] = useDebounceValue(resolvedTheme, 500);
 
   // Current state of render
-  const [
-    { renderedPalette, rendered, renderer, renderedScheme },
-    setRenderParams,
-  ] = useState<RenderParams>(renderParamsInitialState);
-
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [{ renderedPalette, rendered, renderer }, setRenderParams] =
+    useState<RenderParams>(renderParamsInitialState);
 
   const setGlobeColor = useCallback(
     (renderer: RenderParams['renderer']) => {
@@ -69,18 +70,16 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   const renderScene = useCallback(async (): Promise<GlobeUtils | void> => {
     const container = containerRef.current;
 
-    if (!container || !resolvedTheme) return;
+    if (!container) return;
 
-    const {
-      renderer: newRenderer,
-      scene,
-      camera,
-      globe,
-    } = await new Promise<GlobeUtils>((resolve) => {
+    const props = await new Promise<GlobeUtils>((resolve) => {
       // #region Initialize ThreeJs utils
 
       // Create the WebGL renderer with transparency (alpha: true)
-      const renderer = new THREE.WebGLRenderer({ alpha: true });
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
 
       // Initialize the Three.js scene
       const scene = new THREE.Scene();
@@ -107,6 +106,8 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
       scene.add(globe);
 
+      const isMobile = mediaQueryMatches('(max-width: 768px)');
+
       // Load and apply the texture to the globe
       textureLoader.load(
         // Get smaller texture source to smaller devices
@@ -121,6 +122,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
             texture.generateMipmaps = false;
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
+
             globe.material.blending = THREE.SubtractiveBlending;
           }
 
@@ -139,9 +141,9 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     const resizeRenderer = () => {
       const width = container.offsetWidth;
       const height = container.offsetHeight;
-      newRenderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
+      props.renderer.setSize(width, height);
+      props.camera.aspect = width / height;
+      props.camera.updateProjectionMatrix();
     };
 
     // Initialize renderer size on mount
@@ -149,8 +151,8 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
     // Animation loop
     const animate = () => {
-      globe.rotation.y += 0.002; // Control rotation speed
-      newRenderer.render(scene, camera);
+      props.globe.rotation.y += 0.002; // Control rotation speed
+      props.renderer.render(props.scene, props.camera);
       requestAnimationFrame(animate);
     };
 
@@ -158,14 +160,13 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
     // Store globe construction params
     setRenderParams({
+      ...props,
       rendered: true,
       renderedPalette: hexCode,
-      renderer: newRenderer,
-      renderedScheme: resolvedTheme,
     });
 
-    return { renderer: newRenderer, scene, camera, globe };
-  }, [isMobile, hexCode, resolvedTheme, setGlobeColor]);
+    return props;
+  }, [hexCode, setGlobeColor]);
 
   // DOM and renderer cleanup
   const cleanup = useCallback(() => {
@@ -191,15 +192,11 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
   // Re render management
   useEffect(() => {
-    const hasToReRender =
-      renderer &&
-      (renderedPalette !== debouncedPaletteColor ||
-        renderedScheme !== debouncedScheme);
+    const hasToReRender = renderer && renderedPalette !== debouncedPaletteColor;
 
     if (hasToReRender) setGlobeColor(renderer);
   }, [
     renderedPalette,
-    renderedScheme,
     debouncedPaletteColor,
     debouncedScheme,
     renderer,
