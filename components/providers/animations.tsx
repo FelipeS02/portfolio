@@ -72,6 +72,7 @@ const query = {
   sm: '(max-width: 768px)',
   maxLg: '(max-width: 1280px)',
   lg: '(min-width: 1280px)',
+  mobile: '(any-point: coerse)',
 };
 
 const AnimationsProvider: FC<{ children: ReactNode }> = memo(
@@ -86,7 +87,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const isMobileDevice = useMediaQuery(query.sm, {
+    const isMobileDevice = useMediaQuery(query.mobile, {
       initializeWithValue: false,
       defaultValue: undefined,
     });
@@ -565,14 +566,13 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     // Rebuild animations only on width change, to prevent lag on phones
     useEffect(() => {
-      if (typeof window === 'undefined') return;
-
       let prevWidth = window.innerWidth;
 
       const onResize = () => {
         const width = window.innerWidth;
-
-        if (width !== prevWidth) {
+        
+        // In phone devices, rebuild only when width changes
+        if (width !== prevWidth || !isMobileDevice) {
           prevWidth = width;
           debouncedLoad();
         }
@@ -583,7 +583,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
       return () => {
         window.removeEventListener('resize', onResize);
       };
-    }, [debouncedLoad]);
+    }, [debouncedLoad, isMobileDevice]);
 
     // Update only pallete-dependent tweens on scheme or pallete change
     useEffect(() => {
