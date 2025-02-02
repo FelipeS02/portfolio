@@ -82,17 +82,20 @@ const FooterText = () => {
   );
 
   return (
-    <div className='contents' ref={container}>
+    <div
+      className='contents text-[16.3dvw] font-black leading-[0.8] md:text-[17dvw] lg:text-[11.5dvw]'
+      ref={container}
+    >
       {!mobile ? (
         <SplittedWord
-          className={`relative z-[2] select-none text-[17.6dvw] font-black leading-[0.8] md:text-[17dvw] lg:text-[11.6dvw] ${styles.stroke}`}
+          className={`relative z-[2] select-none ${styles.stroke}`}
           id='text'
         >
           {md ? 'FSARACHO' : 'FELIPESARACHO'}
         </SplittedWord>
       ) : (
         // Using simplified element in mobile
-        <SplittedWord className='select-none text-[17.6dvw] font-black leading-[0.8] md:text-[17dvw] lg:text-[11.6dvw]'>
+        <SplittedWord className='select-none font-black'>
           {md ? 'FSARACHO' : 'FELIPESARACHO'}
         </SplittedWord>
       )}

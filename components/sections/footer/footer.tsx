@@ -40,7 +40,7 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
       </div>
 
       <div className='flex w-full flex-col'>
-        <span className='text-xl font-medium mb-0.5 ml-2'>©{currentYear}</span>
+        <span className='text-lg font-medium mb-0.5'>©{currentYear}</span>
         <FooterText />
       </div>
     </footer>
