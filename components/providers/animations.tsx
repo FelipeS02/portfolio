@@ -15,7 +15,7 @@ import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
 import { useDebounceCallback, useMediaQuery } from 'usehooks-ts';
 
-import { mediaQueryMatches } from '@/lib/dom';
+import { isFirefoxAgent, mediaQueryMatches } from '@/lib/dom';
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
@@ -306,9 +306,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               gsap
                 .timeline({
                   id: 'about-transition-mobile',
-                  onStart: () => {
-                    gsap.set(a.mobileSection, { willChange: 'opacity' });
-                  },
                   scrollTrigger: {
                     trigger: a.mobileSection,
                     end: () => `+=${a.mobileSection.offsetHeight * 0.5}`,
@@ -340,12 +337,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             const aboutTransition = gsap
               .timeline({
                 id: 'about-transition',
-                onStart: () => {
-                  gsap.set(a.wrapper, { willChange: 'height' });
-                  gsap.set(a.overlay, { willChange: 'opacity' });
-                  gsap.set(a.section, { willChange: 'transform' });
-                  gsap.set(a.content, { willChange: 'width' });
-                },
                 scrollTrigger: {
                   trigger: home.section,
                   start: 'top top',
@@ -428,14 +419,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
           const objectiveTimeline = gsap
             .timeline({
               id: 'objective-transition',
-              onStart: () => {
-                gsap.set(
-                  [o.section, o.text, o.chars, o.clockLines, d.wrapper],
-                  {
-                    willChange: 'transform, opacity',
-                  },
-                );
-              },
               scrollTrigger: getScrollTriggerByDevice(),
             })
             .to(o.chars, {
@@ -485,15 +468,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             backgroundColor: `${bg}40`,
           });
 
+          const isFirefox = isFirefoxAgent();
+
           const developmentTimeline = gsap
             .timeline({
               id: 'development',
-              onStart: () => {
-                gsap.set(ringsContainer, {
-                  willChange: 'transform, opacity',
-                });
-                gsap.set(globe, { willChange: 'transform' });
-              },
               scrollTrigger: {
                 trigger: content,
                 start: 'start center',
@@ -501,16 +480,21 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                 scrub: true,
               },
             })
-            .to(content, {
-              backgroundColor: `${bg}95`,
-            })
-            .to(globe, { scale: 1.5, ease: 'power1.inOut' }, '<')
-            .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<');
 
-          if (mediaQueryMatches(query.lg))
+            .to(globe, { scale: 1.5, ease: 'power1.inOut' })
+            .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<')
+            .to(
+              content,
+              {
+                backgroundColor: `${bg}95`,
+              },
+              '<',
+            );
+
+          if (mediaQueryMatches(query.lg) && !isFirefox)
             developmentTimeline.to(
               ringsContainer,
-              { scale: 2, opacity: 0.2, ease: 'power1.inOut' },
+              { scale: 2, translateZ: 0, opacity: 0.2, ease: 'power1.inOut' },
               '<',
             );
 
@@ -534,7 +518,11 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               scale: 2.5,
               duration: 10,
             })
-            .to(content, { opacity: 0, duration: 0.5 }, '>');
+            .to(
+              content,
+              { opacity: 0, duration: 1, ease: 'power4.inOut' },
+              '>',
+            );
 
           masterTimeline.current.add(endTimeline);
         })(),
@@ -644,9 +632,6 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
         // Parallax Effect Handlers
         const handleMouseParallax = contextSafe((event: MouseEvent) => {
-          gsap.set(rings, { willChange: 'transform' });
-          gsap.set(globe, { willChange: 'transform' });
-
           const baseDeltaX = event.clientX - window.innerWidth / 2;
           const baseDeltaY = event.clientY - window.innerHeight / 2;
 
@@ -665,14 +650,12 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             y: 0,
             duration: 1,
             ease: 'back.out',
-            willChange: 'none',
           });
           gsap.to(globe, {
             x: 0,
             y: 0,
             duration: 1,
             ease: 'back.out',
-            willChange: 'none',
           });
         });
 

@@ -58,3 +58,9 @@ export function isSafariAgent(): boolean {
     navigator.userAgent.indexOf('FxiOS') === -1
   );
 }
+
+export function isFirefoxAgent(): boolean {
+  return (
+    Boolean(navigator.userAgent) && navigator.userAgent.indexOf('Firefox') > -1
+  );
+}

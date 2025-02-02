@@ -14,7 +14,7 @@ const Development = () => {
   // Using random hero text
   const texts = [
     <Fragment key='development-section-1'>
-      <span className='md:ml-[-0.78em] text-palette-600'>{'<'}</span> Desarrollo
+      <span className='text-palette-600 md:ml-[-0.78em]'>{'<'}</span> Desarrollo
       Web <span className='text-palette-600'>{'/>'}</span>
     </Fragment>,
 
@@ -31,7 +31,10 @@ const Development = () => {
     >
       <TechnologiesRings />
 
-      <div id={DEVELOPMENT_ELEMENTS_IDS.CONTENT} className='relative z-10 text-palette-50'>
+      <div
+        id={DEVELOPMENT_ELEMENTS_IDS.CONTENT}
+        className='relative z-10 text-palette-50'
+      >
         <div
           className='relative flex w-full items-center justify-between border-t-2 border-palette-600 px-4 pb-12 pt-8 lg:px-14 lg:pb-20 lg:pt-10'
           id={DEVELOPMENT_ELEMENTS_IDS.HERO}

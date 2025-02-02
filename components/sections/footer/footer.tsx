@@ -16,13 +16,13 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <footer
       className={cn(
-        'flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111] text-palette-50',
+        'flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111] px-4 text-palette-50',
         className,
       )}
       id={id}
       {...rest}
     >
-      <div className='inline-flex w-fit gap-4 px-4 py-3' id='socials'>
+      <div className='inline-flex w-fit gap-4 py-3' id='socials'>
         <ArrowButton
           as='a'
           href='https://www.linkedin.com/in/felipe-saracho/'
@@ -39,8 +39,8 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
         </ArrowButton>
       </div>
 
-      <div className='flex flex-col'>
-        <span className='ml-3 text-xl font-medium'>©{currentYear}</span>
+      <div className='flex w-full flex-col'>
+        <span className='text-xl font-medium mb-0.5 ml-2'>©{currentYear}</span>
         <FooterText />
       </div>
     </footer>

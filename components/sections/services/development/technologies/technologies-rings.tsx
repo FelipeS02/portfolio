@@ -12,7 +12,7 @@ const TechnologiesRings = memo(function TechnologiesRings() {
       id='planet-orbit'
     >
       <div
-        className='absolute flex aspect-square h-full lg:h-fit lg:w-full'
+        className='absolute flex aspect-square h-full lg:h-fit lg:w-full will-change-[transform,opacity] [&>.orbit-ring]:will-change-transform'
         id='rings-container'
       >
         <Ring>
@@ -92,7 +92,7 @@ const TechnologiesRings = memo(function TechnologiesRings() {
           </Ring>
         </Ring>
       </div>
-      <Globe className='absolute m-auto max-w-full place-self-center overflow-hidden shadow-globe' />
+      <Globe className='absolute m-auto max-w-full place-self-center overflow-hidden shadow-globe will-change-transform' />
     </div>
   );
 });

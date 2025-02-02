@@ -12,7 +12,7 @@ interface FigureProps extends FiguresProps {
 
 export const Figure: FC<FigureProps> = ({ id, selectedElement }) => (
   <SelectableElement
-    className='figure-container absolute flex aspect-square h-[20%] items-center justify-center max-md:h-[10%]'
+    className='figure-container absolute flex aspect-square h-[20%] items-center justify-center will-change-[height,width,border-radius,background,top,left,right,bottom] max-md:h-[10%]'
     selected={id === selectedElement}
     id={id}
   >

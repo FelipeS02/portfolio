@@ -46,8 +46,6 @@ const FooterText = () => {
           const opacity = gsap.utils.mapRange(0, threshold, 1, 0, distance);
           const clampedOpacity = gsap.utils.clamp(0, 1, opacity);
 
-          gsap.set(letter, { willChange: 'color' });
-
           gsap.to(letter, {
             color: `hsla(0, 0%, 100%, ${clampedOpacity})`, // Fondo blanco con opacidad
             duration: 0.3,
@@ -84,21 +82,19 @@ const FooterText = () => {
   );
 
   return (
-    <div ref={container}>
+    <div className='contents' ref={container}>
       {!mobile ? (
         <SplittedWord
-          className={`relative z-[2] select-none text-[11.8vw] font-black leading-[0.8] max-md:text-[17.6vw] ${styles.stroke}`}
+          className={`relative z-[2] select-none text-[17.6dvw] font-black leading-[0.8] md:text-[17dvw] lg:text-[11.6dvw] ${styles.stroke}`}
           id='text'
         >
           {md ? 'FSARACHO' : 'FELIPESARACHO'}
         </SplittedWord>
       ) : (
-        <span
-          className='select-none text-[16.5vw] font-black'
-          aria-hidden='true'
-        >
-          FSARACHO
-        </span>
+        // Using simplified element in mobile
+        <SplittedWord className='select-none text-[17.6dvw] font-black leading-[0.8] md:text-[17dvw] lg:text-[11.6dvw]'>
+          {md ? 'FSARACHO' : 'FELIPESARACHO'}
+        </SplittedWord>
       )}
     </div>
   );

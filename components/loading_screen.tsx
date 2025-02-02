@@ -10,8 +10,6 @@ import { useTheme } from '@/hooks/theme';
 import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 import { PaletteShade } from '@/models/theme';
 
-const BASE_STYLES = 'col-span-1 h-screen min-w-full loading-line';
-
 const LoadingScreen = () => {
   const container = useRef<HTMLDivElement | null>(null);
   const loadingLines = useRef<HTMLElement[] | null>(null);
@@ -39,10 +37,6 @@ const LoadingScreen = () => {
     const linesTl = gsap.timeline({
       onStart: () => {
         if (applyPalette) applyPalette();
-
-        gsap.set(loadingLines.current, {
-          willChange: 'height, background-color',
-        });
       },
     });
 
@@ -78,7 +72,7 @@ const LoadingScreen = () => {
         stagger: 0.05,
         duration: 0.2,
         delay: 0.5,
-
+        translateZ: 0,
         onStart: () => {
           gsap.to('#loading-logo', {
             opacity: 0,
@@ -148,14 +142,15 @@ const LoadingScreen = () => {
 
   return (
     <div
-      className='fixed inset-0 z-50 grid h-fit w-full grid-cols-9 items-center justify-center'
+      className='fixed inset-0 z-50 grid h-fit w-full grid-cols-9 items-center justify-center gap-[-1px]'
       ref={loadElements}
     >
       {initialColorValues.map((color, index) => {
         if (index === 0 || index > 9) return null;
         return (
           <div
-            className={BASE_STYLES}
+            // Using 101% width to prevent visual bug when apply will change
+            className='loading-line col-span-1 h-screen w-[101%] will-change-[transform,background]'
             style={{ backgroundColor: color }}
             key={`loading-line-${color}`}
           />

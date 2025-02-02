@@ -26,7 +26,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
         <Image
           src={AboutImage}
           alt='about-image'
-          className='relative col-span-1 h-full object-cover object-center select-none'
+          className='relative col-span-1 h-full select-none object-cover object-center'
           priority
         />
         <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>

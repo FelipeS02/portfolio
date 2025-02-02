@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import LoadingScreen from '@/components/loading_screen';
 import LenisProvider from '@/components/providers/lenis';
 import RandomThemeProvider from '@/components/providers/random-theme';
+import ScanProvider from '@/components/providers/scan';
 import SchemeProvider from '@/components/providers/scheme';
 import OgImage from '@/public/assets/images/og_image.webp';
 
@@ -59,7 +60,7 @@ export default function RootLayout({
 }>) {
   return (
     <LenisProvider>
-      {/* <ScanProvider /> */}
+      <ScanProvider />
       <html
         lang='es-ES'
         translate='no'
