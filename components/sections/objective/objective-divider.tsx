@@ -10,8 +10,10 @@ const ObjectiveDivider = () => {
       autoFill
       direction='right'
     >
-      <span className='mx-4'>SERVICIOS</span>
-      <span className='mx-4'>✺</span>
+      <span className='mx-4' aria-hidden>
+        SERVICIOS
+      </span>
+      <span className='mx-4' aria-hidden>✺</span>
     </Marquee>
   );
 };
