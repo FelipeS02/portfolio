@@ -53,9 +53,13 @@ const HeaderShortcuts = memo(function HeaderShortcuts() {
   return (
     <div className='col-span-1 flex w-fit items-center justify-end gap-3 lg:w-full'>
       <CurriculumShortcut />
+      
       <ShortcutSeparator />
+
       <ThemeSwitch />
+      
       <ShortcutSeparator />
+      
       <ThemePicker />
     </div>
   );

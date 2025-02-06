@@ -5,6 +5,7 @@ import HeroSection from './hero-section';
 
 export const HOME_ELEMENT_IDS = {
   SECTION: 'home',
+  OVERLAY: 'home-overlay',
 };
 
 const Home: FC<{ children: ReactNode }> = memo(function Home({
@@ -16,6 +17,10 @@ const Home: FC<{ children: ReactNode }> = memo(function Home({
       id={HOME_ELEMENT_IDS.SECTION}
     >
       <Header />
+      <div
+        className='fixed left-0 top-0 z-50 hidden h-screen w-screen select-none'
+        id={HOME_ELEMENT_IDS.OVERLAY}
+      />
       {aboutSection}
       <HeroSection />
     </section>

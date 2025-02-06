@@ -30,28 +30,50 @@ const ThemeSwitch = () => {
     if (mediaQueryMatches('(max-width: 768px)')) return setTheme(newTheme);
 
     const homeElement = document.getElementById(HOME_ELEMENT_IDS.SECTION);
+    const homeOverlay = document.getElementById(HOME_ELEMENT_IDS.OVERLAY);
 
     lenis?.stop();
 
+    gsap.set(homeOverlay, { display: 'block' });
+
     gsap
       .timeline()
-      .to(homeElement, {
-        filter: 'blur(1px)',
-        scale: 0.98,
+      .to(homeOverlay, {
+        backdropFilter: 'blur(1px)',
         duration: 0.3,
         ease: 'power2.out',
-        onComplete: () => setTheme(newTheme),
       })
+      .to(
+        homeElement,
+        {
+          scale: 0.98,
+          duration: 0.3,
+          ease: 'power2.out',
+          onComplete: () => setTheme(newTheme),
+        },
+        '<',
+      )
       .to(
         homeElement,
         {
           scale: 1,
           duration: 0.5,
-          filter: 'blur(0px)',
           ease: 'back.inOut',
-          onComplete: () => lenis?.start(),
         },
         '>+=0.5',
+      )
+      .to(
+        homeOverlay,
+        {
+          backdropFilter: 'blur(0px)',
+          ease: 'back.inOut',
+          duration: 0.5,
+          onComplete: () => {
+            lenis?.start();
+            gsap.set(homeOverlay, { clearProps: 'all' });
+          },
+        },
+        '<',
       );
   });
 
