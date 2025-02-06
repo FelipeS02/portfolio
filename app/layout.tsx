@@ -111,7 +111,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <body
-          className={`${ppNeueMontreal.variable} ${archivo.variable} h-full bg-background font-neue text-foreground antialiased md:transition-colors`}
+          className={`${ppNeueMontreal.variable} ${archivo.variable} h-full bg-background font-neue text-foreground antialiased transition-[background-color] duration-300`}
           suppressHydrationWarning
         >
           <SchemeProvider attribute='class' defaultTheme='system' enableSystem>
