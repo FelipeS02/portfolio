@@ -508,7 +508,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               id: 'end',
               scrollTrigger: {
                 trigger: experience,
-                start: sm ? 'top bottom' : 'top bottom-=300',
+                start: sm ? 'top bottom' : 'top bottom+=500',
                 endTrigger: footer,
                 end: 'bottom bottom',
                 scrub: true,
