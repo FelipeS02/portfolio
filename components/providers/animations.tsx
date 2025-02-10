@@ -186,7 +186,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
     const clearTimeline = useCallback(() => context.revert(), [context]);
 
-    // #region Build or rebuild pallete/scheme dependant animations safely (without re-initializing timeline)
+    // #region Build pallete/scheme dependant animations safely (without re-initializing timeline)
     const getAboutTransitions = useCallback(
       (timeline?: GSAPTimeline) =>
         contextSafe(() => {

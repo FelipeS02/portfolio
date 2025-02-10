@@ -39,28 +39,30 @@ const StyledLilabIcon = () => (
 const Experience = () => {
   return (
     <DevelopmentList className='py-14' id='experience'>
-      <DevelopmentListTitle className='flex items-center gap-2'>
-        <BriefcaseBusiness
-          size={30}
-          strokeWidth={1.5}
-          className='text-palette-500'
-        />
-        Experiencia
-      </DevelopmentListTitle>
+      <div className='mb-2'>
+        <DevelopmentListTitle className='flex items-center gap-2'>
+          <BriefcaseBusiness
+            size={30}
+            strokeWidth={1.5}
+            className='text-palette-500'
+          />
+          Experiencia
+        </DevelopmentListTitle>
 
-      <p className='mb-5 max-w-[800px] text-balance text-xl'>
-        Con mas de dos años de experiencia laboral, he tenido el privilegio de
-        contribuir en todas las etapas de la creación de aplicaciones web
-        dinámicas y altamente interactivas.
-      </p>
+        <p className='max-w-[800px] text-balance text-xl font-light'>
+          Con mas de dos años de experiencia laboral, tuve el privilegio de
+          contribuir en todas las etapas de la creación de aplicaciones web
+          dinámicas y altamente interactivas.
+        </p>
+      </div>
 
       <ul className='size-full'>
         <ListItem className='relative flex-wrap justify-between overflow-hidden'>
           <div>
-            <h6 className='text-2xl font-semibold tracking-wide'>
+            <h6 className='text-xl font-semibold tracking-wide'>
               En búsqueda de nuevos desafíos
             </h6>
-            <p className='max-w-[450px] text-balance text-lg font-light'>
+            <p className='max-w-[400px] text-balance font-light text-palette-50/70'>
               Si creés que mi perfil se alinea con los principios de tu empresa:
             </p>
           </div>
