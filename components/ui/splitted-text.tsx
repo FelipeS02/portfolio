@@ -21,7 +21,10 @@ export const SplittedWord: FC<SplittedWordProps> = ({
 
   return (
     <span
-      className={cn('word inline-block text-inherit', className)}
+      className={cn(
+        'word mb-[-0.1em] inline-block origin-bottom overflow-hidden pb-[0.1em] text-inherit',
+        className,
+      )}
       data-word={word}
       aria-label={word}
       {...rest}

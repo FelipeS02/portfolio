@@ -238,8 +238,8 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
             transitionDuration: '150ms',
             color: 'inherit',
             // Word spacing to make better highlight
-            margin: 'auto -0.1em',
-            padding: 'auto 0.1em',
+            margin: '0 -0.1em',
+            padding: '0 0.1em',
           });
 
           (tl as GSAPTimeline).add(

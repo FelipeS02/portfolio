@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { CSSProperties, memo } from 'react';
 
 import { SplittedText } from '@/components/ui/splitted-text';
 
@@ -23,7 +23,7 @@ const Objective = memo(function Objective() {
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
         data-nosnippet
       >
-        <SplittedText className='mb-[-0.1em] pb-[0.1em]'>
+        <SplittedText>
           Mi objetivo es crear productos que no solo sigan las tendencias
           actuales, sino que también sean atemporales y perduren en el tiempo.
         </SplittedText>
