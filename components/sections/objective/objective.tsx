@@ -1,4 +1,4 @@
-import { CSSProperties, memo } from 'react';
+import { memo } from 'react';
 
 import { SplittedText } from '@/components/ui/splitted-text';
 
