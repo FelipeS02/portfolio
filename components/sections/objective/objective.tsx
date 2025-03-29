@@ -19,7 +19,7 @@ const Objective = memo(function Objective() {
         <ClockLines />
       </div>
       <h3
-        className='w-full max-w-[1400px] text-balance text-[2.5rem] font-semibold leading-tight md:text-[3rem] lg:text-[4rem]'
+        className='w-full max-w-[1400px] text-pretty text-[1.5rem] font-semibold leading-tight md:text-[2.5rem] lg:text-[3rem] uppercase'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
         data-nosnippet
       >

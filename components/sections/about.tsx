@@ -9,6 +9,7 @@ export const ABOUT_ELEMENTS_IDS = {
   SECTION: 'about',
   'MOBILE-SECTION': 'about-mobile',
   CONTENT: 'about-content',
+  CONTENT_INNER: "about-content-inner"
 };
 
 const advice =
@@ -33,7 +34,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
             SOBRE <br /> MI.
           </h1>
-          <p className='text-xl'>
+          <p className='text-lg max-w-md'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
             <span className='font-semibold'>
@@ -73,8 +74,8 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
             className='flex flex-col items-center justify-center overflow-hidden text-balance md:items-start'
             id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
-            <div className='p-8'>
-              <h1 className='static w-[5em] text-[8rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
+            <div className='p-8' id={ABOUT_ELEMENTS_IDS.CONTENT_INNER}>
+              <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
                 SOBRE MI.
               </h1>
               <p className='min-w-[250px] text-xl'>

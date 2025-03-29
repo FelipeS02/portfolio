@@ -32,7 +32,7 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
         </ArrowButton>
         <ArrowButton
           as='a'
-          href='https://www.linkedin.com/in/felipe-saracho/'
+          href='https://github.com/FelipeS02'
           target='_blank'
         >
           Github

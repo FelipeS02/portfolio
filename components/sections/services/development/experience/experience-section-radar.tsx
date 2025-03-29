@@ -75,7 +75,7 @@ const Lines: FC<{ className: string }> = ({ className = '' }) => {
   );
 };
 
-const Radar: FC<{ className?: string }> = ({ className = '' }) => {
+const ExperienceSectionRadar: FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div
       className={cn(
@@ -93,4 +93,4 @@ const Radar: FC<{ className?: string }> = ({ className = '' }) => {
   );
 };
 
-export default Radar;
+export default ExperienceSectionRadar;

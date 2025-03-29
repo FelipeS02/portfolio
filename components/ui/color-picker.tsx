@@ -66,7 +66,7 @@ const ColorPicker: FC<
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <div>
-          <p className='font-semibold leading-none'>Crear nuevo tema</p>
+          <p className='font-semibold leading-none'>CREAR TEMA</p>
           <div className='inline-flex w-full items-center text-sm font-semibold'>
             <span
               style={{

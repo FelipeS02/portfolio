@@ -8,7 +8,10 @@ const DevelopmentListTitle: FC<HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   return (
     <h5
-      className={cn('font-archivo text-2xl font-medium lg:text-3xl', className)}
+      className={cn(
+        '[&_svg]:size-7.5 [&_*]:leading-7.5 font-archivo text-2xl lg:text-3xl [&_svg]:stroke-[1.5px] [&_svg]:text-palette-500 uppercase',
+        className,
+      )}
       {...rest}
     />
   );

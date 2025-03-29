@@ -1,55 +1,33 @@
-import { FC, PropsWithChildren, ReactNode } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { BriefcaseBusiness } from 'lucide-react';
+import { Earth } from 'lucide-react';
 
-import { ArrowButton } from '@/components/ui/arrow-button';
 import {
   DevelopmentList,
   DevelopmentListTitle,
 } from '@/components/ui/development_list';
-import { Henry, Lilab } from '@/components/ui/icons';
+import { Henry } from '@/components/ui/icons';
 import { ListItem } from '@/components/ui/list-item';
+import ItRockLogo from '@/public/assets/images/it-rock.webp';
 
-import { cn } from '@/lib/utils';
-
-import Radar from './radar';
-
-const ExperienceBadge: FC<PropsWithChildren<{ className?: string }>> = ({
-  children,
-  className = '',
-}) => (
-  <div
-    className={cn(
-      'border-b border-palette-600/50 py-1 text-left text-palette-50',
-      className,
-    )}
-  >
-    <p className='text-lg'>{children}</p>
-  </div>
-);
-
-const ExperienceInfo: FC<{ children: ReactNode }> = ({ children }) => {
-  return <div className='flex flex-wrap gap-2 lg:gap-6'>{children}</div>;
-};
-
-const StyledLilabIcon = () => (
-  <Lilab className='w-40 -translate-x-[5%] grayscale invert' />
-);
+import {
+  DevelopmentExperienceAvailable,
+  DevelopmentExperienceBadge,
+  DevelopmentExperienceInfo,
+  DevelopmentExperienceLilabIcon,
+} from './experience-section-parts';
 
 const Experience = () => {
   return (
     <DevelopmentList className='py-14' id='experience'>
       <div className='mb-2'>
         <DevelopmentListTitle className='flex items-center gap-2'>
-          <BriefcaseBusiness
-            size={30}
-            strokeWidth={1.5}
-            className='text-palette-500'
-          />
-          Experiencia
+          <Earth />
+          <span>Experiencia</span>
         </DevelopmentListTitle>
 
-        <p className='max-w-[800px] text-balance text-xl font-light'>
+        <p className='max-w-[750px] text-balance font-light uppercase'>
           Con mas de dos años de experiencia laboral, tuve el privilegio de
           contribuir en todas las etapas de la creación de aplicaciones web
           dinámicas y altamente interactivas.
@@ -57,52 +35,65 @@ const Experience = () => {
       </div>
 
       <ul className='size-full'>
-        <ListItem className='relative flex-wrap justify-between overflow-hidden'>
-          <div>
-            <h6 className='text-xl font-semibold tracking-wide'>
-              En búsqueda de nuevos desafíos
-            </h6>
-            <p className='max-w-[400px] text-balance font-light text-palette-50/70'>
-              Si creés que mi perfil se alinea con los principios de tu empresa:
-            </p>
-          </div>
+        {process.env.NEXT_PUBLIC_AVAILABLE === 'true' ? (
+          <DevelopmentExperienceAvailable />
+        ) : null}
 
-          <ArrowButton
-            as='a'
-            href='https://www.linkedin.com/in/felipe-saracho/'
-            target='_blank'
-            className='border-palette-600/50 transition-colors hover:border-palette-600'
-          >
-            Contactame ahora
-          </ArrowButton>
-          <Radar className='absolute z-[-1] w-full opacity-70 max-md:place-self-center md:w-[40%] md:-translate-x-5' />
-        </ListItem>
         <ListItem className='flex-wrap justify-between'>
-          <StyledLilabIcon />
-          <ExperienceInfo>
-            <ExperienceBadge>
+          <Link href='https://www.itrock.com.ar/' target='_blank'>
+            <Image
+              src={ItRockLogo}
+              alt='ITROCK logo'
+              className='h-auto max-w-40'
+              width={160}
+            />
+          </Link>
+          <DevelopmentExperienceInfo>
+            <DevelopmentExperienceBadge>
+              Desarrollador Frontend
+            </DevelopmentExperienceBadge>
+            <DevelopmentExperienceBadge>Mar. 2025</DevelopmentExperienceBadge>
+          </DevelopmentExperienceInfo>
+        </ListItem>
+
+        <ListItem className='flex-wrap justify-between'>
+          <DevelopmentExperienceLilabIcon />
+          <DevelopmentExperienceInfo>
+            <DevelopmentExperienceBadge>
               Desarrollador Frontend ML. / Diseñador
-            </ExperienceBadge>
-            <ExperienceBadge>Dic. 2023 - Jun. 2024</ExperienceBadge>
-          </ExperienceInfo>
+            </DevelopmentExperienceBadge>
+            <DevelopmentExperienceBadge>
+              Dic. 2023 - Jun. 2024
+            </DevelopmentExperienceBadge>
+          </DevelopmentExperienceInfo>
         </ListItem>
         <ListItem className='flex-wrap justify-between'>
-          <StyledLilabIcon />
-          <ExperienceInfo>
-            <ExperienceBadge>
+          <DevelopmentExperienceLilabIcon />
+          <DevelopmentExperienceInfo>
+            <DevelopmentExperienceBadge>
               Desarrollador Frontend Jr. / Diseñador
-            </ExperienceBadge>
-            <ExperienceBadge>Nov. 2021 - Mar. 2023</ExperienceBadge>
-          </ExperienceInfo>
+            </DevelopmentExperienceBadge>
+            <DevelopmentExperienceBadge>
+              Nov. 2021 - Mar. 2023
+            </DevelopmentExperienceBadge>
+          </DevelopmentExperienceInfo>
         </ListItem>
         <ListItem className='flex-wrap justify-between'>
-          <Henry className='w-56 grayscale invert' />
-          <ExperienceInfo>
-            <ExperienceBadge>
+          <Link
+            href='https://www.soyhenry.com/'
+            target='_blank'
+            className='opacity-40 transition-opacity hover:opacity-100'
+          >
+            <Henry className='w-56 grayscale invert' />
+          </Link>
+          <DevelopmentExperienceInfo>
+            <DevelopmentExperienceBadge>
               Bootcamp / Practica Profesional Full-Stack
-            </ExperienceBadge>
-            <ExperienceBadge>Jun. 2021 - Oct. 2021</ExperienceBadge>
-          </ExperienceInfo>
+            </DevelopmentExperienceBadge>
+            <DevelopmentExperienceBadge>
+              Jun. 2021 - Oct. 2021
+            </DevelopmentExperienceBadge>
+          </DevelopmentExperienceInfo>
         </ListItem>
       </ul>
     </DevelopmentList>

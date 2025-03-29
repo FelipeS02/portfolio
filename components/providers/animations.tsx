@@ -40,6 +40,7 @@ type ElementDictionary = {
     section: HTMLElement;
     mobileSection: HTMLElement;
     content: HTMLElement;
+    contentInner: HTMLElement;
   };
 
   objective: {
@@ -133,6 +134,9 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
               ABOUT_ELEMENTS_IDS['MOBILE-SECTION'],
             ),
             content: aboutSelector(`#${ABOUT_ELEMENTS_IDS.CONTENT}`)[0],
+            contentInner: aboutSelector(
+              `#${ABOUT_ELEMENTS_IDS.CONTENT_INNER}`,
+            )[0],
           },
 
           objective: {
@@ -169,11 +173,12 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         } as ElementDictionary;
 
         if (
-          !validateObject(e.home) ||
-          !validateObject(e.about) ||
-          !validateObject(e.objective) ||
-          !validateObject(e.design) ||
-          !validateObject(e.development)
+          process.env.NODE_ENV === 'development' &&
+          (!validateObject(e.home) ||
+            !validateObject(e.about) ||
+            !validateObject(e.objective) ||
+            !validateObject(e.design) ||
+            !validateObject(e.development))
         )
           throw Error('Some element not exists');
 
@@ -362,7 +367,10 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
                 '<',
               )
               .to(a.content, {
-                width: '40%',
+                width: Math.max(
+                  a.wrapper.clientWidth * 0.4,
+                  a.contentInner.clientWidth,
+                ),
               })
               .to(a.section, {
                 opacity: 0,
@@ -570,7 +578,7 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
 
       const onResize = () => {
         const width = window.innerWidth;
-        
+
         // In phone devices, rebuild only when width changes
         if (width !== prevWidth || !isMobileDevice) {
           prevWidth = width;

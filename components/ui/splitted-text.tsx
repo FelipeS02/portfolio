@@ -27,6 +27,7 @@ export const SplittedWord: FC<SplittedWordProps> = ({
       )}
       data-word={word}
       aria-label={word}
+      suppressHydrationWarning
       {...rest}
     >
       {splittedWord.map((char, index) => (
@@ -34,6 +35,7 @@ export const SplittedWord: FC<SplittedWordProps> = ({
           className='char inline-block'
           data-char={char}
           key={`${word}-${index}`}
+          suppressHydrationWarning
         >
           {char}
         </span>

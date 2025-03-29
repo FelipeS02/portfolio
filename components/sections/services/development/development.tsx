@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 import Experience from './experience/experience';
 import TechnologiesList from './technologies/technologies-list';
 import TechnologiesRings from './technologies/technologies-rings';
@@ -13,13 +11,13 @@ export const DEVELOPMENT_ELEMENTS_IDS = {
 const Development = () => {
   // Using random hero text
   const texts = [
-    <Fragment key='development-section-1'>
-      <span className='text-palette-600 md:ml-[-0.78em]'>{'<'}</span> Desarrollo
+    <>
+      <span className='text-palette-600 lg:ml-[-0.78em]'>{'<'}</span> Desarrollo
       Web <span className='text-palette-600'>{'/>'}</span>
-    </Fragment>,
+    </>,
 
     <span className='-ml-[0.05em]' key='development-section-2'>
-      Desarrollo.web{' '}
+      Desarrollo.Web{' '}
       <span className='tracking-widest text-palette-600'>()</span>
     </span>,
   ];
@@ -40,11 +38,11 @@ const Development = () => {
           id={DEVELOPMENT_ELEMENTS_IDS.HERO}
         >
           <div className='flex flex-col gap-3'>
-            <h4 className='after:contents-["-"] text-3xl font-semibold after:ml-1 after:animate-blink after:border-2 after:border-palette-600 md:text-6xl md:after:ml-4 md:after:border-4'>
+            <h4 className='after:contents-["-"] text-2xl font-semibold after:ml-1 after:animate-blink after:border-2 after:border-palette-600 md:text-6xl md:after:ml-4 md:after:border-2 normal-case'>
               {texts[Math.floor(Math.random() * texts.length)]}
             </h4>
 
-            <p className='max-w-[500px] text-balance text-xl'>
+            <p className='max-w-[500px] text-balance text-lg uppercase'>
               Elaboracion a medida de aplicaciones web utilizando las ultimas
               tecnologias.
             </p>
