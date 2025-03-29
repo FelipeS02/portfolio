@@ -54,7 +54,7 @@ const Ring: FC<{ children?: ReactNode; className?: string }> = memo(
       <div
         className={cn(
           styles['orbit-ring'],
-          'orbit-ring relative inset-0',
+          'orbit-ring relative inset-0 before:inset-0',
           className,
         )}
       >

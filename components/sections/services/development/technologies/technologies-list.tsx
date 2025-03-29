@@ -19,7 +19,7 @@ const TechnologiesList = () => {
   return (
     <DevelopmentList>
       <span className='sr-only'>Tech stack</span>
-      <DevelopmentListTitle className='flex items-center gap-2'>
+      <DevelopmentListTitle>
         <Boxes /> <span>STACK</span>
       </DevelopmentListTitle>
       <ul>

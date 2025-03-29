@@ -87,7 +87,7 @@ const ThemeSwitch = () => {
   return (
     <label
       htmlFor='theme-toggle'
-      className='group relative flex h-fit w-fit cursor-pointer gap-1.5 rounded-full border border-foreground p-1'
+      className='group border-foreground relative flex h-fit w-fit cursor-pointer gap-1.5 border p-1'
       data-toggled={isDarkModeSelected}
     >
       <span className='sr-only'>Toggle theme</span>
@@ -100,12 +100,12 @@ const ThemeSwitch = () => {
         className='hidden'
       />
       <span
-        className='absolute z-auto aspect-square rounded-full bg-foreground transition-all group-data-[toggled=false]:ml-0 group-data-[toggled=true]:ml-[48%]'
+        className='bg-foreground absolute z-auto aspect-square transition-all group-data-[toggled=false]:ml-0 group-data-[toggled=true]:ml-[48%]'
         style={{ height: ICON_SIZE }}
       />
       <Sun
         size={ICON_SIZE}
-        className='fill-yellow-500 text-yellow-500 dark:drop-shadow-current'
+        className='dark:drop-shadow-current fill-yellow-500 text-yellow-500'
       />
       <Moon
         size={ICON_SIZE}

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 
 import { ChevronRight } from 'lucide-react';
@@ -66,7 +66,7 @@ const ColorPicker: FC<
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <div>
-          <p className='font-semibold leading-none'>CREAR TEMA</p>
+          <p className='font-semibold'>CREAR TEMA</p>
           <div className='inline-flex w-full items-center text-sm font-semibold'>
             <span
               style={{
@@ -84,7 +84,11 @@ const ColorPicker: FC<
             />
           </div>
         </div>
-        <HexColorPicker color={value} onChange={setValue} />
+        <HexColorPicker
+          className='[&_*]:rounded-none'
+          color={value}
+          onChange={setValue}
+        />
         <div className='flex w-full gap-2'>
           <Button
             className='w-full'
@@ -94,14 +98,17 @@ const ColorPicker: FC<
             Cancelar
           </Button>
           <Button
-            className='flex w-full'
+            className='flex w-full bg-(--_new-color) transition-none hover:bg-(--_new-color) hover:contrast-125'
             disabled={value === parsedStoreValue}
             onClick={() => {
               onSubmit(value);
               setOpen(false);
             }}
+            style={{ '--_new-color': value } as CSSProperties}
           >
-            Crear
+            <span className='font-medium text-(--_new-color) invert'>
+              Crear
+            </span>
           </Button>
         </div>
       </PopoverContent>

@@ -79,7 +79,7 @@ const ExperienceSectionRadar: FC<{ className?: string }> = ({ className = '' }) 
   return (
     <div
       className={cn(
-        'pointer-events-none relative aspect-square overflow-hidden rounded-full border-2 border-palette-500',
+        'pointer-events-none relative aspect-square overflow-hidden rounded-full border-2 border-palette-500 before:inset-0 before:animate-radar after:inset-0 after:animate-radar',
         styles.radar,
         className,
       )}

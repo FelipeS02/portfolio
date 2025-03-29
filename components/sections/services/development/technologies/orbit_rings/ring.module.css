@@ -8,7 +8,7 @@
 }
 
 .orbit-ring::before {
-  @apply pointer-events-none absolute inset-0 size-full rounded-full;
+  @apply pointer-events-none absolute size-full rounded-full;
   background: conic-gradient(
       rgba(109, 46, 255, 0) 6.7%,
       hsl(var(--palette-500) / 35%) 20.8%,

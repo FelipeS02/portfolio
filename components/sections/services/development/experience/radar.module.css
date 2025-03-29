@@ -1,12 +1,12 @@
 .radar::before {
-  @apply absolute inset-0 size-full animate-radar;
+  @apply absolute size-full;
   content: '';
   background: conic-gradient(transparent 60%, hsl(var(--palette-500)));
   z-index: 2;
 }
 
 .radar::after {
-  @apply absolute inset-0 h-full origin-center animate-radar place-self-center;
+  @apply absolute h-full origin-center place-self-center;
   content: '';
   width: 3px;
   background: linear-gradient(

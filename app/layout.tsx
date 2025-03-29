@@ -37,7 +37,7 @@ const ppNeueMontreal = localFont({
     },
   ],
   display: 'swap',
-  variable: '--font-ppNeueMontreal',
+  variable: '--font-neue',
 });
 
 const archivo = Archivo({

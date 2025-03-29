@@ -21,8 +21,8 @@ import {
 const Experience = () => {
   return (
     <DevelopmentList className='py-14' id='experience'>
-      <div className='mb-2'>
-        <DevelopmentListTitle className='flex items-center gap-2'>
+      <div className='mb-2 space-y-1'>
+        <DevelopmentListTitle>
           <Earth />
           <span>Experiencia</span>
         </DevelopmentListTitle>
