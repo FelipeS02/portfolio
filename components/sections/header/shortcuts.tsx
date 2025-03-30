@@ -5,8 +5,8 @@ import { memo } from 'react';
 import { Separator } from '@radix-ui/react-separator';
 import { Download } from 'lucide-react';
 
-import { ColorPicker } from '@/components/ui/color-picker';
-import ThemeSwitch from '@/components/ui/theme-switch';
+import { ColorPicker } from '@/components/common/color-picker';
+import ThemeSwitch from '@/components/common/theme-switch';
 
 import { useScheme, useTheme } from '@/hooks/theme';
 
@@ -24,7 +24,7 @@ export const CurriculumShortcut = memo(function CurriculumShortcut() {
 
   return (
     <button
-      className='inline-flex gap-1 text-foreground'
+      className='text-foreground inline-flex gap-1'
       onClick={downloadCurriculum}
     >
       <Download size={22} /> <span className='font-semibold'>CV</span>
@@ -44,7 +44,7 @@ export const ThemePicker = memo(function ThemePicker() {
 
 const ShortcutSeparator = () => (
   <Separator
-    className='h-6 w-[1px] bg-foreground-secondary'
+    className='bg-foreground-secondary h-6 w-[1px]'
     orientation='vertical'
   />
 );
@@ -53,13 +53,13 @@ const HeaderShortcuts = memo(function HeaderShortcuts() {
   return (
     <div className='col-span-1 flex w-fit items-center justify-end gap-3 lg:w-full'>
       <CurriculumShortcut />
-      
+
       <ShortcutSeparator />
 
       <ThemeSwitch />
-      
+
       <ShortcutSeparator />
-      
+
       <ThemePicker />
     </div>
   );

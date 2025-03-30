@@ -24,11 +24,11 @@ const SectionText = memo(function SectionText({
 }) {
   return (
     <SelectableElement
-      className='z-20 flex flex-col gap-2 p-4 uppercase'
+      className='z-20 flex flex-col p-4 uppercase'
       selected={selectedElement === DESIGN_ELEMENTS_IDS.HERO}
       id={DESIGN_ELEMENTS_IDS.HERO}
     >
-      <h4 className='text-5xl font-semibold drop-shadow-md md:text-6xl'>
+      <h4 className='text-5xl font-semibold text-nowrap drop-shadow-md md:text-6xl'>
         Diseño web
       </h4>
       <p className='text-md text-foreground md:max-w-[480px]'>
@@ -60,14 +60,16 @@ const applyStyles = (
 };
 
 const FiguresBoard = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const {
     // Extract palette hex values from the theme
     palette: { hex: pallete },
     fullfiled: isPaletteFullfiled,
-  } = useTheme();
-
-  const [isMounted, setIsMounted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  } = useTheme({
+    onThemeChange: () => (isMounted ? setIsMounted(false) : undefined),
+  });
 
   // Refs to manage DOM elements and GSAP-related data
   const boardRef = useRef<HTMLDivElement>(null);
@@ -248,7 +250,7 @@ const FiguresBoard = () => {
     // Re-enable draggables after animation
     alternateDraggables('enable');
 
-    setIsMounted(true);
+    if (!isMounted) setIsMounted(true);
 
     setIsPlaying(false);
   }, [
@@ -256,10 +258,11 @@ const FiguresBoard = () => {
     alternateDraggables,
     applyNewFigurePatterns,
     cleanExistentTimeline,
+    isMounted,
   ]);
 
   const intervalDelay = useMemo(() => {
-    // If palette is not loaded or animations are playing STOP THE COUNT
+    // If palette is not loaded or animations are playing STOP THE COUNT 🦅🦅🦅
     if (!isPaletteFullfiled || isPlaying) return null;
 
     // On first render

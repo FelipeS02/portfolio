@@ -15,29 +15,29 @@ import { hexIsValid, initialPalette } from '@/lib/theme';
 import { ApiResponse } from '@/models/api';
 import { Theme } from '@/models/theme';
 
-interface ThemeState extends Theme {
+export interface RandomThemeState extends Theme {
   loading: boolean;
   fullfiled: boolean;
 }
+export interface RandomThemeContextState extends RandomThemeState {
+  getNewTheme?: () => Promise<void>;
+  applyPalette?: VoidFunction;
+}
 
-export const themeInitialState: ThemeState = {
+export const themeInitialState: RandomThemeState = {
   hexCode: '',
   palette: initialPalette,
   fullfiled: false,
   loading: false,
 };
 
-export const RandomThemeContext = createContext<
-  ThemeState & {
-    getNewTheme?: () => Promise<void>;
-    applyPalette?: VoidFunction;
-  }
->(themeInitialState);
+export const RandomThemeContext =
+  createContext<RandomThemeContextState>(themeInitialState);
 
 const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
 
-  const [theme, setTheme] = useState<ThemeState>(themeInitialState);
+  const [theme, setTheme] = useState<RandomThemeState>(themeInitialState);
 
   //@region Random theme generation
   const getNewTheme = useCallback(async (color: string = '') => {

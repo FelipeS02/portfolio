@@ -11,7 +11,7 @@ const ArrowButton = <T extends ElementType = 'button'>({
   children,
 
   ...props
-}: ComposedComponent<T> & { asChildren?: boolean }) => {
+}: ComposedComponent<T>) => {
   const Component = as ?? 'button';
 
   return (

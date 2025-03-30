@@ -1,9 +1,9 @@
 import { HTMLAttributes } from 'react';
 import Link from 'next/link';
 
-import { ArrowButton } from '@/components/ui/arrow-button';
-import { Lilab } from '@/components/ui/icons';
-import { ListItem } from '@/components/ui/list-item';
+import { ArrowButton } from '@/components/common/arrow-button';
+import { Lilab } from '@/components/common/icons';
+import { ListItem } from '@/components/common/list-item';
 
 import { cn } from '@/lib/utils';
 
@@ -16,12 +16,12 @@ export const DevelopmentExperienceBadge = ({
 }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'border-b border-palette-600/50 py-1 text-left text-palette-50',
+      'border-palette-600/50 text-palette-50 border-b py-1 text-left',
       className,
     )}
     {...rest}
   >
-    <span className='text-lg font-archivo'>{children}</span>
+    <span className='font-archivo text-lg'>{children}</span>
   </div>
 );
 
@@ -51,7 +51,7 @@ export const DevelopmentExperienceAvailable = () => {
         <h6 className='text-xl font-semibold tracking-wide'>
           En búsqueda de nuevos desafíos
         </h6>
-        <p className='max-w-[400px] text-balance font-light text-palette-50/70'>
+        <p className='text-palette-50/70 max-w-[400px] font-light text-balance'>
           Si creés que mi perfil se alinea con los principios de tu empresa:
         </p>
       </div>
@@ -60,7 +60,7 @@ export const DevelopmentExperienceAvailable = () => {
         as='a'
         href='https://www.linkedin.com/in/felipe-saracho/'
         target='_blank'
-        className='border-palette-600/50 transition-colors hover:border-palette-600'
+        className='border-palette-600/50 hover:border-palette-600 transition-colors'
       >
         Contactame ahora
       </ArrowButton>

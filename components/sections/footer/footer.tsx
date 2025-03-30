@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes } from 'react';
 
-import { ArrowButton } from '@/components/ui/arrow-button';
+import { ArrowButton } from '@/components/common/arrow-button';
 
 import { cn } from '@/lib/utils';
 
@@ -16,7 +16,7 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <footer
       className={cn(
-        'flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111] px-4 text-palette-50',
+        'text-palette-50 flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111] px-4',
         className,
       )}
       id={id}
@@ -30,11 +30,7 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
         >
           Linkedin
         </ArrowButton>
-        <ArrowButton
-          as='a'
-          href='https://github.com/FelipeS02'
-          target='_blank'
-        >
+        <ArrowButton as='a' href='https://github.com/FelipeS02' target='_blank'>
           Github
         </ArrowButton>
       </div>

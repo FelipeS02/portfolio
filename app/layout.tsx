@@ -5,7 +5,7 @@ import localFont from 'next/font/local';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-import LoadingScreen from '@/components/ui/loading-screen/loading_screen';
+import LoadingScreen from '@/components/common/loading-screen/loading-screen';
 import LenisProvider from '@/components/providers/lenis';
 import RandomThemeProvider from '@/components/providers/random-theme';
 import SchemeProvider from '@/components/providers/scheme';
@@ -111,7 +111,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <body
-          className={`${ppNeueMontreal.variable} ${archivo.variable} h-full bg-background font-neue text-foreground antialiased transition-[background-color] duration-300`}
+          className={`${ppNeueMontreal.variable} ${archivo.variable} bg-background font-neue text-foreground h-full antialiased transition-[background-color] duration-300`}
           suppressHydrationWarning
         >
           <SchemeProvider attribute='class' defaultTheme='system' enableSystem>

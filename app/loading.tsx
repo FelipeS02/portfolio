@@ -1,4 +1,4 @@
-import LoadingLines from '@/components/ui/loading-screen/lines';
+import LoadingLines from '@/components/common/loading-screen/lines';
 
 const Loading = () => {
   return <LoadingLines />;

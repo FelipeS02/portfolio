@@ -5,7 +5,7 @@ import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useDebounceValue } from 'usehooks-ts';
 
-import HTMLComment from '@/components/ui/html-comment';
+import HTMLComment from '@/components/common/html-comment';
 import GlobeTexture from '@/public/assets/images/globe.png';
 import GlobeMobileTexture from '@/public/assets/images/globe_mobile.png';
 

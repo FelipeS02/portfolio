@@ -6,9 +6,9 @@ import { Earth } from 'lucide-react';
 import {
   DevelopmentList,
   DevelopmentListTitle,
-} from '@/components/ui/development_list';
-import { Henry } from '@/components/ui/icons';
-import { ListItem } from '@/components/ui/list-item';
+} from '@/components/common/development-list';
+import { Henry } from '@/components/common/icons';
+import { ListItem } from '@/components/common/list-item';
 import ItRockLogo from '@/public/assets/images/it-rock.webp';
 
 import {
@@ -27,7 +27,7 @@ const Experience = () => {
           <span>Experiencia</span>
         </DevelopmentListTitle>
 
-        <p className='max-w-[750px] text-balance font-light uppercase'>
+        <p className='max-w-[750px] font-light text-balance uppercase'>
           Con mas de dos años de experiencia laboral, tuve el privilegio de
           contribuir en todas las etapas de la creación de aplicaciones web
           dinámicas y altamente interactivas.

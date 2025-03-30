@@ -543,13 +543,14 @@ const AnimationsProvider: FC<{ children: ReactNode }> = memo(
         if (!isPaletteFullfiled || !isMounted || (!force && timelineIsMounted))
           return;
 
-        if (!timelineIsMounted) setTimelineIsMounted(true);
-
+        
         setHomeAnimations();
-
+        
         setObjectiveAnimations();
-
+        
         setDevelopmentAnimations();
+        
+        if (!timelineIsMounted) setTimelineIsMounted(true);
       },
       [
         isMounted,

@@ -3,8 +3,8 @@ import { Boxes } from 'lucide-react';
 import {
   DevelopmentList,
   DevelopmentListTitle,
-} from '@/components/ui/development_list';
-import { ListItem } from '@/components/ui/list-item';
+} from '@/components/common/development-list';
+import { ListItem } from '@/components/common/list-item';
 
 const technologies = [
   'NextJS',
@@ -28,7 +28,7 @@ const TechnologiesList = () => {
             <h6>{name}</h6>
           </ListItem>
         ))}
-        
+
         <ListItem className='text-4xl font-medium lg:text-6xl'>
           <h6>Abierto a nuevas tecnologías</h6>
         </ListItem>

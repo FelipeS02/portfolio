@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { SplittedText } from '@/components/ui/splitted-text';
+import { SplittedText } from '@/components/common/splitted-text';
 
 import ClockLines from './clock_lines';
 
@@ -19,7 +19,7 @@ const Objective = memo(function Objective() {
         <ClockLines />
       </div>
       <h3
-        className='w-full max-w-[1400px] max-sm:text-justify text-pretty text-[2rem] font-semibold leading-tight md:text-[2.5rem] lg:text-[3rem] uppercase'
+        className='w-full max-w-[1400px] text-[2rem] leading-tight font-semibold text-pretty uppercase max-sm:text-justify md:text-[2.5rem] lg:text-[3rem]'
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
         data-nosnippet
       >

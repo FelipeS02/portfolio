@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-import { SplittedWord } from '@/components/ui/splitted-text';
+import { SplittedWord } from '@/components/common/splitted-text';
 
 import { useTheme } from '@/hooks/theme';
 import { useMediaQueries } from '@/hooks/use-media-queries';
@@ -83,7 +83,7 @@ const FooterText = () => {
 
   return (
     <div
-      className='first contents whitespace-nowrap text-[16.6dvw] font-black leading-[0.8] md:text-[17.25dvw] lg:text-[11.73dvw]'
+      className='contents text-[16.6dvw] leading-[0.8] font-black whitespace-nowrap md:text-[17.25dvw] lg:text-[11.73dvw]'
       ref={container}
     >
       {!mobile ? (
@@ -95,7 +95,7 @@ const FooterText = () => {
         </SplittedWord>
       ) : (
         // Using simplified element in mobile
-        <SplittedWord className='ml-[-0.05em] select-none font-black'>
+        <SplittedWord className='ml-[-0.05em] font-black select-none'>
           {md ? 'FSARACHO' : 'FELIPESARACHO'}
         </SplittedWord>
       )}

@@ -34,7 +34,7 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
           <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
             SOBRE <br /> MI.
           </h1>
-          <p className='text-lg max-w-md'>
+          <p className=' max-w-md'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
             <span className='font-semibold'>
