@@ -59,6 +59,8 @@ const applyStyles = (
   };
 };
 
+type FiguresElementRef = { container: HTMLElement; figure: HTMLElement };
+
 const FiguresBoard = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -73,7 +75,7 @@ const FiguresBoard = () => {
 
   // Refs to manage DOM elements and GSAP-related data
   const boardRef = useRef<HTMLDivElement>(null);
-  const figureElementsList = useRef<HTMLElement[] | null>(null);
+  const figureElementsList = useRef<FiguresElementRef[] | null>(null);
   const figuresTimeline = useRef<GSAPTimeline | null>(null);
   const draggableElements = useRef<Draggable[] | null>(null);
   // Reference to manage patterns
@@ -97,9 +99,13 @@ const FiguresBoard = () => {
     if (!node) return;
 
     const figures = node.getElementsByClassName('figure-container');
+
     if (!figures) return;
 
-    figureElementsList.current = Array.from(figures) as HTMLElement[]; // Store figure elements in the ref
+    figureElementsList.current = Array.from(figures).map((container) => ({
+      container,
+      figure: container.getElementsByClassName('figure')[0],
+    })) as FiguresElementRef[]; // Store figure elements in the ref
   }, []);
 
   // Initialize GSAP Draggable instances and assign them to elements
@@ -117,18 +123,19 @@ const FiguresBoard = () => {
         onPress: () => handleDraggableSelection(sectionHero.id), // Handle selection on press
       });
 
-      // Create draggable for figure elements
-      draggableList.push(
-        ...Draggable.create(figureElementsList.current, {
+      const figureContainers = figureElementsList.current.map(
+        ({ container }) => container,
+      );
+
+      // Only storing figure elements to disable before animations
+      draggableElements.current = draggableList.concat(
+        Draggable.create(figureContainers, {
           bounds: boardRef.current,
           onPress: function () {
             handleDraggableSelection(this?.target?.id); // Handle selection for this target
           },
         }),
       );
-
-      // Only storing figure elements to disable before animations
-      draggableElements.current = draggableList; // Store draggable instances
     },
     {
       scope: boardRef, // Scope for GSAP hooks
@@ -189,30 +196,25 @@ const FiguresBoard = () => {
         // Initialize new timeline
         const newTimeline = gsap.timeline({
           onComplete: resolve,
+          paused: true,
         });
-        newTimeline.pause();
 
-        figureElementsList.current.forEach((figureContainer, index) => {
-          const figureElement =
-            figureContainer.getElementsByClassName('figure')[0];
-
-          if (!figureElement) throw Error("Figure element doesn't exist");
-
+        figureElementsList.current.forEach(({ container, figure }, index) => {
           const styles = pattern[index];
 
           // Reset styles to avoid conflicts
-          gsap.set(figureContainer, {
+          gsap.set(container, {
             clearProps: 'all',
           });
-          gsap.set(figureElement, {
+          gsap.set(figure, {
             clearProps: 'all',
           });
 
           // Apply animations for container and figure elements
           newTimeline
-            .to(figureContainer, applyStyles(styles?.container, pallete), '<')
+            .to(container, applyStyles(styles?.container, pallete), '<')
             .to(
-              figureElement,
+              figure,
               {
                 ease: 'power4.out',
                 ...applyStyles(styles?.figure ?? backupStyles, pallete),
