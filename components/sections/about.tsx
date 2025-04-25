@@ -9,7 +9,7 @@ export const ABOUT_ELEMENTS_IDS = {
   SECTION: 'about',
   'MOBILE-SECTION': 'about-mobile',
   CONTENT: 'about-content',
-  CONTENT_INNER: "about-content-inner"
+  CONTENT_INNER: 'about-content-inner',
 };
 
 const advice =
@@ -27,14 +27,14 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
         <Image
           src={AboutImage}
           alt='about-image'
-          className='relative col-span-1 h-full select-none object-cover object-center'
+          className='relative col-span-1 h-full object-cover object-center select-none'
           priority
         />
-        <div className='col-span-1 flex flex-col items-start justify-center text-balance p-4'>
-          <h1 className='text-[5rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
+        <div className='col-span-1 flex flex-col items-start justify-center p-4 text-balance'>
+          <h1 className='text-palette-600 dark:text-palette-500 text-[5rem] leading-[0.9] font-bold'>
             SOBRE <br /> MI.
           </h1>
-          <p className=' max-w-md'>
+          <p className='max-w-md'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
             <span className='font-semibold'>
@@ -49,10 +49,10 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
 
   return (
     <div
-      className='after:text-md fixed inset-0 z-10 m-auto h-0 w-full will-change-[height] after:absolute after:right-2 after:mt-2 after:tracking-widest after:text-foreground after:content-["(DESLIZAR)"] max-xl:hidden'
+      className='after:text-md after:text-foreground fixed inset-0 z-10 m-auto h-0 w-full will-change-[height] after:absolute after:right-2 after:mt-2 after:tracking-widest after:content-["(DESLIZAR)"] max-xl:hidden'
       id={ABOUT_ELEMENTS_IDS.WRAPPER}
     >
-      <div className='relative size-full overflow-hidden bg-background'>
+      <div className='bg-background relative size-full overflow-hidden'>
         <div
           className='absolute inset-0 z-10 size-full'
           id={ABOUT_ELEMENTS_IDS.OVERLAY}
@@ -75,13 +75,13 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
             id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
             <div className='p-8' id={ABOUT_ELEMENTS_IDS.CONTENT_INNER}>
-              <h1 className='w-[5em] text-[8rem] font-bold leading-[0.9] text-palette-600 dark:text-palette-500'>
+              <h1 className='text-palette-600 dark:text-palette-500 w-[5em] text-[8rem] leading-[0.9] font-bold'>
                 SOBRE MI.
               </h1>
-              <p className='min-w-[250px] max-w-[500px] text-xl'>
+              <p className='max-w-[500px] min-w-[250px] text-xl'>
                 Soy Felipe, desarrollador Full-Stack especializado en Front-end
                 actualmente viviendo en{' '}
-                <span className='font-semibold'>
+                <span className='overflow-visible font-semibold'>
                   Buenos Aires, <span className='text-[#75AADB]'>Arg</span>
                   <span className='text-[#FCBF49]'>en</span>
                   <span className='text-[#75AADB]'>tina</span>

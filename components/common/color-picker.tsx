@@ -17,7 +17,12 @@ import {
 
 import { cn } from '@/lib/utils';
 
-import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHandle,
+  DrawerTrigger,
+} from '../ui/drawer';
 
 interface ColorPickerProps {
   value: string;
@@ -122,7 +127,7 @@ const ColorPicker: FC<
 
   if (isMobile) {
     return (
-      <Drawer direction='top' onOpenChange={setOpen} open={open}>
+      <Drawer direction='top' onOpenChange={setOpen} open={open} handleOnly>
         <DrawerTrigger asChild disabled={disabled} onBlur={onBlur}>
           {TriggerButton}
         </DrawerTrigger>
@@ -131,6 +136,7 @@ const ColorPicker: FC<
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {Content}
+          <DrawerHandle />
         </DrawerContent>
       </Drawer>
     );
