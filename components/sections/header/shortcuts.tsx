@@ -16,8 +16,8 @@ export const CurriculumShortcut = memo(function CurriculumShortcut() {
   const downloadCurriculum = () => {
     const linkByTheme =
       resolvedTheme === 'light'
-        ? 'https://drive.usercontent.google.com/u/0/uc?id=1_glfRxF4rrnhHw0Z3OoI54hlFRyileP9&export=download'
-        : 'https://drive.usercontent.google.com/u/0/uc?id=1H-BTlm4q-rFgyXAUcrGj3PqP8WjhxWVi&export=download';
+        ? 'https://drive.usercontent.google.com/u/0/uc?id=15z8MV-2nIxN6VSaaEHhCcHxh4S8p2FFa&export=download'
+        : 'https://drive.usercontent.google.com/u/0/uc?id=1KtKDoKszOEXYhxbz_FaB_x4gUha5KEqU&export=download';
 
     window.open(linkByTheme, '_blank');
   };
