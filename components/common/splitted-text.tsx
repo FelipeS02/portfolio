@@ -1,4 +1,4 @@
-import { FC, Fragment, HTMLAttributes } from 'react';
+import { forwardRef, Fragment, HTMLAttributes } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -10,60 +10,59 @@ export type SplittedWordProps = Omit<
   className?: string;
 };
 
-export const SplittedWord: FC<SplittedWordProps> = ({
-  children: word,
-  className = '',
-  ...rest
-}) => {
-  if (!word) return null;
+export const SplittedWord = forwardRef<HTMLSpanElement, SplittedWordProps>(
+  ({ children: word, className = '', ...rest }, ref) => {
+    if (!word) return null;
 
-  const splittedWord = word.split('');
+    const splittedWord = word.split('');
 
-  return (
-    <span
-      className={cn(
-        'word mb-[-0.1em] inline-block origin-bottom overflow-hidden pb-[0.1em] text-inherit',
-        className,
-      )}
-      data-word={word}
-      aria-label={word}
-      suppressHydrationWarning
-      {...rest}
-    >
-      {splittedWord.map((char, index) => (
-        <span
-          className='char inline-block'
-          data-char={char}
-          key={`${word}-${index}`}
-          suppressHydrationWarning
-        >
-          {char}
-        </span>
-      ))}
-    </span>
-  );
-};
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          'word mb-[-0.1em] inline-block origin-bottom overflow-hidden pb-[0.1em] text-inherit',
+          className,
+        )}
+        data-word={word}
+        aria-label={word}
+        suppressHydrationWarning
+        {...rest}
+      >
+        {splittedWord.map((char, index) => (
+          <span
+            className='char inline-block'
+            data-char={char}
+            key={`${word}-${index}`}
+            suppressHydrationWarning
+          >
+            {char}
+          </span>
+        ))}
+      </span>
+    );
+  },
+);
 
-export const SplittedText: FC<SplittedWordProps> = ({
-  children: text,
-  className = '',
-  ...rest
-}) => {
-  if (!text) return null;
+SplittedWord.displayName = 'SplittedWord';
 
-  const splittedText = text.split(' ');
+export const SplittedText = forwardRef<HTMLSpanElement, SplittedWordProps>(
+  ({ children: text, className = '', ...rest }, ref) => {
+    if (!text) return null;
 
-  return (
-    <>
-      {splittedText.map((word, index) => (
-        <Fragment key={`${word}-splitted-${index}`}>
-          <SplittedWord className={className} {...rest}>
-            {word}
-          </SplittedWord>
-          {/* Add space between words */}
-          {index < splittedText.length - 1 && ' '}
-        </Fragment>
-      ))}
-    </>
-  );
-};
+    const splittedText = text.split(' ');
+
+    return (
+      <span ref={ref} className={className} {...rest}>
+        {splittedText.map((word, index) => (
+          <Fragment key={`${word}-splitted-${index}`}>
+            <SplittedWord>{word}</SplittedWord>
+            {/* Add space between words */}
+            {index < splittedText.length - 1 && ' '}
+          </Fragment>
+        ))}
+      </span>
+    );
+  },
+);
+
+SplittedText.displayName = 'SplittedText';

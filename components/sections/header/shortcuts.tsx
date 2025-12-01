@@ -2,22 +2,20 @@
 
 import { memo } from 'react';
 
-import { Separator } from '@radix-ui/react-separator';
 import { Download } from 'lucide-react';
 
+import { Separator } from '@/components/ui/separator';
 import { ColorPicker } from '@/components/common/color-picker';
 import ThemeSwitch from '@/components/common/theme-switch';
 
+import { ENV } from '@/lib/env';
 import { useScheme, useTheme } from '@/hooks/theme';
 
 export const CurriculumShortcut = memo(function CurriculumShortcut() {
   const { resolvedTheme } = useScheme();
 
   const downloadCurriculum = () => {
-    const linkByTheme =
-      resolvedTheme === 'light'
-        ? 'https://drive.usercontent.google.com/u/0/uc?id=15z8MV-2nIxN6VSaaEHhCcHxh4S8p2FFa&export=download'
-        : 'https://drive.usercontent.google.com/u/0/uc?id=1KtKDoKszOEXYhxbz_FaB_x4gUha5KEqU&export=download';
+    const linkByTheme = resolvedTheme === 'light' ? ENV.CV_LIGHT : ENV.CV_DARK;
 
     window.open(linkByTheme, '_blank');
   };

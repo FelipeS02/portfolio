@@ -16,15 +16,17 @@ export function useTheme({
   const currentHex = useRef<string>('');
   const context = useContext(RandomThemeContext);
 
+  const cb = useRef<useThemeProps['onThemeChange'] | undefined>(onThemeChange);
+
   if (!context)
     throw Error('useTheme must be wrapped inside RandomThemeContext');
 
   useEffect(() => {
-    if (currentHex.current !== context.hexCode) {
-      onThemeChange(context.hexCode);
-      currentHex.current = context.hexCode;
-    }
-  }, [context.hexCode, onThemeChange]);
+    const colorHasChanged = currentHex.current !== context.hexCode;
+    if (!colorHasChanged) return;
+    cb.current?.(context.hexCode);
+    currentHex.current = context.hexCode;
+  }, [context.hexCode]);
 
   return context;
 }
