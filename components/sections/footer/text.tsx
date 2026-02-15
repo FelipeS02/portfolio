@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import FullWidthText from '@/components/common/full-width-text';
 import { SplittedWord } from '@/components/common/splitted-text';
 
+import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/theme';
 import { useMediaQueries } from '@/hooks/use-media-queries';
 
@@ -83,21 +84,11 @@ const FooterText = () => {
   );
 
   return (
-    <div className='leading-[0.8] font-black -mr-3' ref={container}>
-      <FullWidthText container={container}>
-        {!mobile ? (
-          <SplittedWord
-            className={`relative z-[2] ml-[-0.05em] select-none ${styles.stroke}`}
-            id='text'
-          >
-            {md ? 'FSARACHO' : 'FELIPESARACHO'}
-          </SplittedWord>
-        ) : (
-          // Using simplified element in mobile
-          <SplittedWord className='ml-[-0.05em] font-black select-none'>
-            {md ? 'FSARACHO' : 'FELIPESARACHO'}
-          </SplittedWord>
-        )}
+    <div className='contents w-full leading-[0.8] font-black' ref={container}>
+      <FullWidthText className='ml-[-0.05em]'>
+        <SplittedWord className={cn(styles.stroke, 'select-none')}>
+          {md ? 'FSARACHO' : 'FELIPESARACHO'}
+        </SplittedWord>
       </FullWidthText>
     </div>
   );

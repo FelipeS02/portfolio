@@ -125,7 +125,7 @@ const LoadingScreen = () => {
     if (isThemeReloading) onLoading();
   }, [isThemeReloading, onLoading]);
 
-  const loadElements = useCallback((node: HTMLDivElement) => {
+  const loadElements = (node: HTMLDivElement) => {
     if (!node) return;
 
     container.current = node;
@@ -138,7 +138,7 @@ const LoadingScreen = () => {
     if (newLines.length === 0) return;
 
     loadingLines.current = newLines;
-  }, []);
+  };
 
   return <LoadingLines ref={loadElements} />;
 };

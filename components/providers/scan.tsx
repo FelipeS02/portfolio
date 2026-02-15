@@ -2,8 +2,8 @@
 
 // eslint-disable-next-line 'simple-import-sort/imports'
 import { scan } from 'react-scan';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect } from 'react';
+
+import { useEffect } from 'react';
 
 type Options = Parameters<typeof scan>[0];
 

@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
 import localFont from 'next/font/local';
+import { cookies } from 'next/headers';
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import LoadingScreen from '@/components/common/loading-screen/loading-screen';
+import { EngineProvider } from '@/components/providers/engine';
 import LenisProvider from '@/components/providers/lenis';
 import RandomThemeProvider from '@/components/providers/random-theme';
 import SchemeProvider from '@/components/providers/scheme';
@@ -96,11 +98,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const engine = (cookieStore.get('engine')?.value as any) ?? 'unknown';
+
   return (
     <LenisProvider>
       {/* <ScanProvider /> */}
@@ -110,17 +115,26 @@ export default function RootLayout({
         className='notranslate size-screen'
         suppressHydrationWarning
       >
+        <head>
+          <link rel='icon' id='favicon-link'/>
+        </head>
         <body
           className={`${ppNeueMontreal.variable} ${archivo.variable} bg-background font-neue text-foreground h-full antialiased transition-[background-color] duration-300`}
           suppressHydrationWarning
         >
-          <SchemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <RandomThemeProvider>
-              <LoadingScreen />
+          <EngineProvider engine={engine}>
+            <SchemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+            >
+              <RandomThemeProvider>
+                <LoadingScreen />
 
-              {children}
-            </RandomThemeProvider>
-          </SchemeProvider>
+                {children}
+              </RandomThemeProvider>
+            </SchemeProvider>
+          </EngineProvider>
           <Analytics />
           <SpeedInsights />
         </body>

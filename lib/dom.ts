@@ -64,3 +64,20 @@ export function isFirefoxAgent(): boolean {
     Boolean(navigator.userAgent) && navigator.userAgent.indexOf('Firefox') > -1
   );
 }
+
+export const updateFavicon = (color: string) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = 32; // Common favicon size
+  canvas.height = 32;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) throw new Error('Context not found');
+
+  // Create a colored square (or draw a shape/logo if desired)
+  ctx.fillStyle = `#${color}`;
+  ctx.fillRect(0, 0, 32, 32);
+
+  // Convert canvas to a data URL and update the favicon link
+  const link = document.getElementById('favicon-link') as HTMLLinkElement;
+  if (link && link instanceof HTMLLinkElement) link.href = canvas.toDataURL('image/png');
+};
