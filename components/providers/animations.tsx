@@ -527,7 +527,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
   // Initial animations load
   useEffect(() => {
     loadAnimations();
-  }, [loadAnimations, elementsAreMounted]);
+  }, [loadAnimations]);
 
   // Reload on resize
   const debouncedLoad = useDebounceCallback(() => {
