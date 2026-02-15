@@ -27,7 +27,7 @@ export const RingItem = ({
   return (
     <div
       className={cn(
-        'border-palette-800 from-palette-800 to-palette-900 absolute flex aspect-square items-center justify-center rounded-full border',
+        'border-palette-800 from-palette-800 to-palette-900 absolute flex aspect-square items-center justify-center rounded-full border p-3',
         stylesByPosition[position],
         className,
       )}
@@ -38,7 +38,7 @@ export const RingItem = ({
         strokeWidth={0.25}
         key={iconKey}
         className={cn(
-          'fill-palette-100 text-palette-100 size-2/3',
+          'fill-palette-100 text-palette-100 size-full',
           iconClassName,
         )}
         absoluteStrokeWidth
