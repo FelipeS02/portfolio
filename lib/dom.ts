@@ -79,5 +79,35 @@ export const updateFavicon = (color: string) => {
 
   // Convert canvas to a data URL and update the favicon link
   const link = document.getElementById('favicon-link') as HTMLLinkElement;
-  if (link && link instanceof HTMLLinkElement) link.href = canvas.toDataURL('image/png');
+  if (link && link instanceof HTMLLinkElement)
+    link.href = canvas.toDataURL('image/png');
 };
+
+/**
+ * Returns an optimal pixel ratio for rendering based on device capabilities.
+ * @param scale - Extra multiplier on top of the device pixel ratio (default: 1)
+ * @param max - Maximum pixel ratio cap (default: 3)
+ */
+export function getOptimalPixelRatio(scale = 1, max = 3): number {
+  const dpr = window.devicePixelRatio ?? 1;
+
+  const cores = navigator.hardwareConcurrency ?? 4;
+  const memory = (navigator as Navigator & { deviceMemory?: number })
+    .deviceMemory;
+  const isMobile = mediaQueryMatches('(max-width: 768px)');
+
+  let tier: number;
+
+  if (isMobile || cores <= 2 || (memory !== undefined && memory <= 2)) {
+    // Low-end: cap at 1x DPR, ignore extra scale
+    tier = 1;
+  } else if (cores <= 4 || (memory !== undefined && memory <= 4)) {
+    // Mid-range: apply half the requested scale
+    tier = dpr * (1 + (scale - 1) * 0.5);
+  } else {
+    // High-end: apply full scale
+    tier = dpr * scale;
+  }
+
+  return Math.min(tier, max);
+}

@@ -28,7 +28,7 @@ const Experience = () => {
         </DevelopmentListTitle>
 
         <p className='max-w-[750px] font-light text-balance uppercase'>
-          Con mas de dos años de experiencia laboral, tuve el privilegio de
+          Con mas de tres años de experiencia laboral, tuve el privilegio de
           contribuir en todas las etapas de la creación de aplicaciones web
           dinámicas y altamente interactivas.
         </p>
@@ -50,7 +50,7 @@ const Experience = () => {
           </Link>
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Desarrollador Frontend
+              Desarrollador Frontend SSR.
             </DevelopmentExperienceBadge>
             <DevelopmentExperienceBadge>Mar. 2025</DevelopmentExperienceBadge>
           </DevelopmentExperienceInfo>
@@ -71,7 +71,7 @@ const Experience = () => {
           <DevelopmentExperienceLilabIcon />
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Desarrollador Frontend Jr. / Diseñador
+              Desarrollador Frontend JR. / Diseñador
             </DevelopmentExperienceBadge>
             <DevelopmentExperienceBadge>
               Nov. 2021 - Mar. 2023

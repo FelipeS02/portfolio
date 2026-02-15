@@ -31,7 +31,7 @@ const Development = () => {
 
       <div
         id={DEVELOPMENT_ELEMENTS_IDS.CONTENT}
-        className='text-palette-50 relative z-10'
+        className='text-palette-50 relative z-10 backdrop-blur-[2px]'
       >
         <div
           className='border-palette-600 relative flex w-full items-center justify-between border-t-2 px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20'

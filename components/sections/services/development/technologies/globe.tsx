@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useEffectEvent,
-  useRef,
-  useState,
-} from 'react';
+import { FC, memo, useEffect, useEffectEvent, useRef } from 'react';
 
 import * as THREE from 'three';
 import { useDebounceValue } from 'usehooks-ts';
@@ -17,39 +9,23 @@ import HTMLComment from '@/components/common/html-comment';
 import GlobeTexture from '@/public/assets/images/globe.png';
 import GlobeMobileTexture from '@/public/assets/images/globe_mobile.png';
 
-import { mediaQueryMatches } from '@/lib/dom';
+import { getOptimalPixelRatio, mediaQueryMatches } from '@/lib/dom';
 import { cn } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
-type GlobeUtils = {
+type GlobeRefs = {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
-  globe: THREE.Mesh;
-};
-
-type RenderParams = {
-  renderer: THREE.WebGLRenderer | null;
-  scene: THREE.Scene | null;
-  camera: THREE.PerspectiveCamera | null;
-  globe: THREE.Mesh | null;
-  rendered: boolean;
-  renderedPalette: string;
-};
-
-const renderParamsInitialState: RenderParams = {
-  renderer: null,
-  camera: null,
-  globe: null,
-  scene: null,
-  rendered: false,
-  renderedPalette: '',
+  globe: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+  animationFrameId: number;
 };
 
 const Globe: FC<{ className?: string }> = memo(function Globe({
   className = '',
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const globeRef = useRef<GlobeRefs | null>(null);
 
   const { resolvedTheme } = useScheme();
 
@@ -62,161 +38,153 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   const [debouncedPaletteColor] = useDebounceValue(hexCode, 2000);
   const [debouncedScheme] = useDebounceValue(resolvedTheme, 500);
 
-  // Current state of render
-  const [{ renderedPalette, rendered, renderer }, setRenderParams] =
-    useState<RenderParams>(renderParamsInitialState);
+  // Stable event handler that always reads the latest palette without being a dependency
+  const applyGlobeColor = useEffectEvent(() => {
+    const refs = globeRef.current;
+    if (!refs || !paletteIsFullfiled) return;
 
-  const setGlobeColor = useCallback(
-    (renderer: RenderParams['renderer']) => {
-      if (!renderer || !paletteIsFullfiled) return;
+    refs.renderer.setClearColor(palette[100], 1);
+  });
 
-      renderer.setClearColor(palette[100], 0.9);
-    },
-    [palette, paletteIsFullfiled],
-  );
-
-  // DOM and renderer cleanup
-  const cleanup = useCallback(() => {
-    if (!containerRef.current || !renderer) return;
-
-    const container = containerRef?.current;
-
-    renderer?.dispose();
-
-    setRenderParams(renderParamsInitialState);
-
-    container.removeChild(renderer.domElement);
-  }, [renderer]);
-
+  // Main initialization effect — runs once when palette is ready
   useEffect(() => {
-    if (rendered || !containerRef?.current || !paletteIsFullfiled) return;
+    if (!containerRef.current || !paletteIsFullfiled) return;
 
-    const renderScene = async (): Promise<GlobeUtils | void> => {
+    const container = containerRef.current;
+    let cancelled = false;
+
+    const renderScene = async () => {
       try {
-        const container = containerRef.current;
+        const props = await new Promise<Omit<GlobeRefs, 'animationFrameId'>>(
+          (resolve, reject) => {
+            try {
+              const renderer = new THREE.WebGLRenderer({
+                antialias: true,
+              });
 
-        if (!container) return;
+              const scene = new THREE.Scene();
 
-        const props = await new Promise<GlobeUtils>((resolve, reject) => {
-          try {
-            // #region Initialize ThreeJs utils
+              const camera = new THREE.PerspectiveCamera(73, 1, 0.1, 1000);
+              camera.position.z = 165;
 
-            // Create the WebGL renderer with transparency (alpha: true)
-            const renderer = new THREE.WebGLRenderer({
-              alpha: true,
-              antialias: true,
-            });
+              const material = new THREE.MeshBasicMaterial({
+                transparent: true,
+              });
+              const geometry = new THREE.SphereGeometry(100, 32, 16);
+              const globe = new THREE.Mesh(geometry, material);
 
-            // Initialize the Three.js scene
-            const scene = new THREE.Scene();
+              const textureLoader = new THREE.TextureLoader();
 
-            // Configure the camera with a perspective projection
-            const camera = new THREE.PerspectiveCamera(73, 1, 0.1, 1000);
-            camera.position.z = 165; // Adjust the z-position for the desired view
+              renderer.setPixelRatio(getOptimalPixelRatio(2));
 
-            const material = new THREE.MeshBasicMaterial({ transparent: true });
+              const isMobile = mediaQueryMatches('(max-width: 768px)');
 
-            // Initialize the sphere globe
-            const geometry = new THREE.SphereGeometry(100, 32, 16);
-            const globe = new THREE.Mesh(geometry, material);
+              textureLoader.load(
+                !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
+                (texture) => {
+                  // Bail out if component unmounted during load
+                  if (cancelled) {
+                    renderer.dispose();
+                    geometry.dispose();
+                    material.dispose();
+                    texture.dispose();
+                    return;
+                  }
 
-            const textureLoader = new THREE.TextureLoader();
-            // #endregion
+                  if (!isMobile) {
+                    texture.anisotropy =
+                      renderer.capabilities.getMaxAnisotropy();
+                    texture.generateMipmaps = false;
+                    texture.minFilter = THREE.LinearFilter;
+                    texture.magFilter = THREE.LinearFilter;
+                    material.blending = THREE.SubtractiveBlending;
+                  }
 
-            // Ensure smooth rendering on high-DPI screens
-            renderer.setPixelRatio(window.devicePixelRatio);
+                  material.map = texture;
+                  material.needsUpdate = true;
 
-            setGlobeColor(renderer);
+                  scene.add(globe);
 
-            container.appendChild(renderer.domElement);
+                  resolve({ renderer, scene, camera, globe });
+                },
+                undefined,
+                (error) => {
+                  renderer.dispose();
+                  geometry.dispose();
+                  material.dispose();
+                  reject(error);
+                },
+              );
+            } catch (error) {
+              reject(error);
+            }
+          },
+        );
 
-            scene.add(globe);
+        if (cancelled) {
+          props.renderer.dispose();
+          return;
+        }
 
-            const isMobile = mediaQueryMatches('(max-width: 768px)');
+        container.appendChild(props.renderer.domElement);
 
-            // Load and apply the texture to the globe
-            textureLoader.load(
-              // Get smaller texture source to smaller devices
-              !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
-              (texture) => {
-                // Desktop tweaks
-                if (!isMobile) {
-                  // Set texture properties for improved rendering
-                  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        // Apply initial color
+        applyGlobeColor();
 
-                  // Disable mipmaps for sharper look at the cost of performance
-                  texture.generateMipmaps = false;
-                  texture.minFilter = THREE.LinearFilter;
-                  texture.magFilter = THREE.LinearFilter;
+        // Size renderer to container
+        const width = container.offsetWidth;
+        const height = container.offsetHeight;
+        props.renderer.setSize(width, height);
+        props.camera.aspect = width / height;
+        props.camera.updateProjectionMatrix();
 
-                  globe.material.blending = THREE.SubtractiveBlending;
-                }
-
-                globe.material.map = texture;
-
-                globe.material.needsUpdate = true;
-
-                resolve({ renderer, scene, camera, globe });
-              },
-              undefined,
-              (error) => console.error('Failed to load texture:', error),
-            );
-          } catch (error) {
-            reject(error);
-          }
-        });
-
-        // Resize renderer and update camera aspect ratio
-        const resizeRenderer = () => {
-          const width = container.offsetWidth;
-          const height = container.offsetHeight;
-          props.renderer.setSize(width, height);
-          props.camera.aspect = width / height;
-          props.camera.updateProjectionMatrix();
-        };
-
-        // Initialize renderer size on mount
-        resizeRenderer();
-
-        // Animation loop
+        // Animation loop with cancellation
         const animate = () => {
-          props.globe.rotation.y += 0.002; // Control rotation speed
+          props.globe.rotation.y += 0.002;
           props.renderer.render(props.scene, props.camera);
-          requestAnimationFrame(animate);
+          const id = requestAnimationFrame(animate);
+          if (globeRef.current) globeRef.current.animationFrameId = id;
         };
 
-        animate();
+        const firstFrameId = requestAnimationFrame(animate);
 
-        // Store globe construction params
-        setRenderParams({
-          ...props,
-          rendered: true,
-          renderedPalette: hexCode,
-        });
-
-        return props;
+        globeRef.current = { ...props, animationFrameId: firstFrameId };
       } catch (error) {
-        console.error(error);
+        console.error('Globe render error:', error);
       }
     };
 
     renderScene();
 
-    return () => cleanup();
-  }, [cleanup, hexCode, paletteIsFullfiled, rendered, setGlobeColor]);
+    return () => {
+      cancelled = true;
 
-  // Re render management
+      const refs = globeRef.current;
+      if (!refs) return;
+
+      cancelAnimationFrame(refs.animationFrameId);
+
+      // Dispose GPU resources
+      const material = refs.globe.material;
+      material.map?.dispose();
+      material.dispose();
+      refs.globe.geometry.dispose();
+      refs.renderer.dispose();
+
+      // Remove canvas from DOM
+      if (container.contains(refs.renderer.domElement)) {
+        container.removeChild(refs.renderer.domElement);
+      }
+
+      globeRef.current = null;
+    };
+  }, [paletteIsFullfiled]);
+
+  // Re-apply color when palette/scheme changes
   useEffect(() => {
-    const hasToReRender = renderer && renderedPalette !== debouncedPaletteColor;
-
-    if (hasToReRender) setGlobeColor(renderer);
-  }, [
-    renderedPalette,
-    debouncedPaletteColor,
-    debouncedScheme,
-    renderer,
-    setGlobeColor,
-  ]);
+    if (!globeRef.current) return;
+    applyGlobeColor();
+  }, [debouncedPaletteColor, debouncedScheme]);
 
   return (
     <>
@@ -225,7 +193,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
         ref={containerRef}
         id='globe'
         className={cn(
-          'aspect-square size-full rounded-full [&_canvas]:size-full',
+          'aspect-square size-full overflow-hidden rounded-full [&_canvas]:size-full',
           className,
         )}
       ></div>

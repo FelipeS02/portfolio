@@ -62,8 +62,6 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
         fullfiled: true,
       }));
 
-      console.log(newTheme.hexCode)
-
       updateFavicon(newTheme.hexCode);
     } catch (e) {
       console.log(e);

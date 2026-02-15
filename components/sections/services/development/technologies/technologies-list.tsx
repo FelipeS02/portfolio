@@ -7,11 +7,10 @@ import {
 import { ListItem } from '@/components/common/list-item';
 
 const technologies = [
-  'NextJS',
+  'NextJS | Astro',
   'Typescript',
-  'GSAP',
-  'Framer Motion',
-  'Redux / Zustand',
+  'GSAP | Framer',
+  'Redux | Zustand',
   'TailwindCSS',
 ];
 
@@ -29,8 +28,9 @@ const TechnologiesList = () => {
           </ListItem>
         ))}
 
-        <ListItem className='text-4xl font-medium lg:text-6xl'>
-          <h6>Abierto a nuevas tecnologías</h6>
+        <ListItem className='relative text-4xl font-medium lg:text-6xl overflow-x-visible'>
+          <h6 className='z-2'>Abierto a nuevas tecnologías</h6>
+         
         </ListItem>
       </ul>
     </DevelopmentList>
