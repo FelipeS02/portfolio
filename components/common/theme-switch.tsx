@@ -79,6 +79,7 @@ const ThemeSwitch = () => {
 
   // Ensure this only runs in the client
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -105,7 +106,7 @@ const ThemeSwitch = () => {
       />
       <Sun
         size={ICON_SIZE}
-        className='dark:drop-shadow-current fill-yellow-500 text-yellow-500'
+        className='fill-yellow-500 text-yellow-500 dark:drop-shadow-current'
       />
       <Moon
         size={ICON_SIZE}

@@ -47,10 +47,6 @@ const ColorPicker: FC<
   const [value, setValue] = useState(parsedStoreValue || '#FFFFFF');
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    setValue(parsedStoreValue);
-  }, [open, parsedStoreValue]);
-
   const TriggerButton = (
     <Button
       className={cn('block', className)}

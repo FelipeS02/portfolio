@@ -4,13 +4,12 @@ import {
   createContext,
   FC,
   ReactNode,
-  useCallback,
   useEffect,
-  useMemo,
+  useRef,
   useState,
 } from 'react';
 
-import { applyPaletteIntoCSS } from '@/lib/dom';
+import { applyPaletteIntoCSS, updateFavicon } from '@/lib/dom';
 import { hexIsValid, initialPalette } from '@/lib/theme';
 import { ApiResponse } from '@/models/api';
 import { Theme } from '@/models/theme';
@@ -40,7 +39,7 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<RandomThemeState>(themeInitialState);
 
   //@region Random theme generation
-  const getNewTheme = useCallback(async (color: string = '') => {
+  const getNewTheme = useRef(async (color: string = '') => {
     try {
       if (color && !hexIsValid(color)) throw Error('Hex color is invalid');
 
@@ -62,32 +61,34 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
         ...newTheme,
         fullfiled: true,
       }));
+
+      console.log(newTheme.hexCode)
+
+      updateFavicon(newTheme.hexCode);
     } catch (e) {
       console.log(e);
     } finally {
       setTheme((prev) => ({ ...prev, loading: false, fullfiled: true }));
     }
-  }, []);
+  });
 
   // Manually apply the theme into CSS variables
-  const applyPalette = useCallback(() => {
+  const applyPalette = () => {
     applyPaletteIntoCSS(theme.palette.hsl);
-  }, [theme]);
+    updateFavicon(theme.hexCode);
+  };
 
   // Initial theme loading
   useEffect(() => {
     if (!mounted) return setMounted(true);
 
-    getNewTheme();
+    getNewTheme.current();
   }, [mounted, getNewTheme]);
 
-  const memoizedValue = useMemo(
-    () => ({ ...theme, getNewTheme, applyPalette }),
-    [getNewTheme, theme, applyPalette],
-  );
-
   return (
-    <RandomThemeContext.Provider value={memoizedValue}>
+    <RandomThemeContext.Provider
+      value={{ ...theme, getNewTheme: getNewTheme.current, applyPalette }}
+    >
       {children}
     </RandomThemeContext.Provider>
   );

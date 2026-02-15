@@ -1,60 +1,49 @@
 'use client';
 
-import React, { RefObject, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffectEvent, useLayoutEffect, useRef } from 'react';
+import { ReactFitty } from 'react-fitty';
 
 import { Slot } from '@radix-ui/react-slot';
 
-export default function FullWidthText({
-  children,
-  container: containerRef,
-}: {
-  children: React.ReactNode;
-  container: RefObject<HTMLElement>;
-}) {
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const [fontSize, setFontSize] = useState(100);
+// export default function FullWidthText({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   // const textRef = useRef<HTMLParagraphElement>(null);
 
-  useLayoutEffect(() => {
-    if (!containerRef.current || !textRef.current) return;
+//   // const fitTextToContainer = useEffectEvent(() => {
+//   //   const element = textRef.current;
+//   //   const parent = element?.parentElement;
 
-    const container = containerRef.current;
-    const text = textRef.current;
+//   //   if (!element || !parent) return;
 
-    const resizeObserver = new ResizeObserver(() => adjustSize());
-    resizeObserver.observe(container);
+//   //   const parentWidth = parent?.clientWidth;
+//   //   // restablece transform para medición limpia
+//   //   element.style.transform = 'scaleX(1)';
+//   //   const textWidth = element.scrollWidth;
 
-    function adjustSize() {
-      const containerWidth = container.offsetWidth;
-      if (!containerWidth) return;
+//   //   const scale = parentWidth / textWidth;
+//   //   console.log(scale);
 
-      let low = 5;
-      let high = 500;
-      let best = low;
+//   //   if (scale > 1) {
+//   //     element.style.transform = `scale(${scale})`;
+//   //   } else {
+//   //     element.style.transform = 'scale(1)';
+//   //   }
+//   // });
 
-      // Búsqueda binaria para optimizar al máximo
-      while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        text.style.fontSize = mid + 'px';
-        const textWidth = text.scrollWidth;
+//   // useLayoutEffect(() => {
+//   //   window.addEventListener('resize', fitTextToContainer);
 
-        if (textWidth <= containerWidth) {
-          best = mid;
-          low = mid + 1;
-        } else {
-          high = mid - 1;
-        }
-      }
+//   //   fitTextToContainer();
 
-      setFontSize(best);
-    }
+//   //   return () => {
+//   //     window.removeEventListener('resize', fitTextToContainer);
+//   //   };
+//   // }, [children]);
 
-    adjustSize();
-    return () => resizeObserver.disconnect();
-  }, [children, containerRef]);
+//   return <ReactFitty>{children}</ReactFitty>;
+// }
 
-  return (
-    <Slot ref={textRef} style={{ fontSize }} className='whitespace-nowrap'>
-      {children}
-    </Slot>
-  );
-}
+export default ReactFitty;

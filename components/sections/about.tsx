@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import Image from 'next/image';
 
 import AboutImage from '@/public/assets/images/about-image.webp';
@@ -15,9 +15,7 @@ export const ABOUT_ELEMENTS_IDS = {
 const advice =
   'after:absolute after:left-1 after:top-1 after:font-medium after:text-white after:opacity-40 after:content-["REFERENCIA"] relative';
 
-const About: FC<{ mobile?: boolean }> = memo(function About({
-  mobile = false,
-}) {
+const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
   if (mobile)
     return (
       <section
@@ -93,6 +91,6 @@ const About: FC<{ mobile?: boolean }> = memo(function About({
       </div>
     </div>
   );
-});
+};
 
 export default About;

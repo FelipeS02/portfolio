@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
@@ -17,11 +17,7 @@ import { DESIGN_ELEMENTS_IDS } from '../design';
 import Figures from './figures';
 import SelectableElement from './selectable-element';
 
-const SectionText = memo(function SectionText({
-  selectedElement,
-}: {
-  selectedElement?: string;
-}) {
+const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
   return (
     <SelectableElement
       className='z-20 flex flex-col p-4 uppercase'
@@ -37,7 +33,7 @@ const SectionText = memo(function SectionText({
       </p>
     </SelectableElement>
   );
-});
+};
 
 // Utility function to get a palette value based on a shade
 const getPaletteValue = (palette: Palette['hex'], value?: PaletteShade) => {
@@ -89,13 +85,13 @@ const FiguresBoard = () => {
   const [selectedElement, setSelectedElement] = useState<string>('');
 
   // Handle selection of draggable elements by their ID
-  const handleDraggableSelection = useCallback((elementId: string) => {
+  const handleDraggableSelection = (elementId: string) => {
     if (!elementId) throw Error('Element id not defined'); // Ensure the element ID is valid
     setSelectedElement(elementId); // Update the selected element state
-  }, []);
+  };
 
   // Load figure elements from a given node reference
-  const loadFiguresRef = useCallback((node: HTMLDivElement) => {
+  const loadFiguresRef = (node: HTMLDivElement) => {
     if (!node) return;
 
     const figures = node.getElementsByClassName('figure-container');
@@ -106,7 +102,7 @@ const FiguresBoard = () => {
       container,
       figure: container.getElementsByClassName('figure')[0],
     })) as FiguresElementRef[]; // Store figure elements in the ref
-  }, []);
+  };
 
   // Initialize GSAP Draggable instances and assign them to elements
   useGSAP(
@@ -143,16 +139,16 @@ const FiguresBoard = () => {
   );
 
   // Enable or disable draggable elements
-  const alternateDraggables = useCallback((action: 'disable' | 'enable') => {
+  const alternateDraggables = (action: 'disable' | 'enable') => {
     if (!['disable', 'enable'].includes(action)) {
       throw Error('New state must be enable or disable'); // Validate the action
     }
 
     draggableElements.current?.forEach((draggable) => draggable[action]()); // Apply the action to each draggable
-  }, []);
+  };
 
   // Get a random pattern and remove it from the patterns list
-  const getRandomPattern = useCallback(() => {
+  const getRandomPattern = () => {
     // Reset pattenrs list when all patterns are used
     if (patternsRef.current.length === 0) patternsRef.current = figuresPatterns;
 
@@ -166,10 +162,10 @@ const FiguresBoard = () => {
     );
 
     return randomPositions;
-  }, []);
+  };
 
   // Reverse previous animations if any
-  const cleanExistentTimeline = useCallback(async (timeline: GSAPTimeline) => {
+  const cleanExistentTimeline = async (timeline: GSAPTimeline) => {
     // Clear transform from draggable if exists
     await new Promise<void>((resolve) => {
       gsap.to(figureElementsList.current, {
@@ -182,58 +178,55 @@ const FiguresBoard = () => {
     timeline.reverse(); // Reverse the timeline
     await timeout(timeline.duration() * 2000);
     timeline.kill(); // Kill the timeline to reset
-  }, []);
+  };
 
-  const applyNewFigurePatterns = useCallback(
-    async (pattern: FiguresPatterns[]) => {
-      if (!pattern) throw Error('Pattern is not defined');
+  const applyNewFigurePatterns = async (pattern: FiguresPatterns[]) => {
+    if (!pattern) throw Error('Pattern is not defined');
 
-      // Animate elements to new positions based on random pattern
-      await new Promise<void>((resolve) => {
-        if (!figureElementsList.current)
-          throw Error('Figures ref are not defined');
+    // Animate elements to new positions based on random pattern
+    await new Promise<void>((resolve) => {
+      if (!figureElementsList.current)
+        throw Error('Figures ref are not defined');
 
-        // Initialize new timeline
-        const newTimeline = gsap.timeline({
-          onComplete: resolve,
-          paused: true,
-        });
-
-        figureElementsList.current.forEach(({ container, figure }, index) => {
-          const styles = pattern[index];
-
-          // Reset styles to avoid conflicts
-          gsap.set(container, {
-            clearProps: 'all',
-          });
-          gsap.set(figure, {
-            clearProps: 'all',
-          });
-
-          // Apply animations for container and figure elements
-          newTimeline
-            .to(container, applyStyles(styles?.container, pallete), '<')
-            .to(
-              figure,
-              {
-                ease: 'power4.out',
-                ...applyStyles(styles?.figure ?? backupStyles, pallete),
-              },
-              '<',
-            );
-        });
-
-        // Store the new timeline
-        figuresTimeline.current = newTimeline;
-        // Play to sincronize all changes
-        newTimeline.play();
+      // Initialize new timeline
+      const newTimeline = gsap.timeline({
+        onComplete: resolve,
+        paused: true,
       });
-    },
-    [pallete],
-  );
+
+      figureElementsList.current.forEach(({ container, figure }, index) => {
+        const styles = pattern[index];
+
+        // Reset styles to avoid conflicts
+        gsap.set(container, {
+          clearProps: 'all',
+        });
+        gsap.set(figure, {
+          clearProps: 'all',
+        });
+
+        // Apply animations for container and figure elements
+        newTimeline
+          .to(container, applyStyles(styles?.container, pallete), '<')
+          .to(
+            figure,
+            {
+              ease: 'power4.out',
+              ...applyStyles(styles?.figure ?? backupStyles, pallete),
+            },
+            '<',
+          );
+      });
+
+      // Store the new timeline
+      figuresTimeline.current = newTimeline;
+      // Play to sincronize all changes
+      newTimeline.play();
+    });
+  };
 
   // Set random positions and styles for figure elements
-  const setElementsRandomPosition = useCallback(async () => {
+  const setElementsRandomPosition = async () => {
     if (!figureElementsList.current || !boardRef.current) return;
 
     // Pause interval replay until animations finish
@@ -255,13 +248,7 @@ const FiguresBoard = () => {
     if (!isMounted) setIsMounted(true);
 
     setIsPlaying(false);
-  }, [
-    getRandomPattern,
-    alternateDraggables,
-    applyNewFigurePatterns,
-    cleanExistentTimeline,
-    isMounted,
-  ]);
+  };
 
   const intervalDelay = useMemo(() => {
     // If palette is not loaded or animations are playing STOP THE COUNT 🦅🦅🦅

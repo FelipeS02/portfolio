@@ -1,8 +1,6 @@
-import { memo } from 'react';
-
 import { SplittedWord } from '@/components/common/splitted-text';
 
-const HeroSection = memo(function HeroSection() {
+const HeroSection = () => {
   return (
     <div className='hero-container flex w-full flex-col gap-1 select-none'>
       <h4 className='text-md after:contents-["-"] after:animate-blink after:border-palette-700 after:dark:border-palette-600 after:ml-2 after:h-4 after:border lg:text-xl'>
@@ -18,6 +16,6 @@ const HeroSection = memo(function HeroSection() {
       </h1>
     </div>
   );
-});
+};
 
 export default HeroSection;

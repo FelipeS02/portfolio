@@ -18,31 +18,31 @@ const Development = () => {
 
     <span className='-ml-[0.05em]' key='development-section-2'>
       Desarrollo.Web{' '}
-      <span className='tracking-widest text-palette-600'>()</span>
+      <span className='text-palette-600 tracking-widest'>()</span>
     </span>,
   ];
 
   return (
     <section
-      className='size-screen relative bg-palette-950'
+      className='size-screen bg-palette-950 relative'
       id={DEVELOPMENT_ELEMENTS_IDS.SECTION}
     >
       <TechnologiesRings />
 
       <div
         id={DEVELOPMENT_ELEMENTS_IDS.CONTENT}
-        className='relative z-10 text-palette-50'
+        className='text-palette-50 relative z-10'
       >
         <div
-          className='relative flex w-full items-center justify-between border-t-2 border-palette-600 px-4 pb-12 pt-8 lg:px-14 lg:pb-20 lg:pt-10'
+          className='border-palette-600 relative flex w-full items-center justify-between border-t-2 px-4 pt-8 pb-12 lg:px-14 lg:pt-10 lg:pb-20'
           id={DEVELOPMENT_ELEMENTS_IDS.HERO}
         >
           <div className='flex flex-col gap-1.5'>
-            <h4 className='after:contents-["-"] text-4xl font-semibold after:ml-1 after:animate-blink after:border-2 after:border-palette-600 md:text-6xl md:after:ml-4 md:after:border-2 normal-case'>
+            <h4 className='after:contents-["-"] after:animate-blink after:border-palette-600 text-4xl font-semibold normal-case after:ml-1 after:border-2 md:text-6xl md:after:ml-4 md:after:border-2'>
               {texts[Math.floor(Math.random() * texts.length)]}
             </h4>
 
-            <p className='max-w-[500px] text-balance text-lg uppercase'>
+            <p className='max-w-[500px] text-lg text-balance uppercase'>
               Elaboracion a medida de aplicaciones web utilizando las ultimas
               tecnologias.
             </p>

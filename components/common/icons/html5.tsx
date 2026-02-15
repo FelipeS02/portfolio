@@ -1,8 +1,17 @@
 import { createLucideIcon } from 'lucide-react';
 
 export const Html5 = createLucideIcon('Html5', [
-  ['path', { d: 'M4.6043 20.0068 3 2h17.6373l-1.6042 17.9971L11.8041 22' }],
-  ['path', { d: 'M11.8184 20.4688V3.478h7.2095l-1.3758 15.3622' }],
+  [
+    'path',
+    {
+      d: 'M4.6043 20.0068 3 2h17.6373l-1.6042 17.9971L11.8041 22',
+      key: 'html5-0',
+    },
+  ],
+  [
+    'path',
+    { d: 'M11.8184 20.4688V3.478h7.2095l-1.3758 15.3622', key: 'html5-1' },
+  ],
   [
     'path',
     {
@@ -10,6 +19,7 @@ export const Html5 = createLucideIcon('Html5', [
       className: 'fill-palette-900',
       opacity: '0.8',
       id: 'letter',
+      key: 'html5-2',
     },
   ],
   [
@@ -18,6 +28,7 @@ export const Html5 = createLucideIcon('Html5', [
       d: 'M17.3409 5.6802h-5.5323v2.207h5.3281m-.1993 2.2606h-5.1288v2.2071h2.7224l-.2577 2.8683-2.4647.6612v2.2946l4.5211-1.2543',
       className: 'fill-palette-950',
       id: 'letter',
+      key: 'html5-3',
     },
   ],
 ]);

@@ -1,55 +1,21 @@
-import { FC, memo, ReactNode } from 'react';
+'use client';
 
-import { LucideIcon, LucideProps } from 'lucide-react';
+import { FC, ReactNode } from 'react';
+
+import { useEngine } from '@/components/providers/engine';
 
 import { cn } from '@/lib/utils';
 
 import styles from './ring.module.css';
 
-export const RingItem = ({
-  Icon,
-  position = 'left',
-  className = '',
-  iconClassName = '',
-  ...iconProps
-}: {
-  position?: 'left' | 'right' | 'top' | 'bottom';
+const Ring: FC<{
+  children?: ReactNode;
   className?: string;
-  iconClassName?: string;
-  Icon: LucideIcon;
-} & LucideProps) => {
-  const stylesByPosition: Record<typeof position, string> = {
-    right: 'top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r',
-    left: 'top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-l',
-    bottom:
-      'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-gradient-to-b',
-    top: 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-t',
-  };
+}> = ({ children, className = '' }) => {
+  const engine = useEngine();
 
-  return (
-    <div
-      className={cn(
-        'absolute flex aspect-square items-center justify-center rounded-full border border-palette-800 from-palette-800 to-palette-900 p-3',
-        stylesByPosition[position],
-        className,
-      )}
-    >
-      <Icon
-        size={24}
-        strokeWidth={0.25}
-        className={cn(
-          'size-full fill-palette-100 text-palette-100',
-          iconClassName,
-        )}
-        absoluteStrokeWidth
-        {...iconProps}
-      />
-    </div>
-  );
-};
-
-const Ring: FC<{ children?: ReactNode; className?: string }> = memo(
-  function Ring({ children, className = '' }) {
+  // Render masked div in safari to prevent engine overload
+  if (engine === 'webkit' || engine === 'unknown') {
     return (
       <div
         className={cn(
@@ -61,7 +27,29 @@ const Ring: FC<{ children?: ReactNode; className?: string }> = memo(
         {children}
       </div>
     );
-  },
-);
+  }
+
+  return (
+    <div
+      className={cn(
+        'orbit-ring pointer-events-none relative flex aspect-square w-full rounded-full',
+        className,
+      )}
+    >
+      <svg viewBox='0 0 100 100' className='absolute inset-0 h-full w-full'>
+        <circle
+          cx='50'
+          cy='50'
+          r='49.5'
+          fill='none'
+          stroke='url(#ring-gradient)'
+          strokeWidth='0.15'
+        />
+      </svg>
+
+      {children}
+    </div>
+  );
+};
 
 export default Ring;
