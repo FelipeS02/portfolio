@@ -336,7 +336,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
           .timeline({
             scrollTrigger: {
               trigger: content,
-              start: 'start center',
+              start: 'top center',
               end: () => `+=${content.offsetHeight * 0.2}`,
               scrub: true,
             },
