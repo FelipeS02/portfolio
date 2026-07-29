@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -115,15 +115,24 @@ const LoadingScreen = () => {
     );
   });
 
-  useEffect(() => {
-    if (!loadingLines?.current || !container?.current) return;
+  // Depend on the loading state only: onLoaded/onLoading come from contextSafe(),
+  // which returns a new function every render, so using them as dependencies
+  // would re-run these on every render and keep stacking tweens onto tl.current
+  useGSAP(
+    () => {
+      if (!loadingLines.current || !container.current) return;
 
-    if (!isThemeLoading) return onLoaded();
-  }, [onLoaded, isThemeLoading]);
+      if (!isThemeLoading) onLoaded();
+    },
+    { dependencies: [isThemeLoading], scope: container },
+  );
 
-  useEffect(() => {
-    if (isThemeReloading) onLoading();
-  }, [isThemeReloading, onLoading]);
+  useGSAP(
+    () => {
+      if (isThemeReloading) onLoading();
+    },
+    { dependencies: [isThemeReloading], scope: container },
+  );
 
   const loadElements = (node: HTMLDivElement) => {
     if (!node) return;

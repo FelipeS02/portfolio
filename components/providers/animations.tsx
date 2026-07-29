@@ -388,7 +388,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div ref={containerRef} aria-hidden className='content'>
+    <div ref={containerRef} className='content'>
       {children}
     </div>
   );
