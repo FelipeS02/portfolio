@@ -29,9 +29,9 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
           priority
         />
         <div className='col-span-1 flex flex-col items-start justify-center p-4 text-balance'>
-          <h1 className='text-palette-600 dark:text-palette-500 text-[5rem] leading-[0.9] font-bold'>
+          <h2 className='text-palette-600 dark:text-palette-500 text-[5rem] leading-[0.9] font-bold'>
             SOBRE <br /> MI.
-          </h1>
+          </h2>
           <p className='max-w-md'>
             Soy Felipe, desarrollador Full-Stack especializado en Front-end
             actualmente viviendo en{' '}
@@ -73,9 +73,9 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
             id={ABOUT_ELEMENTS_IDS.CONTENT}
           >
             <div className='p-8' id={ABOUT_ELEMENTS_IDS.CONTENT_INNER}>
-              <h1 className='text-palette-600 dark:text-palette-500 w-[5em] text-[8rem] leading-[0.9] font-bold'>
+              <h2 className='text-palette-600 dark:text-palette-500 w-[5em] text-[8rem] leading-[0.9] font-bold'>
                 SOBRE MI.
-              </h1>
+              </h2>
               <p className='max-w-[500px] min-w-[250px] text-xl'>
                 Soy Felipe, desarrollador Full-Stack especializado en Front-end
                 actualmente viviendo en{' '}
