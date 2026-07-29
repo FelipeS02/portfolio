@@ -43,6 +43,9 @@ export function getRelativeXY(container: HTMLElement, target: HTMLElement) {
   return { x, y, targetRect };
 }
 
+// Devices where *any* available input is touch-like (finger, stylus)
+export const COARSE_POINTER_QUERY = '(any-pointer: coarse)';
+
 export function mediaQueryMatches(query: string) {
   if (typeof window === 'undefined' || !query) return false;
 

@@ -3,13 +3,11 @@ import * as Icons from '@/components/common/icons';
 import Globe from './globe';
 import Ring from './orbit_rings/ring';
 import { RingItem, RingsCircleGradient } from './orbit_rings/ring-parts';
+import OrbitInteractions from './orbit-interactions';
 
 const TechnologiesRings = () => {
   return (
-    <div
-      className='sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden'
-      id='planet-orbit'
-    >
+    <OrbitInteractions>
       <div
         className='absolute flex aspect-square h-full will-change-[transform,opacity] lg:h-fit lg:w-full'
         id='rings-container'
@@ -104,7 +102,7 @@ const TechnologiesRings = () => {
       </div>
 
       <Globe className='shadow-globe absolute m-auto max-w-full place-self-center overflow-hidden will-change-transform' />
-    </div>
+    </OrbitInteractions>
   );
 };
 

@@ -7,7 +7,7 @@ import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
 import { useDebounceCallback, useMediaQuery } from 'usehooks-ts';
 
-import { mediaQueryMatches } from '@/lib/dom';
+import { COARSE_POINTER_QUERY, mediaQueryMatches } from '@/lib/dom';
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
@@ -53,8 +53,6 @@ type ElementDictionary = {
     hero: HTMLElement;
     globe: HTMLElement;
     ringsContainer: HTMLElement;
-    planetOrbit: HTMLElement;
-    rings: HTMLElement[];
     experience: HTMLElement;
   };
 
@@ -65,7 +63,6 @@ const query = {
   sm: '(max-width: 768px)',
   maxLg: '(max-width: 1280px)',
   lg: '(min-width: 1280px)',
-  mobile: '(any-point: coerse)',
 };
 
 function AnimationsProvider({ children }: { children: ReactNode }) {
@@ -79,9 +76,8 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isMobileDevice = useMediaQuery(query.mobile, {
+  const isTouchDevice = useMediaQuery(COARSE_POINTER_QUERY, {
     initializeWithValue: false,
-    defaultValue: undefined,
   });
 
   const masterTimeline = useRef<GSAPTimeline>(gsap.timeline({ paused: true }));
@@ -153,8 +149,6 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
           hero: developmentSelector(`#${DEVELOPMENT_ELEMENTS_IDS.HERO}`)[0],
           globe: developmentSelector('#globe')[0],
           ringsContainer: developmentSelector('#rings-container')[0],
-          planetOrbit: developmentSelector('#planet-orbit')[0],
-          rings: developmentSelector('.orbit-ring'),
           experience: developmentSelector('#experience')[0],
         },
 
@@ -543,7 +537,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
       const width = window.innerWidth;
 
       // In phone devices, rebuild only when width changes
-      if (width !== prevWidth || !isMobileDevice) {
+      if (width !== prevWidth || !isTouchDevice) {
         prevWidth = width;
         debouncedLoad();
       }
@@ -554,128 +548,13 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
     return () => {
       window.removeEventListener('resize', onResize);
     };
-  }, [debouncedLoad, isMobileDevice]);
+  }, [debouncedLoad, isTouchDevice]);
 
   // Update only pallete-dependent tweens on scheme or pallete change
   useEffect(() => {
     getAboutTransitions();
     getObjectiveTransitions();
   }, [getAboutTransitions, getObjectiveTransitions]);
-
-  // Development section elements pointer interaction
-  useGSAP(
-    (_, contextSafe) => {
-      if (!contextSafe || !elementsAreMounted || isMobileDevice === undefined)
-        return;
-
-      const { development } = elementsRef.current as ElementDictionary;
-
-      const { rings, globe, ringsContainer, section } = development;
-
-      // Opacity and padding settings
-      rings.forEach((ring, index) => {
-        const opacity = Math.max(0, 80 + index * 2);
-        const paddingValue = Math.max(0, 10 - index * 0.25);
-
-        gsap.set(ring, {
-          padding: `${paddingValue}%`,
-          opacity: `${opacity}%`,
-        });
-      });
-
-      const containerRing = rings.at(-5) as HTMLElement;
-
-      // Globe Resize Handler
-      const resizeGlobe = contextSafe(() => {
-        // Ring visual position
-
-        if (!containerRing) return;
-
-        gsap.set(globe, {
-          width: `${containerRing.offsetWidth}px`,
-          height: `${containerRing.offsetHeight}px`,
-        });
-
-        gsap.set(globe.getElementsByTagName('canvas'), {
-          width: `${containerRing.offsetWidth}px`,
-          height: `${containerRing.offsetHeight}px`,
-        });
-      });
-
-      resizeGlobe();
-      window.addEventListener('resize', resizeGlobe);
-
-      // Parallax Effect Handlers
-      const handleMouseParallax = contextSafe((event: MouseEvent) => {
-        const baseDeltaX = event.clientX - window.innerWidth / 2;
-        const baseDeltaY = event.clientY - window.innerHeight / 2;
-
-        const getDeltaValues = (multiplicator: number) => ({
-          x: baseDeltaX * multiplicator,
-          y: baseDeltaY * multiplicator,
-        });
-
-        gsap.to(rings, { ...getDeltaValues(0.009), duration: 0.75 });
-        gsap.to(globe, { ...getDeltaValues(0.05), duration: 0.75 });
-      });
-
-      const restoreElementsPosition = contextSafe(() => {
-        gsap.to(rings, {
-          x: 0,
-          y: 0,
-          duration: 1,
-          ease: 'back.out',
-        });
-        gsap.to(globe, {
-          x: 0,
-          y: 0,
-          duration: 1,
-          ease: 'back.out',
-        });
-      });
-
-      const ringsRotation = gsap.to(ringsContainer, {
-        rotation: 360,
-        duration: 60,
-        transformOrigin: 'center center',
-        repeat: -1,
-        ease: 'linear',
-      });
-
-      // Disable animations when development section is not in viewport
-      const observer = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) {
-          ringsRotation.pause();
-          document.removeEventListener('mousemove', handleMouseParallax);
-          document.removeEventListener('mouseleave', restoreElementsPosition);
-
-          return;
-        }
-
-        if (!isMobileDevice) {
-          document.addEventListener('mousemove', handleMouseParallax);
-          document.addEventListener('mouseleave', restoreElementsPosition);
-        }
-
-        ringsRotation.play();
-      });
-
-      observer.observe(section);
-
-      // Cleanup Function
-      return () => {
-        window.removeEventListener('resize', resizeGlobe);
-
-        // observer.unobserve(section);
-
-        if (!isMobileDevice) {
-          document.removeEventListener('mousemove', handleMouseParallax);
-          document.removeEventListener('mouseleave', restoreElementsPosition);
-        }
-      };
-    },
-    { dependencies: [isMobileDevice, elementsAreMounted], scope: containerRef },
-  );
 
   return (
     <div ref={containerRef} aria-hidden className='content'>
