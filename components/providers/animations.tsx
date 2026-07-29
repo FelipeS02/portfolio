@@ -1,13 +1,11 @@
 'use client';
 
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useRef } from 'react';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
-import { useDebounceCallback, useMediaQuery } from 'usehooks-ts';
 
-import { COARSE_POINTER_QUERY, mediaQueryMatches } from '@/lib/dom';
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
@@ -59,34 +57,25 @@ type ElementDictionary = {
   footer: HTMLElement;
 };
 
-const query = {
-  sm: '(max-width: 768px)',
-  maxLg: '(max-width: 1280px)',
-  lg: '(min-width: 1280px)',
+const breakpoints = {
+  isSm: '(max-width: 768px)',
+  isMaxLg: '(max-width: 1280px)',
+  isLg: '(min-width: 1280px)',
 };
+
+type Breakpoints = Record<keyof typeof breakpoints, boolean>;
 
 function AnimationsProvider({ children }: { children: ReactNode }) {
   const { resolvedTheme } = useScheme();
   const {
     palette: { hex: palette },
+    hexCode,
     fullfiled: isPaletteFullfiled,
   } = useTheme();
 
-  const elementsRef = useRef<ElementDictionary | null>(null);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isTouchDevice = useMediaQuery(COARSE_POINTER_QUERY, {
-    initializeWithValue: false,
-  });
-
-  const masterTimeline = useRef<GSAPTimeline>(gsap.timeline({ paused: true }));
-
-  const [elementsAreMounted, setElementsAreMounted] = useState(false);
-
-  const [timelineIsMounted, setTimelineIsMounted] = useState(false);
-
-  const { contextSafe, context } = useGSAP(
+  useGSAP(
     () => {
       const objectiveText = document.getElementById(
         OBJECTIVE_ELEMENTS_IDS.TEXT,
@@ -112,7 +101,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
         },
 
         about: {
-          wrapper: document.getElementById(ABOUT_ELEMENTS_IDS.WRAPPER),
+          wrapper: aboutWrapper,
           overlay: aboutSelector(`#${ABOUT_ELEMENTS_IDS.OVERLAY}`)[0],
           section: aboutSelector(`#${ABOUT_ELEMENTS_IDS.SECTION}`)[0],
           mobileSection: document.getElementById(
@@ -165,396 +154,238 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
       )
         throw Error('Some element not exists');
 
-      elementsRef.current = e;
+      // Colors come from the theme API, so there is nothing to paint until it lands
+      if (!isPaletteFullfiled) return;
 
-      setElementsAreMounted(true);
-    },
-    { scope: containerRef },
-  );
+      const mm = gsap.matchMedia();
 
-  const clearTimeline = () => context.revert();
+      // matchMedia reverts everything a handler created once its query stops
+      // matching, so each breakpoint only has to describe its own setup
+      mm.add(breakpoints, (context) => {
+        const { isSm, isMaxLg, isLg } = context.conditions as Breakpoints;
 
-  // #region Build pallete/scheme dependant animations safely (without re-initializing timeline)
-  const getAboutTransitions = contextSafe((timeline?: GSAPTimeline) => {
-    const aboutBorderByTheme =
-      resolvedTheme === 'dark' ? palette[500] : palette[600];
+        const { home, about: a, objective: o, design: d, development } = e;
 
-    const { about: a } = elementsRef.current as ElementDictionary;
+        // #region About
+        if (!isSm && isMaxLg)
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: a.mobileSection,
+                end: () => `+=${a.mobileSection.offsetHeight * 0.5}`,
+                start: 'bottom bottom',
+                scrub: true,
+                pin: true,
+              },
+            })
+            .to(a.mobileSection, { opacity: 0 });
 
-    const tl = timeline ?? masterTimeline.current.getById('about-transition');
+        if (isLg) {
+          const borderColor =
+            resolvedTheme === 'dark' ? palette[500] : palette[600];
 
-    if (!tl) return;
-
-    gsap.set(a.wrapper, {
-      height: 0,
-      placeSelf: 'center',
-      borderColor: aboutBorderByTheme,
-      borderTop: 1,
-      borderBottom: 1,
-      // overwrite: true,
-    });
-
-    (tl as GSAPTimeline).add(
-      gsap.to(a.wrapper, {
-        height: '100%',
-        borderColor: `${aboutBorderByTheme}00`,
-        overwrite: true,
-      }),
-      'border-transition',
-    );
-  });
-
-  const getObjectiveTransitions = contextSafe((timeline?: GSAPTimeline) => {
-    const { objective: o } = elementsRef.current as ElementDictionary;
-
-    const tl =
-      timeline ?? masterTimeline.current.getById('objective-transition');
-
-    if (!tl) return;
-
-    gsap.set(o.words, {
-      backgroundColor: 'transparent',
-      transitionProperty: 'background-color, color',
-      transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
-      transitionDuration: '150ms',
-      color: 'inherit',
-      // Word spacing to make better highlight
-      margin: '0 -0.1em',
-      padding: '0 0.1em',
-    });
-
-    (tl as GSAPTimeline).add(
-      gsap.timeline({
-        onReverseComplete: () => {
-          const transitionProps = {
-            opacity: 0,
-            duration: 0.35,
-            ease: 'back.out',
-          };
-
-          gsap.to(o.clockLines[0], {
-            yPercent: -100,
-            ...transitionProps,
-          });
-          gsap.to(o.clockLines[1], {
-            yPercent: 100,
-            ...transitionProps,
+          gsap.set(a.overlay, { background: '#000000', opacity: 1 });
+          gsap.set(a.section, { scale: 0.75 });
+          gsap.set(a.content, { width: 0 });
+          gsap.set(a.wrapper, {
+            height: 0,
+            placeSelf: 'center',
+            borderColor,
+            borderTop: 1,
+            borderBottom: 1,
           });
 
-          gsap.set(o.words, {
-            color: 'inherit',
-            backgroundColor: 'transparent',
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: home.section,
+                start: 'top top',
+                end: () => `${home.section.offsetHeight * 2}`,
+                scrub: true,
+                pin: true,
+              },
+            })
+            .to(a.wrapper, {
+              height: '100%',
+              borderColor: `${borderColor}00`,
+            })
+            .to(a.overlay, { opacity: 0 }, '<')
+            .to(a.section, { scale: 1 }, '<')
+            .to(a.content, {
+              width: Math.max(
+                a.wrapper.clientWidth * 0.4,
+                a.contentInner.clientWidth,
+              ),
+            })
+            .to(a.section, { opacity: 0 });
+        }
+        // #endregion
+
+        // #region Objective
+        if (!isSm) {
+          gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
+          gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
+
+          // Margin applied to make pin (objectiveSection) section overflow animation possible
+          gsap.set(d.wrapper, {
+            marginBottom: `-${d.wrapper.clientHeight}px`,
+            yPercent: -50,
           });
-        },
-        onComplete: () => {
-          gsap.to(o.clockLines, {
-            opacity: 1,
-            yPercent: 0,
-            ease: 'expo.out',
-            duration: 0.35,
-          });
+        }
 
-          gsap.set(o.words, {
-            color: palette[50],
-            backgroundColor: palette[700],
-          });
-        },
+        gsap.set(o.chars, { opacity: 0 });
 
-        overwrite: true,
-      }),
-      'words-transition-=1',
-    );
-  });
-
-  // #endregion
-
-  const setHomeAnimations = contextSafe(() => {
-    const { about: a, home } = elementsRef.current as ElementDictionary;
-
-    if (mediaQueryMatches(query.sm)) {
-      gsap.set([a.wrapper, a.overlay, a.section, a.content], {
-        clearProps: 'all ',
-      });
-
-      return;
-    }
-
-    if (mediaQueryMatches(query.maxLg)) {
-      masterTimeline.current.add(
-        gsap
-          .timeline({
-            id: 'about-transition-mobile',
-            scrollTrigger: {
-              trigger: a.mobileSection,
-              end: () => `+=${a.mobileSection.offsetHeight * 0.5}`,
-              start: 'bottom bottom',
-              scrub: true,
-              pin: true,
-            },
-          })
-          .to(a.mobileSection, {
-            opacity: 0,
-          }),
-      );
-    }
-
-    if (mediaQueryMatches(query.lg)) {
-      gsap.set(a.overlay, {
-        background: '#000000',
-        opacity: 1,
-      });
-
-      gsap.set(a.section, {
-        scale: 0.75,
-      });
-
-      gsap.set(a.content, {
-        width: 0,
-      });
-
-      const aboutTransition = gsap
-        .timeline({
-          id: 'about-transition',
-          scrollTrigger: {
-            trigger: home.section,
-            start: 'top top',
-            end: () => `${home.section.offsetHeight * 2}`,
-            scrub: true,
-            pin: true,
-          },
-        })
-        .add('border-transition')
-        .to(
-          a.overlay,
-          {
-            opacity: 0,
-          },
-          '<',
-        )
-        .to(
-          a.section,
-          {
-            scale: 1,
-          },
-          '<',
-        )
-        .to(a.content, {
-          width: Math.max(
-            a.wrapper.clientWidth * 0.4,
-            a.contentInner.clientWidth,
-          ),
-        })
-        .to(a.section, {
-          opacity: 0,
+        gsap.set(o.words, {
+          backgroundColor: 'transparent',
+          transitionProperty: 'background-color, color',
+          transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+          transitionDuration: '150ms',
+          color: 'inherit',
+          // Word spacing to make better highlight
+          margin: '0 -0.1em',
+          padding: '0 0.1em',
         });
 
-      getAboutTransitions(aboutTransition);
+        const objectiveTimeline = gsap
+          .timeline({
+            scrollTrigger: isSm
+              ? {
+                  trigger: o.section,
+                  start: 'top center',
+                  end: 'bottom bottom',
+                  scrub: true,
+                }
+              : {
+                  trigger: o.section,
+                  start: 'center center',
+                  end: () => `+=${o.section.offsetHeight * 3}`,
+                  scrub: true,
+                  pin: true,
+                },
+          })
+          .to(o.chars, {
+            opacity: 1,
+            ease: 'circ.inOut',
+            stagger: 0.07,
+            duration: 3,
+            delay: 2,
+          })
+          .add('words-transition')
+          .add(
+            gsap.timeline({
+              onReverseComplete: () => {
+                const transitionProps = {
+                  opacity: 0,
+                  duration: 0.35,
+                  ease: 'back.out',
+                };
 
-      masterTimeline.current.add(aboutTransition);
-    }
-  });
+                gsap.to(o.clockLines[0], {
+                  yPercent: -100,
+                  ...transitionProps,
+                });
+                gsap.to(o.clockLines[1], {
+                  yPercent: 100,
+                  ...transitionProps,
+                });
 
-  const setObjectiveAnimations = contextSafe(() => {
-    const { objective: o, design: d } =
-      elementsRef.current as ElementDictionary;
+                gsap.set(o.words, {
+                  color: 'inherit',
+                  backgroundColor: 'transparent',
+                });
+              },
+              onComplete: () => {
+                gsap.to(o.clockLines, {
+                  opacity: 1,
+                  yPercent: 0,
+                  ease: 'expo.out',
+                  duration: 0.35,
+                });
 
-    const sm = mediaQueryMatches(query.sm);
+                gsap.set(o.words, {
+                  color: palette[50],
+                  backgroundColor: palette[700],
+                });
+              },
+            }),
+            'words-transition-=1',
+          );
 
-    if (!sm) {
-      gsap.set(o.clockLines[0], { yPercent: -100, opacity: 0 });
-      gsap.set(o.clockLines[1], { yPercent: 100, opacity: 0 });
+        if (!isSm)
+          objectiveTimeline
+            .to(
+              o.section,
+              { opacity: 0.4, duration: 6, scale: 0.95 },
+              '>+2',
+            )
+            .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5');
+        // #endregion
 
-      // Margin applied to make pin (objectiveSection) section overflow animation possible
-      gsap.set(d.wrapper, {
-        marginBottom: `-${d.wrapper.clientHeight}px`,
-        yPercent: -50,
+        // #region Development
+        const { content, hero, ringsContainer, globe, experience } =
+          development;
+
+        const bg = '#111111';
+
+        gsap.set(content, {
+          marginTop: `-${hero.clientHeight * 0.7}px`,
+          backgroundColor: `${bg}40`,
+        });
+
+        const developmentTimeline = gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: content,
+              start: 'start center',
+              end: () => `+=${content.offsetHeight * 0.2}`,
+              scrub: true,
+            },
+          })
+          .to(globe, { scale: 1.5, ease: 'power1.inOut' })
+          .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<')
+          .to(content, { backgroundColor: `${bg}95` }, '<');
+
+        if (isLg)
+          developmentTimeline.to(
+            ringsContainer,
+            { scale: 2, translateZ: 0, opacity: 0.2, ease: 'power1.inOut' },
+            '<',
+          );
+
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: experience,
+              start: isSm ? 'top bottom' : 'top bottom+=500',
+              endTrigger: e.footer,
+              end: 'bottom bottom',
+              scrub: true,
+            },
+          })
+          .to(globe, {
+            yPercent: isSm ? 250 : 150,
+            scale: 2.5,
+            duration: 10,
+          })
+          .to(content, { opacity: 0, duration: 1, ease: 'power4.inOut' }, '>');
+        // #endregion
       });
-    }
 
-    gsap.set(o.chars, {
-      opacity: 0,
-    });
-
-    const getScrollTriggerByDevice = () => {
-      if (sm)
-        return {
-          trigger: o.section,
-          start: 'top center',
-          end: 'bottom bottom',
-          scrub: true,
-        };
-
-      return {
-        trigger: o.section,
-        start: 'center center',
-        end: () => `+=${o.section.offsetHeight * 3}`,
-        scrub: true,
-        pin: true,
-      };
-    };
-
-    const objectiveTimeline = gsap
-      .timeline({
-        id: 'objective-transition',
-        scrollTrigger: getScrollTriggerByDevice(),
-      })
-      .to(o.chars, {
-        opacity: 1,
-        ease: 'circ.inOut',
-        stagger: 0.07,
-        duration: 3,
-        delay: 2,
-      })
-      .add('words-transition');
-
-    getObjectiveTransitions(objectiveTimeline);
-
-    if (!sm) {
-      objectiveTimeline
-        .to(
-          o.section,
-          {
-            opacity: 0.4,
-            duration: 6,
-            scale: 0.95,
-          },
-          '>+2',
-        )
-        .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5');
-    }
-
-    masterTimeline.current.add(objectiveTimeline);
-  });
-
-  const setDevelopmentAnimations = contextSafe(() => {
-    const { development, footer } = elementsRef.current as ElementDictionary;
-    const { content, hero, ringsContainer, globe, experience } = development;
-
-    const developmentSectionMargin = hero.clientHeight * 0.7;
-
-    const bg = '#111111';
-
-    gsap.set(content, {
-      marginTop: `-${developmentSectionMargin}px`,
-      backgroundColor: `${bg}40`,
-    });
-
-    const developmentTimeline = gsap
-      .timeline({
-        id: 'development',
-        scrollTrigger: {
-          trigger: content,
-          start: 'start center',
-          end: () => `+=${content.offsetHeight * 0.2}`,
-          scrub: true,
-        },
-      })
-      .to(globe, { scale: 1.5, ease: 'power1.inOut' })
-      .to(ringsContainer, { opacity: 0.2, ease: 'power1.inOut' }, '<')
-      .to(
-        content,
-        {
-          backgroundColor: `${bg}95`,
-        },
-        '<',
-      );
-
-    if (mediaQueryMatches(query.lg))
-      developmentTimeline.to(
-        ringsContainer,
-        { scale: 2, translateZ: 0, opacity: 0.2, ease: 'power1.inOut' },
-        '<',
-      );
-
-    masterTimeline.current.add(developmentTimeline);
-
-    const sm = mediaQueryMatches(query.sm);
-
-    const endTimeline = gsap
-      .timeline({
-        id: 'end',
-        scrollTrigger: {
-          trigger: experience,
-          start: sm ? 'top bottom' : 'top bottom+=500',
-          endTrigger: footer,
-          end: 'bottom bottom',
-          scrub: true,
-        },
-      })
-      .to(globe, {
-        yPercent: sm ? 250 : 150,
-        scale: 2.5,
-        duration: 10,
-      })
-      .to(content, { opacity: 0, duration: 1, ease: 'power4.inOut' }, '>');
-
-    masterTimeline.current.add(endTimeline);
-  });
-
-  const loadAnimations = useCallback(
-    (force?: boolean) => {
-      if (
-        !isPaletteFullfiled ||
-        !elementsAreMounted ||
-        (!force && timelineIsMounted)
-      )
-        return;
-
-      setHomeAnimations();
-
-      setObjectiveAnimations();
-
-      setDevelopmentAnimations();
-
-      if (!timelineIsMounted) setTimelineIsMounted(true);
+      return () => mm.revert();
     },
-    [
-      isPaletteFullfiled,
-      timelineIsMounted,
-      elementsAreMounted,
-      setHomeAnimations,
-      setObjectiveAnimations,
-      setDevelopmentAnimations,
-    ],
+    {
+      scope: containerRef,
+      // resolvedTheme excluded on purpose: it only tints the about-wrapper
+      // border, not worth reverting the whole ScrollTrigger/pin scaffold for.
+      // A rebuild triggered by a dark/light toggle killed the pin on
+      // home.section mid-way through the theme-switch scale tween.
+      // ponytail: about-border color goes stale until next real rebuild
+      // (palette change or resize); live-update it via a scoped
+      // contextSafe setter if that desync becomes noticeable.
+      dependencies: [isPaletteFullfiled, hexCode],
+      revertOnUpdate: true,
+    },
   );
-
-  // Initial animations load
-  useEffect(() => {
-    loadAnimations();
-  }, [loadAnimations]);
-
-  // Reload on resize
-  const debouncedLoad = useDebounceCallback(() => {
-    clearTimeline();
-    loadAnimations(true);
-  }, 100);
-
-  // Rebuild animations only on width change, to prevent lag on phones
-  useEffect(() => {
-    let prevWidth = window.innerWidth;
-
-    const onResize = () => {
-      const width = window.innerWidth;
-
-      // In phone devices, rebuild only when width changes
-      if (width !== prevWidth || !isTouchDevice) {
-        prevWidth = width;
-        debouncedLoad();
-      }
-    };
-
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
-  }, [debouncedLoad, isTouchDevice]);
-
-  // Update only pallete-dependent tweens on scheme or pallete change
-  useEffect(() => {
-    getAboutTransitions();
-    getObjectiveTransitions();
-  }, [getAboutTransitions, getObjectiveTransitions]);
 
   return (
     <div ref={containerRef} aria-hidden className='content'>
