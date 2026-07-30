@@ -11,6 +11,9 @@ importers:
       '@gsap/react':
         specifier: ^2.1.1
         version: 2.1.2(gsap@3.13.0)(react@19.2.0)
+      '@lglab/react-qr-code':
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.0)
       '@radix-ui/react-dialog':
         specifier: ^1.1.6
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -820,6 +823,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@lglab/react-qr-code@1.7.0':
+    resolution: {integrity: sha512-nocFONGSsDkgCKpMEvBkOsBZc7OXih4d9TDRBMdikLnlN4p5a63i2zfs2fEnsyyF02gBfhw8rgLWpFZNOyfabQ==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -3692,6 +3700,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@lglab/react-qr-code@1.7.0(react@19.2.0)':
+    dependencies:
+      react: 19.2.0
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
