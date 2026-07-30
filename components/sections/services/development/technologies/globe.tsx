@@ -9,7 +9,7 @@ import HTMLComment from '@/components/common/html-comment';
 
 import { getOptimalPixelRatio, mediaQueryMatches } from '@/lib/dom';
 import { cn } from '@/lib/utils';
-import { useScheme, useTheme } from '@/hooks/theme';
+import { useTheme } from '@/hooks/theme';
 
 type GlobeRefs = {
   renderer: THREE.WebGLRenderer;
@@ -25,8 +25,6 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   const containerRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeRefs | null>(null);
 
-  const { resolvedTheme } = useScheme();
-
   const {
     palette: { hex: palette },
     hexCode,
@@ -34,7 +32,6 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
   } = useTheme();
 
   const [debouncedPaletteColor] = useDebounceValue(hexCode, 2000);
-  const [debouncedScheme] = useDebounceValue(resolvedTheme, 500);
 
   // Stable event handler that always reads the latest palette without being a dependency
   const applyGlobeColor = useEffectEvent(() => {
@@ -126,9 +123,6 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
 
         container.appendChild(props.renderer.domElement);
 
-        // Apply initial color
-        applyGlobeColor();
-
         // Size renderer to container
         const width = container.offsetWidth;
         const height = container.offsetHeight;
@@ -147,6 +141,9 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
         const firstFrameId = requestAnimationFrame(animate);
 
         globeRef.current = { ...props, animationFrameId: firstFrameId };
+
+        // After the ref: applyGlobeColor reads globeRef.current and bails if empty
+        applyGlobeColor();
       } catch (error) {
         console.error('Globe render error:', error);
       }
@@ -178,11 +175,11 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
     };
   }, [paletteIsFullfiled]);
 
-  // Re-apply color when palette/scheme changes
+  // Re-apply color when the palette changes
   useEffect(() => {
     if (!globeRef.current) return;
     applyGlobeColor();
-  }, [debouncedPaletteColor, debouncedScheme]);
+  }, [debouncedPaletteColor]);
 
   return (
     <>
