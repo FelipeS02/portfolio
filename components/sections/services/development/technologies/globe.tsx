@@ -6,8 +6,6 @@ import * as THREE from 'three';
 import { useDebounceValue } from 'usehooks-ts';
 
 import HTMLComment from '@/components/common/html-comment';
-import GlobeTexture from '@/public/assets/images/globe.png';
-import GlobeMobileTexture from '@/public/assets/images/globe_mobile.png';
 
 import { getOptimalPixelRatio, mediaQueryMatches } from '@/lib/dom';
 import { cn } from '@/lib/utils';
@@ -80,7 +78,7 @@ const Globe: FC<{ className?: string }> = memo(function Globe({
               const isMobile = mediaQueryMatches('(max-width: 768px)');
 
               textureLoader.load(
-                !isMobile ? GlobeTexture.src : GlobeMobileTexture.src,
+                `/assets/images/globe${isMobile ? '_mobile' : ''}.webp`,
                 (texture) => {
                   // Bail out if component unmounted during load
                   if (cancelled) {
