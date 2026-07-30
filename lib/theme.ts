@@ -3,7 +3,7 @@ import tinycolor from 'tinycolor2';
 import { Palette, PaletteShade, Theme } from '@/models/theme';
 
 export function hexIsValid(hexCode: string) {
-  const regexHex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
+  const regexHex = /^#?([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
   return regexHex.test(hexCode);
 }
 
@@ -130,8 +130,12 @@ function generatePalette(hexColor: string): Palette {
     return baseSaturation;
   };
 
-  // Generate the color scale
-  const palette = initialPalette;
+  // Copy instead of mutating: initialPalette is a module singleton, and the
+  // loading screen compares against it to detect "theme not generated yet"
+  const palette: Palette = {
+    hsl: { ...initialPalette.hsl },
+    hex: { ...initialPalette.hex },
+  };
 
   Object.entries(lightnessScale).forEach(([step, lightness]) => {
     const parsedStep = String(step) as PaletteShade;
@@ -149,13 +153,15 @@ function generatePalette(hexColor: string): Palette {
   return palette;
 }
 
-export async function getNewThemeByHex(hexCode: string): Promise<Theme> {
-  if (!hexIsValid) throw new Error('Invalid Hex Code');
+export function getNewThemeByHex(hexCode: string): Theme {
+  const normalizedHex = hexCode.replace('#', '');
 
-  const palette = generatePalette(hexCode);
+  if (!hexIsValid(normalizedHex)) throw new Error('Invalid Hex Code');
+
+  const palette = generatePalette(normalizedHex);
 
   return {
     palette,
-    hexCode,
+    hexCode: normalizedHex,
   };
 }

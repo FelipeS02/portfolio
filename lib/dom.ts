@@ -8,6 +8,19 @@ export function getRootElement(): HTMLElement {
   return root;
 }
 
+// Loading screen visibility lives on the root element so pages mounting after
+// it already left (client-side navigation gets no event) can still tell.
+export function setLoadingScreenHidden(hidden: boolean): void {
+  const root = getRootElement();
+
+  if (hidden) root.dataset.loaded = 'true';
+  else delete root.dataset.loaded;
+}
+
+export function isLoadingScreenHidden(): boolean {
+  return getRootElement().dataset.loaded === 'true';
+}
+
 export function applyPaletteIntoCSS(palette: Palette['hsl']): void {
   if (!palette) throw new Error('Palette is not defined');
 

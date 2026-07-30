@@ -10,8 +10,8 @@ import {
 } from 'react';
 
 import { applyPaletteIntoCSS, updateFavicon } from '@/lib/dom';
-import { hexIsValid, initialPalette } from '@/lib/theme';
-import { ApiResponse } from '@/models/api';
+import { getNewThemeByHex, getRandomHex, initialPalette } from '@/lib/theme';
+import { timeout } from '@/lib/utils';
 import { Theme } from '@/models/theme';
 
 export interface RandomThemeState extends Theme {
@@ -19,7 +19,7 @@ export interface RandomThemeState extends Theme {
   fullfiled: boolean;
 }
 export interface RandomThemeContextState extends RandomThemeState {
-  getNewTheme?: () => Promise<void>;
+  getNewTheme?: (color?: string) => Promise<void>;
   applyPalette?: VoidFunction;
 }
 
@@ -41,20 +41,14 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
   //@region Random theme generation
   const getNewTheme = useRef(async (color: string = '') => {
     try {
-      if (color && !hexIsValid(color)) throw Error('Hex color is invalid');
-
       setTheme((prev) => ({ ...prev, loading: true }));
 
-      // Get theme from API
-      const res = await fetch(
-        `api/theme${color ? `?color=${color.replace('#', '')}` : ''}`,
-      );
+      // Generation is synchronous now, so without yielding React would batch
+      // this with the state below and never render the loading frame the
+      // LoadingScreen needs to replay its lines animation
+      await timeout(0);
 
-      const { data }: ApiResponse<{ theme: Theme }> = await res.json();
-
-      if (!data?.theme) throw new Error('Failed to get theme');
-
-      const newTheme = data.theme;
+      const newTheme = getNewThemeByHex(color || getRandomHex());
 
       setTheme((prev) => ({
         ...prev,
@@ -76,11 +70,15 @@ const CustomPaletteProvider: FC<{ children: ReactNode }> = ({ children }) => {
     updateFavicon(theme.hexCode);
   };
 
-  // Initial theme loading
+  // Initial theme loading (optionally preselected via ?theme=hexcode)
   useEffect(() => {
     if (!mounted) return setMounted(true);
 
-    getNewTheme.current();
+    const presetHex = new URLSearchParams(window.location.search).get(
+      'theme',
+    );
+
+    getNewTheme.current(presetHex ?? '');
   }, [mounted, getNewTheme]);
 
   return (

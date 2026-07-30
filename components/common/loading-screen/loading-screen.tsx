@@ -5,12 +5,17 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
+import { setLoadingScreenHidden } from '@/lib/dom';
 import { initialPalette } from '@/lib/theme';
 import { useTheme } from '@/hooks/theme';
 import useHandleLoadingAnimations from '@/hooks/use-handle-loading-animations';
 import { PaletteShade } from '@/models/theme';
 
 import LoadingLines from './lines';
+
+// Fired once the lines finished leaving, so pages can start their own entrance
+// animations at the exact moment the screen stops covering them
+export const LOADING_SCREEN_HIDDEN = 'loading-screen:hidden';
 
 const LoadingScreen = () => {
   const container = useRef<HTMLDivElement | null>(null);
@@ -31,10 +36,18 @@ const LoadingScreen = () => {
 
   const { contextSafe } = useGSAP({ scope: container });
 
+  const hide = () => {
+    gsap.set(container.current, { display: 'none' });
+    setLoadingScreenHidden(true);
+    window.dispatchEvent(new Event(LOADING_SCREEN_HIDDEN));
+  };
+
   const onLoaded = contextSafe(() => {
     const isDefaultPalette = palette[100] === initialPalette.hex[100];
 
-    if (isDefaultPalette) return;
+    // Theme generation failed: uncover the site with the default greys instead
+    // of leaving the loading screen up forever
+    if (isDefaultPalette) return hide();
 
     const linesTl = gsap.timeline({
       onStart: () => {
@@ -82,11 +95,7 @@ const LoadingScreen = () => {
             ease: 'circ.inOut',
           });
         },
-        onComplete: () => {
-          gsap.set(container.current, {
-            display: 'none',
-          });
-        },
+        onComplete: hide,
       }),
       '>',
     );
@@ -109,6 +118,7 @@ const LoadingScreen = () => {
             ease: 'back.inOut',
           });
           gsap.set(container.current, { display: 'grid' });
+          setLoadingScreenHidden(false);
         },
       }),
       '>',
@@ -122,9 +132,11 @@ const LoadingScreen = () => {
     () => {
       if (!loadingLines.current || !container.current) return;
 
-      if (!isThemeLoading) onLoaded();
+      // fullfiled is part of this because generation is synchronous: React
+      // batches the loading flag away, so isThemeLoading alone never transitions
+      if (!isThemeLoading && isThemeFullfiled) onLoaded();
     },
-    { dependencies: [isThemeLoading], scope: container },
+    { dependencies: [isThemeLoading, isThemeFullfiled], scope: container },
   );
 
   useGSAP(
