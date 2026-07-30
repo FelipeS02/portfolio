@@ -27,7 +27,6 @@
 
   --animate-blink: blink 1s ease infinite;
   --animate-orbit-rings: spin 3s linear infinite;
-  --animate-radar: spin 8s linear infinite;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -79,9 +78,6 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-
-  --animate-blink: blink 1s ease infinite;
-  --animate-radar: var(--animate-spin) 8s linear infinite;
 
   @keyframes blink {
     0%,

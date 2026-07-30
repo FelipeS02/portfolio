@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { CSSProperties, FC } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -75,11 +75,23 @@ const Lines: FC<{ className: string }> = ({ className = '' }) => {
   );
 };
 
+/** angle: degrees clockwise from 12 o'clock. radius: % of the radar width (edge at 50). */
+const BLIPS = [
+  { angle: 18, radius: 30 },
+  { angle: 47, radius: 43 },
+  { angle: 72, radius: 17 },
+  { angle: 106, radius: 37 },
+  { angle: 134, radius: 25 },
+  { angle: 159, radius: 44 },
+  { angle: 197, radius: 12 },
+  { angle: 342, radius: 21 },
+];
+
 const ExperienceSectionRadar: FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div
       className={cn(
-        'pointer-events-none relative aspect-square overflow-hidden rounded-full border-2 border-palette-500 before:inset-0 before:animate-radar after:inset-0 after:animate-radar',
+        'pointer-events-none relative aspect-square overflow-hidden rounded-full border-2 border-palette-500',
         styles.radar,
         className,
       )}
@@ -89,6 +101,19 @@ const ExperienceSectionRadar: FC<{ className?: string }> = ({ className = '' }) 
       }}
     >
       <Lines className='absolute size-full fill-palette-600/40 stroke-palette-600/20' />
+      {BLIPS.map(({ angle, radius }) => (
+        <span
+          key={angle}
+          className={styles.blip}
+          style={
+            {
+              left: `${50 + radius * Math.sin((angle * Math.PI) / 180)}%`,
+              top: `${50 - radius * Math.cos((angle * Math.PI) / 180)}%`,
+              '--angle': angle,
+            } as CSSProperties
+          }
+        />
+      ))}
     </div>
   );
 };
