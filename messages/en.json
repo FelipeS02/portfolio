@@ -1,0 +1,125 @@
+{
+  "Metadata": {
+    "title": "FELIPE SARACHO",
+    "description": "Full-Stack Developer with 3+ years of experience. My goal is to create products that don't just follow current trends, but are also timeless and built to last",
+    "jobTitle": "Full-Stack Developer",
+    "keywords": [
+      "Full-Stack Developer",
+      "Back-End Developer",
+      "Front-End Developer",
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "Redux",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "MySQL",
+      "SCRUM",
+      "Kanban",
+      "UX/UI",
+      "Figma",
+      "ChakraUI",
+      "Bootstrap",
+      "TailwindCSS",
+      "SASS",
+      "LESS",
+      "Jest",
+      "Atomic Design",
+      "SOLID",
+      "Docker",
+      "Prisma",
+      "Web design",
+      "Web development",
+      "Programming",
+      "Software",
+      "Computer Engineering",
+      "LILAB",
+      "FinTech",
+      "E-Commerce"
+    ]
+  },
+  "HelloMetadata": {
+    "title": "FELIPE SARACHO — Card",
+    "description": "Felipe Saracho's business card, full-stack developer."
+  },
+  "Header": {
+    "available": "AVAILABLE"
+  },
+  "Hero": {
+    "role": "Full-Stack <b>Developer</b>"
+  },
+  "About": {
+    "headingLine1": "ABOUT",
+    "headingLine2": "ME.",
+    "heading": "ABOUT ME.",
+    "bioPrefix": "I'm Felipe, a Full-Stack developer specialized in Front-end, currently living in ",
+    "reference": "REFERENCE",
+    "swipe": "(SWIPE)"
+  },
+  "Objective": {
+    "heading": "My goal is to create products that don't just follow current trends, but are also timeless and built to last.",
+    "marquee": "SERVICES"
+  },
+  "Design": {
+    "heading": "Web design",
+    "paragraph": "Creating visually stunning, user-centered designs that capture a brand's identity and values."
+  },
+  "Development": {
+    "heroVariant1": "Web Development",
+    "heroVariant2": "Web.Development",
+    "paragraph": "Custom-built web applications using the latest technologies."
+  },
+  "Experience": {
+    "title": "Experience",
+    "paragraph": "With more than three years of professional experience, I've had the privilege of contributing to every stage of building dynamic, highly interactive web applications.",
+    "available": {
+      "heading": "Looking for new challenges",
+      "paragraph": "If you think my profile lines up with your company's principles:",
+      "cta": "Contact me now"
+    },
+    "itrock": {
+      "role": "Frontend SSR Developer.",
+      "date": "Mar. 2025"
+    },
+    "lilabMl": {
+      "role": "Frontend ML Developer / Designer",
+      "date": "Dec. 2023 - Jun. 2024"
+    },
+    "lilabJr": {
+      "role": "Junior Frontend Developer / Designer",
+      "date": "Nov. 2021 - Mar. 2023"
+    },
+    "henry": {
+      "role": "Bootcamp / Full-Stack Professional Practice",
+      "date": "Jun. 2021 - Oct. 2021"
+    }
+  },
+  "Technologies": {
+    "openToNew": "Open to new technologies"
+  },
+  "Hello": {
+    "heading": "You found a card!",
+    "subheadingLine1": "Nice to meet you",
+    "subheadingLine2": "shall we build something together?",
+    "browsePortfolio": "Browse my portfolio",
+    "addContact": "Add contact",
+    "role": "Developer"
+  },
+  "ColorPicker": {
+    "title": "CREATE THEME",
+    "cancel": "Cancel",
+    "create": "Create"
+  },
+  "ThemeSwitch": {
+    "toggle": "Toggle theme",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
+  },
+  "LanguageSwitch": {
+    "label": "Change language",
+    "spanish": "Español",
+    "english": "English"
+  }
+}

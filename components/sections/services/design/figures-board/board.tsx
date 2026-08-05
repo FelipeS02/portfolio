@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from 'gsap/all';
@@ -18,6 +19,8 @@ import Figures from './figures';
 import SelectableElement from './selectable-element';
 
 const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
+  const t = useTranslations('Design');
+
   return (
     <SelectableElement
       className='z-20 flex flex-col p-4 uppercase'
@@ -25,11 +28,10 @@ const SectionText = ({ selectedElement }: { selectedElement?: string }) => {
       id={DESIGN_ELEMENTS_IDS.HERO}
     >
       <h4 className='text-5xl font-semibold text-nowrap drop-shadow-md md:text-6xl'>
-        Diseño web
+        {t('heading')}
       </h4>
       <p className='text-md text-foreground md:max-w-[480px]'>
-        Creación de diseños visualmente impresionantes y centrados en el usuario
-        que capturan la identidad y los valores de la marca.
+        {t('paragraph')}
       </p>
     </SelectableElement>
   );

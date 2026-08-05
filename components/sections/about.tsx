@@ -1,5 +1,5 @@
-import { FC } from 'react';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 import AboutImage from '@/public/assets/images/about-image.webp';
 
@@ -13,14 +13,17 @@ export const ABOUT_ELEMENTS_IDS = {
 };
 
 const advice =
-  'after:absolute after:left-1 after:top-1 after:font-medium after:text-white after:opacity-40 after:content-["REFERENCIA"] relative';
+  'after:absolute after:left-1 after:top-1 after:font-medium after:text-white after:opacity-40 after:content-[attr(data-content)] relative';
 
-const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
+const About = async function About({ mobile = false }: { mobile?: boolean }) {
+  const t = await getTranslations('About');
+
   if (mobile)
     return (
       <section
         className={`grid h-screen w-full grid-rows-2 xl:hidden ${advice}`}
         id={ABOUT_ELEMENTS_IDS['MOBILE-SECTION']}
+        data-content={t('reference')}
       >
         <Image
           src={AboutImage}
@@ -30,11 +33,10 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
         />
         <div className='col-span-1 flex flex-col items-start justify-center p-4 text-balance'>
           <h2 className='text-palette-600 dark:text-palette-500 text-[5rem] leading-[0.9] font-bold'>
-            SOBRE <br /> MI.
+            {t('headingLine1')} <br /> {t('headingLine2')}
           </h2>
           <p className='max-w-md'>
-            Soy Felipe, desarrollador Full-Stack especializado en Front-end
-            actualmente viviendo en{' '}
+            {t('bioPrefix')}
             <span className='font-semibold'>
               Buenos Aires, <span className='text-[#75AADB]'>Arg</span>
               <span className='text-[#FCBF49]'>en</span>
@@ -47,8 +49,9 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
 
   return (
     <div
-      className='after:text-md after:text-foreground fixed inset-0 z-10 m-auto h-0 w-full will-change-[height] after:absolute after:right-2 after:mt-2 after:tracking-widest after:content-["(DESLIZAR)"] max-xl:hidden'
+      className='after:text-md after:text-foreground fixed inset-0 z-10 m-auto h-0 w-full will-change-[height] after:absolute after:right-2 after:mt-2 after:tracking-widest after:content-[attr(data-content)] max-xl:hidden'
       id={ABOUT_ELEMENTS_IDS.WRAPPER}
+      data-content={t('swipe')}
     >
       <div className='bg-background relative size-full overflow-hidden'>
         <div
@@ -59,7 +62,10 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
           className='absolute inset-0 top-0 flex size-full'
           id={ABOUT_ELEMENTS_IDS.SECTION}
         >
-          <div className={`relative h-full grow ${advice} select-none`}>
+          <div
+            className={`relative h-full grow ${advice} select-none`}
+            data-content={t('reference')}
+          >
             <Image
               src={AboutImage}
               alt='about-section-image'
@@ -74,11 +80,10 @@ const About: FC<{ mobile?: boolean }> = function About({ mobile = false }) {
           >
             <div className='p-8' id={ABOUT_ELEMENTS_IDS.CONTENT_INNER}>
               <h2 className='text-palette-600 dark:text-palette-500 w-[5em] text-[8rem] leading-[0.9] font-bold'>
-                SOBRE MI.
+                {t('heading')}
               </h2>
               <p className='max-w-[500px] min-w-[250px] text-xl'>
-                Soy Felipe, desarrollador Full-Stack especializado en Front-end
-                actualmente viviendo en{' '}
+                {t('bioPrefix')}
                 <span className='overflow-visible font-semibold'>
                   Buenos Aires, <span className='text-[#75AADB]'>Arg</span>
                   <span className='text-[#FCBF49]'>en</span>

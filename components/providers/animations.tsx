@@ -119,7 +119,12 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
           chars: objectiveSelectorText('.char'),
           words: objectiveSelectorText('.word').filter((element) => {
             const word = element.getAttribute('data-word');
-            return word === 'productos' || word === 'atemporales';
+            return (
+              word === 'productos' ||
+              word === 'atemporales' ||
+              word === 'products' ||
+              word === 'timeless'
+            );
           }),
           clockLines: Array.from(
             document.getElementsByClassName('clock-lines'),
@@ -313,11 +318,7 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
 
         if (!isSm)
           objectiveTimeline
-            .to(
-              o.section,
-              { opacity: 0.4, duration: 6, scale: 0.95 },
-              '>+2',
-            )
+            .to(o.section, { opacity: 0.4, duration: 6, scale: 0.95 }, '>+2')
             .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5');
         // #endregion
 

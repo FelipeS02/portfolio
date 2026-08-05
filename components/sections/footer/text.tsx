@@ -5,20 +5,19 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-import FullWidthText from '@/components/common/full-width-text';
-import { SplittedWord } from '@/components/common/splitted-text';
+import {
+  Fsaracho,
+  FsarachoGlow,
+  FsarachoGlowMobile,
+  FsarachoMobile,
+} from '@/components/common/fsaracho';
 
-import { cn } from '@/lib/utils';
-import { useTheme } from '@/hooks/theme';
 import { useMediaQueries } from '@/hooks/use-media-queries';
 
-import styles from './text.module.css';
+const MASK_IMAGE =
+  'radial-gradient(circle var(--mr, 0px) at var(--mx, -9999px) var(--my, -9999px), #000 0%, transparent 60%)';
 
 const FooterText = () => {
-  const {
-    palette: { hsl: palette },
-  } = useTheme();
-
   const [md, mobile] = useMediaQueries([
     '(max-width: 768px)',
     '(any-pointer: coarse)',
@@ -30,66 +29,111 @@ const FooterText = () => {
     () => {
       if (mobile) return;
 
-      const letters = gsap.utils.toArray<HTMLSpanElement>('.char');
+      const root = container.current;
+      const suffix = md ? 'mobile' : 'desktop';
+      const baseWrap = document.getElementById(`fsaracho-base-wrap-${suffix}`);
+      const glowWrap = document.getElementById(`fsaracho-glow-wrap-${suffix}`);
 
-      gsap.set(letters, { color: 'hsla(0, 0%, 7%, 100%)' });
+      if (!root || !baseWrap || !glowWrap) return;
 
-      // Range of activation
-      const threshold = md ? 150 : 400;
+      // Spot radius in CSS px, relative to the word's own box
+      const radius = md ? 180 : 260;
+      // Distance from the word's box beyond which the spot fully closes
+      const threshold = md ? 220 : 380;
 
-      const updateBackground = ({ clientX }: MouseEvent) => {
-        letters.forEach((letter) => {
-          const { left, width } = letter.getBoundingClientRect();
+      [baseWrap, glowWrap].forEach((el) => {
+        el.style.setProperty('mask-image', MASK_IMAGE);
+        el.style.setProperty('-webkit-mask-image', MASK_IMAGE);
+      });
 
-          const center = left + width / 2;
-          const distance = Math.abs(clientX - center);
+      // Tween a plain proxy instead of the CSS vars directly — gsap writes
+      // custom properties as bare numbers with no unit, which makes
+      // var(--mx, -9999px) invalid (unit mismatch) and kills the whole
+      // mask-image. Format the px strings ourselves in onUpdate instead.
+      // mx/my/mr live on the shared ancestor so both wraps inherit the
+      // same reveal circle — base and glow open/close together.
+      const pos = { x: 0, y: 0, r: 0 };
+      const setX = gsap.quickTo(pos, 'x', {
+        duration: 0.3,
+        ease: 'power2.out',
+        onUpdate: () => root.style.setProperty('--mx', `${pos.x}px`),
+      });
+      const setY = gsap.quickTo(pos, 'y', {
+        duration: 0.3,
+        ease: 'power2.out',
+        onUpdate: () => root.style.setProperty('--my', `${pos.y}px`),
+      });
+      const setR = gsap.quickTo(pos, 'r', {
+        duration: 0.3,
+        ease: 'power2.out',
+        onUpdate: () => root.style.setProperty('--mr', `${Math.max(pos.r, 0)}px`),
+      });
 
-          // Distance mapping
-          const opacity = gsap.utils.mapRange(0, threshold, 1, 0, distance);
-          const clampedOpacity = gsap.utils.clamp(0, 1, opacity);
+      const updateSpot = ({ clientX, clientY }: MouseEvent) => {
+        const rect = baseWrap.getBoundingClientRect();
 
-          gsap.to(letter, {
-            color: `hsla(0, 0%, 100%, ${clampedOpacity})`, // Fondo blanco con opacidad
-            duration: 0.3,
-            ease: 'power2.out',
-          });
-        });
+        // Distance from the cursor to the word's own box (0 while inside it)
+        const dx = Math.max(rect.left - clientX, 0, clientX - rect.right);
+        const dy = Math.max(rect.top - clientY, 0, clientY - rect.bottom);
+        const distance = Math.hypot(dx, dy);
+
+        const proximity = gsap.utils.clamp(
+          0,
+          1,
+          gsap.utils.mapRange(0, threshold, 1, 0, distance),
+        );
+
+        setX(clientX - rect.left);
+        setY(clientY - rect.top);
+        setR(radius * proximity);
       };
 
-      // Clear effect when cursor is out window
-      const resetBackground = () => {
-        letters.forEach((letter) => {
-          gsap.to(letter, {
-            color: 'transparent',
-            duration: 0.3,
-            ease: 'power2.out',
-          });
-        });
+      // Safety net for when the cursor leaves the browser window entirely —
+      // no more mousemove events fire past that point to close the spot
+      const resetSpot = () => {
+        setR(0);
       };
 
-      document.addEventListener('mousemove', updateBackground);
-      document.addEventListener('mouseleave', resetBackground);
+      document.addEventListener('mousemove', updateSpot);
+      document.addEventListener('mouseleave', resetSpot);
 
       // Clear listeners on unmount
       return () => {
-        document.removeEventListener('mousemove', updateBackground);
-        document.removeEventListener('mouseleave', resetBackground);
+        document.removeEventListener('mousemove', updateSpot);
+        document.removeEventListener('mouseleave', resetSpot);
       };
     },
     {
       scope: container,
-      dependencies: [palette[50], mobile, md],
+      dependencies: [mobile, md],
       revertOnUpdate: true,
     },
   );
 
   return (
-    <div className='contents w-full leading-[0.8] font-black' ref={container}>
-      <FullWidthText className='ml-[-0.05em]'>
-        <SplittedWord className={cn(styles.stroke, 'select-none')}>
-          {md ? 'FSARACHO' : 'FELIPESARACHO'}
-        </SplittedWord>
-      </FullWidthText>
+    <div className='relative w-full' ref={container}>
+      <div
+        id='fsaracho-base-wrap-desktop'
+        className='w-full h-fit max-md:hidden'
+      >
+        <Fsaracho className='w-full h-fit' />
+      </div>
+      <div
+        id='fsaracho-glow-wrap-desktop'
+        className='absolute inset-0 w-full h-fit max-md:hidden pointer-events-none'
+      >
+        <FsarachoGlow className='w-full h-fit' />
+      </div>
+
+      <div id='fsaracho-base-wrap-mobile' className='w-full h-fit md:hidden'>
+        <FsarachoMobile className='w-full h-fit' />
+      </div>
+      <div
+        id='fsaracho-glow-wrap-mobile'
+        className='absolute inset-0 w-full h-fit md:hidden pointer-events-none'
+      >
+        <FsarachoGlowMobile className='w-full h-fit' />
+      </div>
     </div>
   );
 };

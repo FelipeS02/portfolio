@@ -2,6 +2,7 @@
 
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
+import { useTranslations } from 'next-intl';
 
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { ChevronRight } from 'lucide-react';
@@ -41,6 +42,7 @@ const ColorPicker: FC<
   className,
   ...props
 }) => {
+  const t = useTranslations('ColorPicker');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const parsedStoreValue = `#${storedValue}`;
@@ -70,7 +72,7 @@ const ColorPicker: FC<
   const Content = (
     <>
       <div>
-        <Title className='font-semibold'>CREAR TEMA</Title>
+        <Title className='font-semibold'>{t('title')}</Title>
         <div className='inline-flex w-full items-center text-sm font-semibold'>
           <span
             style={{
@@ -99,7 +101,7 @@ const ColorPicker: FC<
           variant='outline'
           onClick={() => setOpen(false)}
         >
-          Cancelar
+          {t('cancel')}
         </Button>
         <Button
           disabled={value === parsedStoreValue}
@@ -115,7 +117,7 @@ const ColorPicker: FC<
           }
           className='flex w-full bg-(--_new-color) text-(--_text-color) transition-none hover:bg-(--_new-color) hover:contrast-125'
         >
-          <span className='transition-colors duration-200'>Crear</span>
+          <span className='transition-colors duration-200'>{t('create')}</span>
         </Button>
       </div>
     </>

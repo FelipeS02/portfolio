@@ -2,7 +2,7 @@
 
 import { CSSProperties, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { useGSAP } from '@gsap/react';
 import { ReactQRCode } from '@lglab/react-qr-code';
@@ -16,6 +16,8 @@ import PaperTexture from '@/public/assets/images/paper.webp';
 import { isLoadingScreenHidden, mediaQueryMatches } from '@/lib/dom';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/theme';
+
+import { Link } from '@/i18n/navigation';
 
 const PHONE = '+54 11 3926 9165';
 const EMAIL = 'FELIPESARACHO02@GMAIL.COM';
@@ -93,6 +95,7 @@ const Hello = () => {
   const card = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
 
+  const t = useTranslations('Hello');
   const { hexCode } = useTheme();
 
   const themeHex = `#${hexCode || '000000'}`;
@@ -230,7 +233,7 @@ const Hello = () => {
                 Felipe Saracho
               </span>
               <span className='text-[5.21cqw] tracking-widest uppercase'>
-                Desarrollador
+                {t('role')}
               </span>
             </div>
 
@@ -245,19 +248,19 @@ const Hello = () => {
       <div className='flex flex-col items-center gap-6' ref={content}>
         <div className='flex flex-col items-center gap-1 text-center'>
           <h1 className='font-neue text-2xl font-semibold md:text-4xl'>
-            ¡Encontraste una tarjeta!
+            {t('heading')}
           </h1>
           <p className='text-foreground-secondary text-lg normal-case md:text-xl'>
-            Un gusto conocerte
+            {t('subheadingLine1')}
             <br />
-            ¿construimos algo juntos?
+            {t('subheadingLine2')}
           </p>
         </div>
 
         <div className='flex w-full flex-col gap-2 sm:w-auto sm:flex-row'>
           <Button asChild variant='outline' size='lg'>
             <Link replace href={`/?theme=${hexCode}`}>
-              Recorré mi portafolio
+              {t('browsePortfolio')}
             </Link>
           </Button>
 
@@ -275,7 +278,7 @@ const Hello = () => {
             }
           >
             <a href='/felipe-saracho.vcf' download>
-              Agregar contacto
+              {t('addContact')}
             </a>
           </Button>
         </div>

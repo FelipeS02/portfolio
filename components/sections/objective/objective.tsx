@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 import { SplittedText } from '@/components/common/splitted-text';
 
@@ -9,7 +9,9 @@ export const OBJECTIVE_ELEMENTS_IDS = {
   TEXT: 'objective-text',
 };
 
-const Objective = memo(function Objective() {
+const Objective = async function Objective() {
+  const t = await getTranslations('Objective');
+
   return (
     <section
       id={OBJECTIVE_ELEMENTS_IDS.SECTION}
@@ -23,16 +25,13 @@ const Objective = memo(function Objective() {
         id={OBJECTIVE_ELEMENTS_IDS.TEXT}
         data-nosnippet
       >
-        <SplittedText>
-          Mi objetivo es crear productos que no solo sigan las tendencias
-          actuales, sino que también sean atemporales y perduren en el tiempo.
-        </SplittedText>
+        <SplittedText>{t('heading')}</SplittedText>
       </h3>
       <div className='clock-lines z-0 w-full'>
         <ClockLines side='bottom' />
       </div>
     </section>
   );
-});
+};
 
 export default Objective;

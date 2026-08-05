@@ -1,5 +1,6 @@
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import HeaderShortcuts from './shortcuts';
 
@@ -18,14 +19,16 @@ const HeaderText = ({
   );
 };
 
-const Header = memo(function Header() {
+const Header = async function Header() {
+  const t = await getTranslations('Header');
+
   return (
     <header className='flex w-full grid-cols-3 justify-between lg:grid'>
       <div className='flex flex-col gap-6 lg:contents'>
         <HeaderText
           title={
             <span className='flex items-center gap-2'>
-              DISPONIBLE{' '}
+              {t('available')}{' '}
               <span className='mb-[4px] size-1 animate-ping rounded-full bg-foreground-secondary' />
             </span>
           }
@@ -46,6 +49,6 @@ const Header = memo(function Header() {
       </div>
     </header>
   );
-});
+};
 
 export default Header;

@@ -1,10 +1,14 @@
+import { getTranslations } from 'next-intl/server';
+
 import { SplittedWord } from '@/components/common/splitted-text';
 
-const HeroSection = () => {
+const HeroSection = async () => {
+  const t = await getTranslations('Hero');
+
   return (
     <div className='hero-container flex w-full flex-col gap-1 select-none'>
       <h4 className='text-md after:contents-["-"] after:animate-blink after:border-palette-700 after:dark:border-palette-600 after:ml-2 after:h-4 after:border lg:text-xl'>
-        Desarrollador <b className='font-semibold'>Full-Stack</b>
+        {t.rich('role', { b: (chunks) => <b className='font-semibold'>{chunks}</b> })}
       </h4>
 
       <h1

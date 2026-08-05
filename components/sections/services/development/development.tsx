@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import Experience from './experience/experience';
 import TechnologiesList from './technologies/technologies-list';
 import TechnologiesRings from './technologies/technologies-rings';
@@ -8,16 +10,18 @@ export const DEVELOPMENT_ELEMENTS_IDS = {
   HERO: 'development-section-hero',
 };
 
-const Development = () => {
+const Development = async () => {
+  const t = await getTranslations('Development');
+
   // Using random hero text
   const texts = [
     <>
-      <span className='text-palette-600 lg:ml-[-0.78em]'>{'<'}</span> Desarrollo
-      Web <span className='text-palette-600'>{'/>'}</span>
+      <span className='text-palette-600 lg:ml-[-0.78em]'>{'<'}</span>{' '}
+      {t('heroVariant1')} <span className='text-palette-600'>{'/>'}</span>
     </>,
 
     <span className='-ml-[0.05em]' key='development-section-2'>
-      Desarrollo.Web{' '}
+      {t('heroVariant2')}{' '}
       <span className='text-palette-600 tracking-widest'>()</span>
     </span>,
   ];
@@ -43,8 +47,7 @@ const Development = () => {
             </h4>
 
             <p className='max-w-[500px] text-lg text-balance uppercase'>
-              Elaboracion a medida de aplicaciones web utilizando las ultimas
-              tecnologias.
+              {t('paragraph')}
             </p>
           </div>
         </div>

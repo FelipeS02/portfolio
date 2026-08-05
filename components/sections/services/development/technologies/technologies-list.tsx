@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Boxes } from 'lucide-react';
 
 import {
@@ -14,7 +16,9 @@ const technologies = [
   'TailwindCSS',
 ];
 
-const TechnologiesList = () => {
+const TechnologiesList = async () => {
+  const t = await getTranslations('Technologies');
+
   return (
     <DevelopmentList>
       <span className='sr-only'>Tech stack</span>
@@ -29,7 +33,7 @@ const TechnologiesList = () => {
         ))}
 
         <ListItem className='relative text-4xl font-medium lg:text-6xl overflow-x-visible'>
-          <h6 className='z-2'>Abierto a nuevas tecnologías</h6>
+          <h6 className='z-2'>{t('openToNew')}</h6>
          
         </ListItem>
       </ul>

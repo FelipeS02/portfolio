@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { ArrowButton } from '@/components/common/arrow-button';
 import { Lilab } from '@/components/common/icons';
@@ -44,15 +45,17 @@ export const DevelopmentExperienceLilabIcon = () => (
   </Link>
 );
 
-export const DevelopmentExperienceAvailable = () => {
+export const DevelopmentExperienceAvailable = async () => {
+  const t = await getTranslations('Experience.available');
+
   return (
     <ListItem className='relative flex-wrap justify-between overflow-hidden'>
       <div>
         <h6 className='text-xl font-semibold tracking-wide'>
-          En búsqueda de nuevos desafíos
+          {t('heading')}
         </h6>
         <p className='text-palette-50/70 max-w-[400px] font-light text-balance'>
-          Si creés que mi perfil se alinea con los principios de tu empresa:
+          {t('paragraph')}
         </p>
       </div>
 
@@ -62,7 +65,7 @@ export const DevelopmentExperienceAvailable = () => {
         target='_blank'
         className='border-palette-600/50 hover:border-palette-600 transition-colors'
       >
-        Contactame ahora
+        {t('cta')}
       </ArrowButton>
       <ExperienceSectionRadar className='absolute z-[-1] w-full opacity-70 max-md:place-self-center md:w-[40%] md:-translate-x-5' />
     </ListItem>

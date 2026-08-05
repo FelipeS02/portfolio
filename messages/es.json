@@ -1,0 +1,125 @@
+{
+  "Metadata": {
+    "title": "FELIPE SARACHO",
+    "description": "Desarrollador Full-Stack con +3 años de experiencia. Mi objetivo es crear productos que no solo sigan las tendencias actuales, sino que también sean atemporales y perduren en el tiempo",
+    "jobTitle": "Desarrollador Full-Stack",
+    "keywords": [
+      "Desarrollador Full-Stack",
+      "Back-End Developer",
+      "Front-End Developer",
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "Redux",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "MySQL",
+      "SCRUM",
+      "Kanban",
+      "UX/UI",
+      "Figma",
+      "ChakraUI",
+      "Bootstrap",
+      "TailwindCSS",
+      "SASS",
+      "LESS",
+      "Jest",
+      "Atomic Design",
+      "SOLID",
+      "Docker",
+      "Prisma",
+      "Diseño web",
+      "Desarrollo web",
+      "Programación",
+      "Software",
+      "Ingeniería Informática",
+      "LILAB",
+      "FinTech",
+      "E-Commerce"
+    ]
+  },
+  "HelloMetadata": {
+    "title": "FELIPE SARACHO — Tarjeta",
+    "description": "Tarjeta de presentación de Felipe Saracho, desarrollador full-stack."
+  },
+  "Header": {
+    "available": "DISPONIBLE"
+  },
+  "Hero": {
+    "role": "Desarrollador <b>Full-Stack</b>"
+  },
+  "About": {
+    "headingLine1": "SOBRE",
+    "headingLine2": "MI.",
+    "heading": "SOBRE MI.",
+    "bioPrefix": "Soy Felipe, desarrollador Full-Stack especializado en Front-end actualmente viviendo en ",
+    "reference": "REFERENCIA",
+    "swipe": "(DESLIZAR)"
+  },
+  "Objective": {
+    "heading": "Mi objetivo es crear productos que no solo sigan las tendencias actuales, sino que también sean atemporales y perduren en el tiempo.",
+    "marquee": "SERVICIOS"
+  },
+  "Design": {
+    "heading": "Diseño web",
+    "paragraph": "Creación de diseños visualmente impresionantes y centrados en el usuario que capturan la identidad y los valores de la marca."
+  },
+  "Development": {
+    "heroVariant1": "Desarrollo Web",
+    "heroVariant2": "Desarrollo.Web",
+    "paragraph": "Elaboracion a medida de aplicaciones web utilizando las ultimas tecnologias."
+  },
+  "Experience": {
+    "title": "Experiencia",
+    "paragraph": "Con mas de tres años de experiencia laboral, tuve el privilegio de contribuir en todas las etapas de la creación de aplicaciones web dinámicas y altamente interactivas.",
+    "available": {
+      "heading": "En búsqueda de nuevos desafíos",
+      "paragraph": "Si creés que mi perfil se alinea con los principios de tu empresa:",
+      "cta": "Contactame ahora"
+    },
+    "itrock": {
+      "role": "Desarrollador Frontend SSR.",
+      "date": "Mar. 2025"
+    },
+    "lilabMl": {
+      "role": "Desarrollador Frontend ML. / Diseñador",
+      "date": "Dic. 2023 - Jun. 2024"
+    },
+    "lilabJr": {
+      "role": "Desarrollador Frontend JR. / Diseñador",
+      "date": "Nov. 2021 - Mar. 2023"
+    },
+    "henry": {
+      "role": "Bootcamp / Practica Profesional Full-Stack",
+      "date": "Jun. 2021 - Oct. 2021"
+    }
+  },
+  "Technologies": {
+    "openToNew": "Abierto a nuevas tecnologías"
+  },
+  "Hello": {
+    "heading": "¡Encontraste una tarjeta!",
+    "subheadingLine1": "Un gusto conocerte",
+    "subheadingLine2": "¿construimos algo juntos?",
+    "browsePortfolio": "Recorré mi portafolio",
+    "addContact": "Agregar contacto",
+    "role": "Desarrollador"
+  },
+  "ColorPicker": {
+    "title": "CREAR TEMA",
+    "cancel": "Cancelar",
+    "create": "Crear"
+  },
+  "ThemeSwitch": {
+    "toggle": "Cambiar tema",
+    "switchToDark": "Cambiar a modo oscuro",
+    "switchToLight": "Cambiar a modo claro"
+  },
+  "LanguageSwitch": {
+    "label": "Cambiar idioma",
+    "spanish": "Español",
+    "english": "English"
+  }
+}

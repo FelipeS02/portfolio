@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { Earth } from 'lucide-react';
 
@@ -18,19 +19,19 @@ import {
   DevelopmentExperienceLilabIcon,
 } from './experience-section-parts';
 
-const Experience = () => {
+const Experience = async () => {
+  const t = await getTranslations('Experience');
+
   return (
     <DevelopmentList className='py-14' id='experience'>
       <div className='mb-2 space-y-1'>
         <DevelopmentListTitle>
           <Earth />
-          <span>Experiencia</span>
+          <span>{t('title')}</span>
         </DevelopmentListTitle>
 
         <p className='max-w-[750px] font-light text-balance uppercase'>
-          Con mas de tres años de experiencia laboral, tuve el privilegio de
-          contribuir en todas las etapas de la creación de aplicaciones web
-          dinámicas y altamente interactivas.
+          {t('paragraph')}
         </p>
       </div>
 
@@ -50,9 +51,11 @@ const Experience = () => {
           </Link>
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Desarrollador Frontend SSR.
+              {t('itrock.role')}
             </DevelopmentExperienceBadge>
-            <DevelopmentExperienceBadge>Mar. 2025</DevelopmentExperienceBadge>
+            <DevelopmentExperienceBadge>
+              {t('itrock.date')}
+            </DevelopmentExperienceBadge>
           </DevelopmentExperienceInfo>
         </ListItem>
 
@@ -60,10 +63,10 @@ const Experience = () => {
           <DevelopmentExperienceLilabIcon />
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Desarrollador Frontend ML. / Diseñador
+              {t('lilabMl.role')}
             </DevelopmentExperienceBadge>
             <DevelopmentExperienceBadge>
-              Dic. 2023 - Jun. 2024
+              {t('lilabMl.date')}
             </DevelopmentExperienceBadge>
           </DevelopmentExperienceInfo>
         </ListItem>
@@ -71,10 +74,10 @@ const Experience = () => {
           <DevelopmentExperienceLilabIcon />
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Desarrollador Frontend JR. / Diseñador
+              {t('lilabJr.role')}
             </DevelopmentExperienceBadge>
             <DevelopmentExperienceBadge>
-              Nov. 2021 - Mar. 2023
+              {t('lilabJr.date')}
             </DevelopmentExperienceBadge>
           </DevelopmentExperienceInfo>
         </ListItem>
@@ -88,10 +91,10 @@ const Experience = () => {
           </Link>
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>
-              Bootcamp / Practica Profesional Full-Stack
+              {t('henry.role')}
             </DevelopmentExperienceBadge>
             <DevelopmentExperienceBadge>
-              Jun. 2021 - Oct. 2021
+              {t('henry.date')}
             </DevelopmentExperienceBadge>
           </DevelopmentExperienceInfo>
         </ListItem>

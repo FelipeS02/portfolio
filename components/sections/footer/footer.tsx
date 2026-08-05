@@ -16,13 +16,13 @@ const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <footer
       className={cn(
-        'text-palette-50 flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111] px-4',
+        'text-palette-50 flex h-[60vh] flex-col items-end justify-between overflow-hidden bg-[#111111]',
         className,
       )}
       id={id}
       {...rest}
     >
-      <div className='inline-flex w-fit gap-4 py-3' id='socials'>
+      <div className='inline-flex w-fit gap-4 px-4 py-3' id='socials'>
         <ArrowButton
           as='a'
           href='https://www.linkedin.com/in/felipe-saracho/'

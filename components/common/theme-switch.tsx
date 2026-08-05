@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -15,6 +16,7 @@ import { HOME_ELEMENT_IDS } from '../sections/home/home';
 const ICON_SIZE = 18;
 
 const ThemeSwitch = () => {
+  const t = useTranslations('ThemeSwitch');
   const lenis = useLenis();
   const { setTheme, resolvedTheme } = useScheme();
   const [isMounted, setIsMounted] = useState(false);
@@ -91,13 +93,13 @@ const ThemeSwitch = () => {
       className='group border-foreground relative flex h-fit w-fit cursor-pointer gap-1.5 border p-1'
       data-toggled={isDarkModeSelected}
     >
-      <span className='sr-only'>Toggle theme</span>
+      <span className='sr-only'>{t('toggle')}</span>
       <input
         id='theme-toggle'
         type='checkbox'
         checked={isDarkModeSelected}
         onChange={switchTheme}
-        aria-label={`Switch to ${newTheme} mode`}
+        aria-label={t(newTheme === 'dark' ? 'switchToDark' : 'switchToLight')}
         className='hidden'
       />
       <span

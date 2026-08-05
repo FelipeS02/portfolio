@@ -1,9 +1,12 @@
 'use client';
 
+import { useLocale } from 'next-intl';
+
 import { Download } from 'lucide-react';
 
 import { Separator } from '@/components/ui/separator';
 import { ColorPicker } from '@/components/common/color-picker';
+import LanguageSwitch from '@/components/common/language-switch';
 import ThemeSwitch from '@/components/common/theme-switch';
 
 import { ENV } from '@/lib/env';
@@ -11,19 +14,21 @@ import { useScheme, useTheme } from '@/hooks/theme';
 
 export const CurriculumShortcut = () => {
   const { resolvedTheme } = useScheme();
+  const locale = useLocale();
 
   const downloadCurriculum = () => {
-    const linkByTheme = resolvedTheme === 'light' ? ENV.CV_LIGHT : ENV.CV_DARK;
+    const key =
+      `CV_${resolvedTheme === 'light' ? 'LIGHT' : 'DARK'}_${locale === 'en' ? 'EN' : 'ES'}` as const;
 
-    window.open(linkByTheme, '_blank');
+    window.open(ENV[key], '_blank');
   };
 
   return (
     <button
-      className='text-foreground inline-flex gap-1'
+      className='text-foreground inline-flex gap-1 items-center'
       onClick={downloadCurriculum}
     >
-      <Download size={22} /> <span className='font-semibold'>CV</span>
+      <Download className='size-5' /> <span className='font-semibold'>CV</span>
     </button>
   );
 };
@@ -54,6 +59,10 @@ const HeaderShortcuts = () => {
   return (
     <div className='col-span-1 flex w-fit items-center justify-end gap-3 lg:w-full'>
       <CurriculumShortcut />
+
+      <ShortcutSeparator />
+
+      <LanguageSwitch />
 
       <ShortcutSeparator />
 

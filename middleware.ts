@@ -1,5 +1,9 @@
 import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
+
+import { routing } from './i18n/routing';
+
+const intlMiddleware = createMiddleware(routing);
 
 function detectEngine(ua: string) {
   if (!ua) return 'unknown';
@@ -23,10 +27,10 @@ function detectEngine(ua: string) {
 }
 
 export function middleware(request: NextRequest) {
+  const response = intlMiddleware(request);
+
   const ua = request.headers.get('user-agent') || '';
   const engine = detectEngine(ua);
-
-  const response = NextResponse.next();
 
   response.cookies.set('engine', engine, {
     path: '/',
@@ -35,3 +39,7 @@ export function middleware(request: NextRequest) {
 
   return response;
 }
+
+export const config = {
+  matcher: ['/((?!_next|.*\\..*).*)'],
+};
