@@ -93,10 +93,16 @@ export const updateFavicon = (color: string) => {
   ctx.fillStyle = `#${color}`;
   ctx.fillRect(0, 0, 32, 32);
 
-  // Convert canvas to a data URL and update the favicon link
-  const link = document.getElementById('favicon-link') as HTMLLinkElement;
-  if (link && link instanceof HTMLLinkElement)
-    link.href = canvas.toDataURL('image/png');
+  // Browsers re-resolve the favicon when a rel=icon link is inserted, but not
+  // when an existing one's href is merely mutated — so the static light/dark
+  // favicon picked at parse time would stick around. Swap the node instead.
+  document.getElementById('favicon-link')?.remove();
+
+  const link = document.createElement('link');
+  link.id = 'favicon-link';
+  link.rel = 'icon';
+  link.href = canvas.toDataURL('image/png');
+  document.head.appendChild(link);
 };
 
 /**
