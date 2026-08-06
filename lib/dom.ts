@@ -95,8 +95,12 @@ export const updateFavicon = (color: string) => {
 
   // Browsers re-resolve the favicon when a rel=icon link is inserted, but not
   // when an existing one's href is merely mutated — so the static light/dark
-  // favicon picked at parse time would stick around. Swap the node instead.
+  // favicon picked at parse time would stick around. Swap the node instead,
+  // and drop the static prefers-color-scheme links so they can't win again.
   document.getElementById('favicon-link')?.remove();
+  document
+    .querySelectorAll("link[rel='icon'][media]")
+    .forEach((link) => link.remove());
 
   const link = document.createElement('link');
   link.id = 'favicon-link';
