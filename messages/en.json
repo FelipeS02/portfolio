@@ -60,7 +60,12 @@
   },
   "Objective": {
     "heading": "My goal is to create products that don't just follow current trends, but are also timeless and built to last.",
-    "marquee": "SERVICES"
+    "marquee": "SERVICES",
+    "viewProject": "View project",
+    "roles": {
+      "development": "Development",
+      "designAndDevelopment": "Design + Development"
+    }
   },
   "Design": {
     "heading": "Web design",

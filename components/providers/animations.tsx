@@ -6,12 +6,16 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Draggable, ScrollTrigger } from 'gsap/all';
 
+import { getReadableForeground } from '@/lib/theme';
 import { validateObject } from '@/lib/utils';
 import { useScheme, useTheme } from '@/hooks/theme';
 
 import { ABOUT_ELEMENTS_IDS } from '../sections/about';
 import { HOME_ELEMENT_IDS } from '../sections/home/home';
+import { CLOCK_LINES_TILE } from '../sections/objective/clock_lines';
 import { OBJECTIVE_ELEMENTS_IDS } from '../sections/objective/objective';
+import { PROJECT_FIGURE_CLASS } from '../sections/objective/project-card';
+import { PROJECTS } from '../sections/objective/projects';
 import { DESIGN_ELEMENTS_IDS } from '../sections/services/design/design';
 import { DEVELOPMENT_ELEMENTS_IDS } from '../sections/services/development/development';
 
@@ -35,10 +39,16 @@ type ElementDictionary = {
 
   objective: {
     section: HTMLElement;
+    // Offset parent shared by text and textSlot — the corner math depends on it
+    stage: HTMLElement;
     text: HTMLElement;
+    textSlot: HTMLElement;
+    track: HTMLElement;
+    figures: HTMLElement[];
     chars: HTMLElement[];
     words: HTMLElement[];
     clockLines: HTMLElement[];
+    clockTracks: HTMLElement[];
   };
 
   design: {
@@ -56,6 +66,27 @@ type ElementDictionary = {
 
   footer: HTMLElement;
 };
+
+// How many tiles the clock ticks travel across the whole objective scroll
+const CLOCK_LINES_LAPS = 8;
+
+// Timeline units one project panel takes. Only sets proportions inside the
+// timeline — raise it and everything else in the objective happens faster
+// relative to the panels, not slower overall
+const PANEL_DURATION = 4;
+
+// Viewports of scrolling each panel costs. This is the "weight" knob: raise it
+// and a card takes more wheel to cross the screen
+const PANEL_SCROLL_VIEWPORTS = 1.2;
+
+// Figure drag. A scroll jolt offsets the whole figure against the direction of
+// travel and it eases back to rest, so the panels read as heavy instead of
+// rigid. Moving the box rather than the media inside it means nothing has to be
+// cropped or scaled to hide the slide — the travel is free to grow
+const FIGURE_DRAG_MAX = 6;
+// px/s of scroll per percent of drag — lower hits the cap on a gentler flick
+const FIGURE_DRAG_DAMPING = 150;
+const FIGURE_DRAG_RECOVERY = 0.9;
 
 const breakpoints = {
   isSm: '(max-width: 768px)',
@@ -115,7 +146,13 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
 
         objective: {
           section: document.getElementById(OBJECTIVE_ELEMENTS_IDS.SECTION),
+          stage: document.getElementById(OBJECTIVE_ELEMENTS_IDS.STAGE),
           text: objectiveText,
+          textSlot: document.getElementById(OBJECTIVE_ELEMENTS_IDS.TEXT_SLOT),
+          track: document.getElementById(OBJECTIVE_ELEMENTS_IDS.TRACK),
+          figures: Array.from(
+            document.getElementsByClassName(PROJECT_FIGURE_CLASS),
+          ),
           chars: objectiveSelectorText('.char'),
           words: objectiveSelectorText('.word').filter((element) => {
             const word = element.getAttribute('data-word');
@@ -128,6 +165,9 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
           }),
           clockLines: Array.from(
             document.getElementsByClassName('clock-lines'),
+          ),
+          clockTracks: Array.from(
+            document.getElementsByClassName('clock-lines-track'),
           ),
         },
 
@@ -242,30 +282,77 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
 
         gsap.set(o.words, {
           backgroundColor: 'transparent',
-          transitionProperty: 'background-color, color',
-          transitionTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
-          transitionDuration: '150ms',
           color: 'inherit',
           // Word spacing to make better highlight
           margin: '0 -0.1em',
           padding: '0 0.1em',
         });
 
+        // Heading shrinks into the corner slot from its own top-left, so the
+        // translation and the scale share an origin
+        gsap.set(o.text, { transformOrigin: '0 0' });
+
+        const figureDrag = { percent: 0 };
+        const setFigureDrag = gsap.quickSetter(o.figures, 'xPercent');
+        const applyFigureDrag = () => setFigureDrag(figureDrag.percent);
+
+        // Reads scroll velocity rather than timeline progress: the pan is
+        // linear, so progress alone carries no sense of how hard the panels are
+        // being pushed. Scrolling forward yields a positive velocity, hence the
+        // negated ratio — the figure lags left while the track travels left
+        const dragFigures = (self: ScrollTrigger) => {
+          // Once the panels have handed off to the services section, the
+          // figures are gone from view — a jolt here would just animate
+          // nothing and leave stale drag state behind
+          if (
+            objectiveTimeline.time() >= objectiveTimeline.labels['projects-end']
+          )
+            return;
+
+          const percent = gsap.utils.clamp(
+            -FIGURE_DRAG_MAX,
+            FIGURE_DRAG_MAX,
+            self.getVelocity() / -FIGURE_DRAG_DAMPING,
+          );
+
+          // A fresh jolt only takes over while it beats the one still easing
+          // out, so a sustained scroll reads as one lag instead of a stutter
+          if (Math.abs(percent) <= Math.abs(figureDrag.percent)) return;
+
+          figureDrag.percent = percent;
+
+          gsap.to(figureDrag, {
+            percent: 0,
+            duration: FIGURE_DRAG_RECOVERY,
+            ease: 'power3',
+            overwrite: true,
+            onUpdate: applyFigureDrag,
+          });
+        };
+
         const objectiveTimeline = gsap
           .timeline({
             scrollTrigger: isSm
               ? {
-                  trigger: o.section,
+                  trigger: o.text,
                   start: 'top center',
-                  end: 'bottom bottom',
+                  end: () => `+=${window.innerHeight * 0.5}`,
                   scrub: true,
                 }
               : {
                   trigger: o.section,
                   start: 'center center',
-                  end: () => `+=${o.section.offsetHeight * 3}`,
+                  end: () =>
+                    `+=${
+                      o.section.offsetHeight * 3 +
+                      PROJECTS.length *
+                        window.innerHeight *
+                        PANEL_SCROLL_VIEWPORTS
+                    }`,
                   scrub: true,
                   pin: true,
+                  invalidateOnRefresh: true,
+                  onUpdate: dragFigures,
                 },
           })
           .to(o.chars, {
@@ -276,50 +363,125 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
             delay: 2,
           })
           .add('words-transition')
-          .add(
-            gsap.timeline({
-              onReverseComplete: () => {
-                const transitionProps = {
-                  opacity: 0,
-                  duration: 0.35,
-                  ease: 'back.out',
-                };
-
-                gsap.to(o.clockLines[0], {
-                  yPercent: -100,
-                  ...transitionProps,
-                });
-                gsap.to(o.clockLines[1], {
-                  yPercent: 100,
-                  ...transitionProps,
-                });
-
-                gsap.set(o.words, {
-                  color: 'inherit',
-                  backgroundColor: 'transparent',
-                });
-              },
-              onComplete: () => {
-                gsap.to(o.clockLines, {
-                  opacity: 1,
-                  yPercent: 0,
-                  ease: 'expo.out',
-                  duration: 0.35,
-                });
-
-                gsap.set(o.words, {
-                  color: palette[50],
-                  backgroundColor: palette[700],
-                });
-              },
-            }),
+          .to(
+            o.words,
+            {
+              backgroundColor: palette[700],
+              color: palette[50],
+              ease: 'none',
+              duration: 1,
+            },
             'words-transition-=1',
           );
 
-        if (!isSm)
+        if (!isSm) {
+          objectiveTimeline.to(
+            o.clockLines,
+            { opacity: 1, yPercent: 0, ease: 'expo.out', duration: 1 },
+            'words-transition-=1',
+          );
+
           objectiveTimeline
-            .to(o.section, { opacity: 0.4, duration: 6, scale: 0.95 }, '>+2')
+            .add('projects', '>+1')
+            // Heading flies to the top-left corner. offsetLeft/offsetTop ignore
+            // transforms, so these stay correct when invalidateOnRefresh re-runs
+            // them. fromTo keeps both ends explicit, so an invalidate mid-scroll
+            // can never record an already-transformed state as the start
+            .fromTo(
+              o.text,
+              { x: 0, y: 0, scale: 1 },
+              {
+                x: () => o.textSlot.offsetLeft - o.text.offsetLeft,
+                y: () => o.textSlot.offsetTop - o.text.offsetTop,
+                scale: () => o.textSlot.offsetWidth / o.text.offsetWidth,
+                ease: 'power1.inOut',
+                duration: PANEL_DURATION,
+              },
+              'projects',
+            );
+
+          // Every panel is positioned off the `projects` label rather than off
+          // the previous tween, so the pans chain with no dead frames between
+          // them. The pan itself stays linear: any ease flattens out near the
+          // end and reads as the scroll locking up right as the card centres
+          PROJECTS.forEach((project, panel) => {
+            const at = panel * PANEL_DURATION;
+
+            if (panel === 0)
+              // First panel rides in from off-screen right
+              objectiveTimeline.fromTo(
+                o.track,
+                { x: () => window.innerWidth },
+                { x: 0, ease: 'none', duration: PANEL_DURATION },
+                `projects+=${at}`,
+              );
+            else
+              objectiveTimeline.to(
+                o.track,
+                {
+                  x: () => -panel * window.innerWidth,
+                  ease: 'none',
+                  duration: PANEL_DURATION,
+                },
+                `projects+=${at}`,
+              );
+
+            // Accent runs over the back half of the pan, so it has landed by
+            // the time the card sits in the centre
+            objectiveTimeline.to(
+              o.words,
+              {
+                backgroundColor: project.color,
+                color: getReadableForeground(project.color),
+                ease: 'none',
+                duration: PANEL_DURATION * 0.5,
+              },
+              `projects+=${at + PANEL_DURATION * 0.4}`,
+            );
+          });
+
+          objectiveTimeline.add(
+            'projects-end',
+            `projects+=${PROJECTS.length * PANEL_DURATION}`,
+          );
+
+          // Anchored to the label, not to `>`: the last accent tween finishes
+          // before the last pan does, so `>` would start the hand-off early
+          objectiveTimeline
+            .to(
+              o.section,
+              { opacity: 0.4, duration: 6, scale: 0.95 },
+              'projects-end+=2',
+            )
             .to(d.wrapper, { yPercent: -100, duration: 10 }, '>-5');
+
+          // Ticks slide sideways for the whole ride, wrapped inside one tile so
+          // the strip never runs out of ruler. Added last, at position 0, with
+          // the duration the timeline ended up with.
+          // Mobile isn't pinned and its scroll ride is too short for this scrub
+          // to read well, so it keeps a plain CSS crawl instead (see
+          // clock_lines.tsx's `max-md:animate-clock-ticks-*` classes)
+          o.clockTracks.forEach((track, index) => {
+            gsap.set(track, { x: 0 });
+
+            objectiveTimeline.to(
+              track,
+              {
+                x:
+                  (index === 0 ? -1 : 1) * CLOCK_LINES_TILE * CLOCK_LINES_LAPS,
+                ease: 'none',
+                duration: objectiveTimeline.duration(),
+                modifiers: {
+                  x: gsap.utils.unitize(gsap.utils.wrap(0, CLOCK_LINES_TILE)),
+                },
+              },
+              0,
+            );
+          });
+        }
+
+        // No per-project tint on mobile: the panels stack below the heading, so
+        // by the time one reaches the centre the highlighted words are long gone
         // #endregion
 
         // #region Development

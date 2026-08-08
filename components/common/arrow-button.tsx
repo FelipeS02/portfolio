@@ -22,7 +22,7 @@ const ArrowButton = <T extends ElementType = 'button'>({
       )}
       {...props}
     >
-      <div className='font-archivo text-lg tracking-wide'>{children}</div>
+      <span className='font-archivo text-lg tracking-wide'>{children}</span>
       <ArrowUpRight className='transition-transform group-hover:-translate-y-1 group-hover:translate-x-1' />
     </Component>
   );

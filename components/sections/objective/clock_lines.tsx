@@ -1,117 +1,107 @@
-import { FC } from 'react';
-import Marquee from 'react-fast-marquee';
+import { FC, HTMLAttributes } from 'react';
 
 import { cn } from '@/lib/utils';
 
-const LineIterations: FC<{ className?: string }> = ({ className = '' }) => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='182'
-    height='30'
-    viewBox='0 0 182 30'
-    fill='none'
-    className={className}
-  >
-    <line
-      x1='1.25'
-      y1='5.46392e-08'
-      x2='1.25'
-      y2='25'
-      stroke='inherit'
-      strokeWidth='2.5'
-    />
-    <line
-      x1='20.75'
-      y1='3.27835e-08'
-      x2='20.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='40.75'
-      y1='3.27835e-08'
-      x2='40.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='60.75'
-      y1='3.27835e-08'
-      x2='60.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='80.75'
-      y1='3.27835e-08'
-      x2='80.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='100.75'
-      y1='3.27835e-08'
-      x2='100.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='120.75'
-      y1='3.27835e-08'
-      x2='120.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='140.75'
-      y1='3.27835e-08'
-      x2='140.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='160.75'
-      y1='3.27835e-08'
-      x2='160.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-    <line
-      x1='180.75'
-      y1='3.27835e-08'
-      x2='180.75'
-      y2='20'
-      stroke='inherit'
-      strokeWidth='1.5'
-    />
-  </svg>
+/**
+ * Distance between two long ticks. The strip is rendered one tile wider on each
+ * side of its container, so wrapping `x` inside `[0, TILE)` keeps it covering
+ * the full width no matter which way it travels.
+ */
+export const CLOCK_LINES_TILE = 200;
+
+const TILE_HEIGHT = 30;
+/** Horizontal fade at both ends, replacing react-fast-marquee's `gradient` */
+const FADE_WIDTH = 200;
+const LONG_TICK_LENGTH = 25;
+const SHORT_TICK_LENGTH = 20;
+const LONG_TICK_X = 1.25;
+
+// 20.75, 40.75 ... 180.75 — 180.75 to the next tile's 201.25 is another 20.5,
+// so the spacing stays even across the seam
+const SHORT_TICKS_X = Array.from(
+  { length: 9 },
+  (_, index) => LONG_TICK_X + 19.5 + index * 20,
 );
 
-const ClockLines: FC<{ side?: 'top' | 'bottom' }> = ({ side = 'top' }) => {
+// Masking instead of overlaying a background-colored gradient keeps the fade
+// correct whatever sits behind the section
+const FADE_MASK = `linear-gradient(to right, transparent, #000 ${FADE_WIDTH}px, #000 calc(100% - ${FADE_WIDTH}px), transparent)`;
+
+type ClockLinesProps = {
+  side?: 'top' | 'bottom';
+} & HTMLAttributes<HTMLDivElement>;
+
+const ClockLines = ({
+  side = 'top',
+  style,
+  className,
+  ...props
+}: ClockLinesProps) => {
+  const patternId = `clock-ticks-${side}`;
+
+  // Ticks hang from the top edge, or grow up from the bottom one. Doing it with
+  // coordinates instead of a rotate class leaves the transform free for GSAP.
+  const tick = (length: number) =>
+    side === 'bottom'
+      ? { y1: TILE_HEIGHT, y2: TILE_HEIGHT - length }
+      : { y1: 0, y2: length };
+
   return (
-    <Marquee
-      autoFill
-      className='w-full'
-      direction={side === 'bottom' ? 'right' : 'left'}
-      speed={20}
-      gradient
-      gradientColor='hsl(var(--background))'
+    <div
+      className={cn('clock-lines z-0 w-full overflow-hidden', className)}
+      style={{ ...style, maskImage: FADE_MASK, WebkitMaskImage: FADE_MASK }}
+      {...props}
     >
-      <LineIterations
+      <svg
         className={cn(
-          'stroke-foreground-secondary',
-          side === 'bottom' ? 'mr-4 rotate-180' : 'ml-4',
+          'clock-lines-track stroke-foreground-secondary block opacity-50',
+          // Mobile's scroll ride is too short for GSAP's scrub to read well,
+          // so it keeps the old marquee-style constant crawl instead
+          side === 'bottom'
+            ? 'max-md:animate-clock-ticks-right'
+            : 'max-md:animate-clock-ticks-left',
         )}
-      />
-    </Marquee>
+        style={{
+          width: `calc(100% + ${CLOCK_LINES_TILE * 2}px)`,
+          marginLeft: `-${CLOCK_LINES_TILE}px`,
+        }}
+        height={TILE_HEIGHT}
+        aria-hidden
+      >
+        <defs>
+          {/* No viewBox on the svg, so user space is CSS pixels */}
+          <pattern
+            id={patternId}
+            width={CLOCK_LINES_TILE}
+            height={TILE_HEIGHT}
+            patternUnits='userSpaceOnUse'
+          >
+            <line
+              x1={LONG_TICK_X}
+              x2={LONG_TICK_X}
+              strokeWidth='2.5'
+              {...tick(LONG_TICK_LENGTH)}
+            />
+            {SHORT_TICKS_X.map((x) => (
+              <line
+                key={x}
+                x1={x}
+                x2={x}
+                strokeWidth='1.5'
+                {...tick(SHORT_TICK_LENGTH)}
+              />
+            ))}
+          </pattern>
+        </defs>
+        {/* stroke is inherited in SVG, so without this the rect outlines itself */}
+        <rect
+          width='100%'
+          height={TILE_HEIGHT}
+          fill={`url(#${patternId})`}
+          stroke='none'
+        />
+      </svg>
+    </div>
   );
 };
 

@@ -153,6 +153,11 @@ function generatePalette(hexColor: string): Palette {
   return palette;
 }
 
+// Picks black or white, whichever stays legible on top of the given color
+export function getReadableForeground(hexColor: string): string {
+  return tinycolor.mostReadable(hexColor, ['#ffffff', '#000000']).toHexString();
+}
+
 export function getNewThemeByHex(hexCode: string): Theme {
   const normalizedHex = hexCode.replace('#', '');
 

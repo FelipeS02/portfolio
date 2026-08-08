@@ -60,7 +60,12 @@
   },
   "Objective": {
     "heading": "Mi objetivo es crear productos que no solo sigan las tendencias actuales, sino que también sean atemporales y perduren en el tiempo.",
-    "marquee": "SERVICIOS"
+    "marquee": "SERVICIOS",
+    "viewProject": "Ver proyecto",
+    "roles": {
+      "development": "Desarrollo",
+      "designAndDevelopment": "Diseño + Desarrollo"
+    }
   },
   "Design": {
     "heading": "Diseño web",

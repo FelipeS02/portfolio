@@ -27,6 +27,8 @@
 
   --animate-blink: blink 1s ease infinite;
   --animate-orbit-rings: spin 3s linear infinite;
+  --animate-clock-ticks-left: clock-ticks 10s linear infinite;
+  --animate-clock-ticks-right: clock-ticks 10s linear infinite reverse;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -86,6 +88,14 @@
     }
     50% {
       opacity: 1;
+    }
+  }
+
+  /* Translates by exactly one tile — keep in sync with CLOCK_LINES_TILE in
+     clock_lines.tsx — so the pattern loops with no visible seam */
+  @keyframes clock-ticks {
+    to {
+      transform: translateX(-200px);
     }
   }
 }
