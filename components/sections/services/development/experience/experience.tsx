@@ -9,8 +9,10 @@ import {
   DevelopmentListTitle,
 } from '@/components/common/development-list';
 import { Henry } from '@/components/common/icons';
+import ItRock from '@/components/common/icons/itrock';
 import { ListItem } from '@/components/common/list-item';
-import ItRockLogo from '@/public/assets/images/it-rock.webp';
+
+import { AVAILABLE } from '@/lib/env';
 
 import {
   DevelopmentExperienceAvailable,
@@ -36,18 +38,11 @@ const Experience = async () => {
       </div>
 
       <ul className='size-full'>
-        {process.env.NEXT_PUBLIC_AVAILABLE === 'true' ? (
-          <DevelopmentExperienceAvailable />
-        ) : null}
+        {AVAILABLE ? <DevelopmentExperienceAvailable /> : null}
 
         <ListItem className='flex-wrap justify-between'>
           <Link href='https://www.itrock.com.ar/' target='_blank'>
-            <Image
-              src={ItRockLogo}
-              alt='ITROCK logo'
-              className='h-auto max-w-40'
-              width={160}
-            />
+            <ItRock className='h-auto w-full max-w-40' />
           </Link>
           <DevelopmentExperienceInfo>
             <DevelopmentExperienceBadge>

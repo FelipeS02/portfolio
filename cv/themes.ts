@@ -14,6 +14,10 @@ export type CvTheme = {
   gradientAccent: string;
 };
 
+export function variantName(locale: string, themeName: CvThemeName): string {
+  return `felipe-saracho-cv-${locale}${themeName === 'dark' ? '-dark' : ''}`;
+}
+
 export const cvThemes: Record<CvThemeName, CvTheme> = {
   light: {
     text: '#171717', // palette-900

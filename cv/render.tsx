@@ -8,7 +8,7 @@ import { CvDocument } from './components/cv-document';
 import en from './content/en';
 import es from './content/es';
 import { CvContent } from './content/types';
-import { CvThemeName,cvThemes } from './themes';
+import { CvThemeName, cvThemes, variantName } from './themes';
 
 export const ROOT = path.resolve(__dirname, '..');
 export const OUTPUT_HTML_DIR = path.join(__dirname, '.output');
@@ -86,10 +86,6 @@ export function buildHtml(
     ${markup}
   </body>
 </html>`;
-}
-
-export function variantName(locale: string, themeName: CvThemeName): string {
-  return `felipe-saracho-cv-${locale}${themeName === 'dark' ? '-dark' : ''}`;
 }
 
 export function* buildAllVariants(tailwindCss: string, fontFaceCss: string) {

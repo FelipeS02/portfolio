@@ -9,18 +9,22 @@ import { ColorPicker } from '@/components/common/color-picker';
 import LanguageSwitch from '@/components/common/language-switch';
 import ThemeSwitch from '@/components/common/theme-switch';
 
-import { ENV } from '@/lib/env';
 import { useScheme, useTheme } from '@/hooks/theme';
+
+import { CvThemeName, variantName } from '@/cv/themes';
 
 export const CurriculumShortcut = () => {
   const { resolvedTheme } = useScheme();
   const locale = useLocale();
 
   const downloadCurriculum = () => {
-    const key =
-      `CV_${resolvedTheme === 'light' ? 'LIGHT' : 'DARK'}_${locale === 'en' ? 'EN' : 'ES'}` as const;
+    const themeName: CvThemeName = resolvedTheme === 'dark' ? 'dark' : 'light';
+    const modeLabel = themeName === 'dark' ? 'DM' : 'LM';
 
-    window.open(ENV[key], '_blank');
+    const link = document.createElement('a');
+    link.href = `/cv/${variantName(locale, themeName)}.pdf`;
+    link.download = `CV Felipe Saracho ${locale.toUpperCase()} ${modeLabel}.pdf`;
+    link.click();
   };
 
   return (

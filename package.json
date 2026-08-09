@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx cv/generate.tsx && next build",
     "start": "next start",
     "lint": "eslint .",
     "scan": "next dev & npx react-scan@latest localhost:3000",
