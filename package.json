@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx cv/generate.tsx && next build",
+    "build": "next build",
+    "postinstall": "git config core.hooksPath .githooks || true",
     "start": "next start",
     "lint": "eslint .",
     "scan": "next dev & npx react-scan@latest localhost:3000",

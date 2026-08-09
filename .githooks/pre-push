@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+echo "Regenerating CV PDFs before push..."
+pnpm cv:build
+
+if [ -n "$(git status --porcelain public/cv/)" ]; then
+  git add public/cv/
+  git commit -m "chore(cv): regenerate PDFs"
+  echo "CV PDFs were stale — committed the refresh automatically."
+fi
