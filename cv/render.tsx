@@ -16,10 +16,11 @@ export const TAILWIND_CSS_PATH = path.join(OUTPUT_HTML_DIR, 'tailwind.css');
 
 export const CONTENT_BY_LOCALE: Record<string, CvContent> = { es, en };
 
-// Only the weights the components actually use (book=500, bold=700) — the
-// site's "thin"/"medium" .otf files aren't referenced anywhere in cv/components.
+// Only the weights the components actually use (book=500, medium=600,
+// bold=700) — the site's "thin" .otf isn't referenced anywhere in cv/components.
 const NEUE_MONTREAL_FACES = [
   { file: 'ppneuemontreal-book.otf', weight: 500 },
+  { file: 'ppneuemontreal-medium.otf', weight: 600 },
   { file: 'ppneuemontreal-bold.otf', weight: 700 },
 ];
 
@@ -81,7 +82,7 @@ export function buildHtml(
     <style>${fontFaceCss}</style>
     <style>${tailwindCss}</style>
   </head>
-  <body class="font-archivo m-0 text-[15px] leading-[1.4] text-(--cv-text)" style="${bodyStyle}">
+  <body class="font-archivo m-0 text-[13.5px] leading-[1.3] text-(--cv-text)" style="${bodyStyle}">
     ${markup}
   </body>
 </html>`;

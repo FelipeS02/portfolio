@@ -33,7 +33,7 @@ export default async function CvPreviewPage({
 
   return (
     <div
-      className='font-archivo text-[15px] leading-[1.4] text-(--cv-text)'
+      className='font-archivo text-[13.5px] leading-[1.3] text-(--cv-text)'
       style={
         {
           '--cv-text': theme.text,

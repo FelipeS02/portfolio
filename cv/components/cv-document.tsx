@@ -10,7 +10,7 @@ export function CvDocument({ content }: { content: CvContent }) {
     <div className="cv-page-pad">
       <Header content={content} />
       <main className="mx-auto max-w-[800px] px-10">
-        <div className="grid grid-cols-[auto_1fr] items-start gap-x-7 gap-y-5">
+        <div className="grid grid-cols-[auto_1fr] items-start gap-x-7 gap-y-4">
           <Section label={content.labels.about}>
             <p className="m-0 max-w-[58ch] font-light tracking-wide normal-case">{content.about}</p>
           </Section>
