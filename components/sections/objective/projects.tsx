@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { StaticImageData } from 'next/image';
 
-import AyemagMiniature from '@/public/assets/images/ayemag.png';
-import LicautMiniature from '@/public/assets/images/licaut.png';
-import MindtuMiniature from '@/public/assets/images/mindtu.png';
-import TodoparabrisasMiniature from '@/public/assets/images/todoparabrisas.png';
+import AyemagMiniature from '@/public/assets/images/ayemag.webp';
+import LicautMiniature from '@/public/assets/images/licaut.webp';
+import MindtuMiniature from '@/public/assets/images/mindtu.webp';
+import TodoparabrisasMiniature from '@/public/assets/images/todoparabrisas.webp';
 
 import { PROJECT_ICONS } from './icons';
 

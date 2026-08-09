@@ -11,6 +11,9 @@ import { ListItem } from '@/components/common/list-item';
 const technologies = [
   'NextJS | Astro',
   'Typescript',
+  'NestJS | Express',
+  'PostgreSQL | Prisma',
+  'Redis | BullMQ',
   'GSAP | Framer',
   'Redux | Zustand',
   'TailwindCSS',
@@ -27,7 +30,7 @@ const TechnologiesList = async () => {
       </DevelopmentListTitle>
       <ul>
         {technologies.map((name) => (
-          <ListItem className='text-6xl lg:text-8xl' key={`list-tech-${name}`}>
+          <ListItem className='text-5xl lg:text-7xl' key={`list-tech-${name}`}>
             <h6>{name}</h6>
           </ListItem>
         ))}
