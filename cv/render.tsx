@@ -1,14 +1,14 @@
+import { renderToStaticMarkup } from 'react-dom/server';
+
 import { execSync } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-
-import { renderToStaticMarkup } from 'react-dom/server';
 
 import { CvDocument } from './components/cv-document';
 import en from './content/en';
 import es from './content/es';
 import { CvContent } from './content/types';
-import { cvThemes, CvThemeName } from './themes';
+import { CvThemeName,cvThemes } from './themes';
 
 export const ROOT = path.resolve(__dirname, '..');
 export const OUTPUT_HTML_DIR = path.join(__dirname, '.output');
@@ -82,7 +82,7 @@ export function buildHtml(
     <style>${fontFaceCss}</style>
     <style>${tailwindCss}</style>
   </head>
-  <body class="font-archivo m-0 text-[13.5px] leading-[1.3] text-(--cv-text)" style="${bodyStyle}">
+  <body class="font-archivo m-0 text-[16px] leading-[1.3] text-(--cv-text)" style="${bodyStyle}">
     ${markup}
   </body>
 </html>`;
