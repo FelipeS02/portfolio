@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+/*
+  Same token names app/globals.css registers (--font-neue / --font-archivo),
+  but resolved here for the standalone Puppeteer build, which never loads
+  globals.css. The Next.js dev-only preview at app/[locale]/cv-preview
+  imports globals.css instead, so `font-neue`/`font-archivo` resolve to the
+  app's own next/font-optimized values there — same utility classes, two
+  builds.
+*/
+@theme {
+  --font-neue: 'PP Neue Montreal CV', Arial, sans-serif;
+  --font-archivo: 'Archivo', Arial, sans-serif;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+/*
+  box-decoration-break: clone re-applies this padding on every page fragment
+  (every page break), independent of @page's own margin. @page margin can't
+  be used for this: the body background gradient is painted across its full
+  fragmented box, so shrinking the per-page content area with @page margin
+  pushes the gradient's 95%/100% stops into view on every page instead of
+  only the last one.
+*/
+.cv-page-pad {
+  padding: 10mm 0 16mm;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+* {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}

@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "scan": "next dev & npx react-scan@latest localhost:3000"
+    "scan": "next dev & npx react-scan@latest localhost:3000",
+    "cv:build": "tsx cv/generate.tsx",
+    "cv:preview": "tsx cv/preview.tsx"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@simbathesailor/use-what-changed": "^2.0.0",
+    "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/postcss": "^4.0.17",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
@@ -60,8 +63,18 @@
     "postcss": "^8",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "puppeteer": "^25.5.0",
     "react-scan": "^0.0.54",
     "tailwindcss": "^4.0.17",
+    "tsx": "^4.23.11",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "puppeteer"
+    ]
   }
 }
