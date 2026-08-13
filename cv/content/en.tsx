@@ -19,7 +19,7 @@ const en: CvContent = {
     stack: 'Stack:',
   },
   about:
-    'Full-Stack Developer with 3+ years of experience building scalable web applications with React, Next.js and TypeScript. Experience in frontend architecture, Design Systems, API integration and performance optimization. Focused on technical quality, user experience, and maintainable, scalable solutions.',
+    'Front-End/Full-Stack Developer with 3+ years of experience in web products and SaaS, specialized in React, Next.js and TypeScript. Experience defining Design Systems, optimizing performance and integrating serverless architectures. Focused on quality, scalability and user experience.',
   experience: [
     {
       role: 'Front-End Developer',
@@ -74,33 +74,71 @@ const en: CvContent = {
     },
     {
       role: 'Full-Stack Developer',
-      company: 'Freelance',
-      dateRanges: ['June 2024 - Present'],
+      company: 'AndesIA (freelance, in-team)',
+      dateRanges: ['January 2025 - June 2025'],
       bullets: [
         <>
-          <strong>AndesIA</strong> — End-to-end development of a SaaS platform for managing
-          insurance tenders: landing page, backoffice, and a BullMQ + Redis queue system that
-          automates scraping across multiple sites, handling concurrent tasks and publishing
-          results reliably.
+          Designed and built the entire frontend of LICAUT, a SaaS platform for managing and
+          automating windshield replacement tenders for insurance companies, with React, Vite,
+          TypeScript and shadcn/ui.
         </>,
         <>
-          <strong>FSARACHO</strong> — Designed and built landing pages for companies across
-          different industries.
+          Implemented from scratch the asynchronous queue system with BullMQ + Redis that
+          orchestrates tender scraping and automated document submission.
+        </>,
+        <>
+          Contributed to the backend architecture (NestJS), going deep into maintaining the
+          document extraction system integrated with multiple AI providers.
+        </>,
+        <>
+          The product was sold to Todo Parabrisas, a client for whom I also built the corporate
+          landing page.
         </>,
       ],
       stack: [
-        'ReactJS',
+        'React',
         'Vite',
-        'Astro',
-        'NestJS',
-        'TailwindCSS',
+        'TypeScript',
         'shadcn/ui',
-        'Redis',
+        'NestJS',
         'BullMQ',
-        'Playwright',
+        'Redis',
         'Prisma',
         'Zod',
+        'Playwright',
+        'Astro',
+        'Three.js',
         'GSAP',
+      ],
+    },
+    {
+      role: 'Full-Stack Developer',
+      company: 'FSARACHO (freelance)',
+      dateRanges: ['June 2024 - Present'],
+      bullets: [
+        <>
+          <strong>Mindtú</strong> (Jun.–Jul. 2026): Built end-to-end the web platform of an
+          audiovisual production company and creator academy, with Next.js 16, React 19 and strict
+          TypeScript — corporate landing page + academy section with separate forms for two
+          audiences.
+        </>,
+        <>
+          <strong>AYEMAG</strong> (August 2025): Built the commercial landing page of an industrial
+          flexible container manufacturer, with Astro and React, including a lead generation flow
+          validated with Zod.
+        </>,
+      ],
+      stack: [
+        'Next.js',
+        'Astro',
+        'React',
+        'TypeScript',
+        'Tailwind CSS',
+        'shadcn/ui',
+        'Framer Motion',
+        'GSAP',
+        'Zod',
+        'React Hook Form',
         'Figma',
       ],
     },
@@ -145,7 +183,7 @@ const en: CvContent = {
       title: 'Languages',
       entries: [
         { level: 'Advanced', items: 'JavaScript, TypeScript' },
-        { level: 'Intermediate', items: 'C#, SQL' },
+        { level: 'Intermediate', items: 'C#, SQL (PostgreSQL, MySQL)' },
         { level: 'Basic', items: 'Python' },
       ],
     },
@@ -153,46 +191,30 @@ const en: CvContent = {
       title: 'Frameworks',
       entries: [
         { level: 'Advanced', items: 'ReactJS, Next.js, Tailwind CSS, Bootstrap' },
-        { level: 'Intermediate', items: 'Node.js, ExpressJS, NestJS' },
+        { level: 'Intermediate', items: 'Astro, Node.js, ExpressJS, NestJS' },
         { level: 'Basic', items: '.NET Core' },
       ],
-    },
-    {
-      title: 'Databases',
-      entries: [{ level: 'Intermediate', items: 'PostgreSQL, MySQL' }],
     },
     {
       title: 'Tools',
       entries: [
         {
           items:
-            'Figma, Jest, Playwright, Puppeteer, MaterialUI, React Bootstrap, ClickUp, Jira, Redux, SASS - LESS, Docker (basic), GSAP, Prisma, shadcn/ui, AI-assisted automation.',
+            'Zustand, SASS, LESS, Docker (basic), SEO optimization (Google Search Console), AI-assisted automation.',
         },
       ],
     },
     {
       title: 'Languages (spoken)',
       entries: [
-        { level: 'Native', items: 'Spanish' },
-        { level: 'Intermediate', items: 'English (B1)' },
-        { level: 'Basic', items: 'Italian' },
-      ],
-    },
-    {
-      title: 'Soft Skills',
-      entries: [
-        {
-          items:
-            'Teamwork, creativity, critical thinking, problem-solving, adaptability and continuous improvement.',
-        },
+        { level: 'Spanish', items: 'Native' },
+        { level: 'English', items: 'B1 general | C2 in reading and listening (EF SET, 72/100)' },
+        { level: 'Italian', items: 'Basic' },
       ],
     },
   ],
   education: [{ title: 'Full-Stack Web Development / HENRY', date: 'Oct. 2021' }],
-  certifications: [
-    'English: C2 Proficient (reading and listening) | EF SET',
-    'Yo Puedo Programar | JAA x Microsoft',
-  ],
+  certifications: ['Yo Puedo Programar | JAA x Microsoft'],
 };
 
 export default en;
