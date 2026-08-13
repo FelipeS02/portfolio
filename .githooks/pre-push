@@ -1,11 +1,58 @@
 #!/bin/sh
 set -e
 
-echo "Regenerating CV PDFs before push..."
+# Verifies the committed CV PDFs still match what the CV source produces.
+#
+# It deliberately does NOT commit. Git resolves which refs to push before
+# running this hook and passes them in on stdin, so a commit created here is
+# never part of the push: it stays behind, the remote gets the old tree, and
+# the next push regenerates and commits again. Verify and refuse instead.
+#
+# cv:build pins the PDF timestamps (see cv/generate.tsx), so identical content
+# produces identical bytes and a clean tree here is a real signal.
+
+ZERO='0000000000000000000000000000000000000000'
+
+# Everything whose content decides what the PDFs end up looking like
+CV_PATHS='cv/ public/cv/'
+
+needs_check=0
+
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+  # Branch deletion — nothing being pushed to inspect
+  [ "$local_sha" = "$ZERO" ] && continue
+
+  # New branch on the remote, or a base we do not have locally: no baseline to
+  # diff against, so fall back to checking
+  if [ "$remote_sha" = "$ZERO" ] || ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+    needs_check=1
+    break
+  fi
+
+  if [ -n "$(git diff --name-only "$remote_sha" "$local_sha" -- $CV_PATHS)" ]; then
+    needs_check=1
+    break
+  fi
+done
+
+if [ "$needs_check" = 0 ]; then
+  echo "No CV changes in this push — skipping the PDF check."
+  exit 0
+fi
+
+echo "Checking the CV PDFs are up to date..."
 pnpm cv:build
 
 if [ -n "$(git status --porcelain public/cv/)" ]; then
-  git add public/cv/
-  git commit -m "chore(cv): regenerate PDFs"
-  echo "CV PDFs were stale — committed the refresh automatically."
+  echo ""                                                            >&2
+  echo "The committed CV PDFs do not match the current CV source."   >&2
+  echo "cv:build is reproducible, so this is a real content change." >&2
+  echo ""                                                            >&2
+  echo "  git add public/cv/"                                        >&2
+  echo "  git commit -m 'chore(cv): regenerate PDFs'"                 >&2
+  echo ""                                                            >&2
+  echo "Then push again."                                            >&2
+  exit 1
 fi
+
+echo "CV PDFs are up to date."
