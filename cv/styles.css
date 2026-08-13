@@ -27,7 +27,7 @@
   only the last one.
 */
 .cv-page-pad {
-  padding: 10mm 0 16mm;
+  padding: 6mm 0 0mm;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }

@@ -2,11 +2,11 @@ import { Job } from '../content/types';
 
 export function JobEntry({ job, stackLabel }: { job: Job; stackLabel: string }) {
   return (
-    <div className="mb-[22px] break-inside-avoid last:mb-0">
+    <div className="mb-4 break-inside-avoid last:mb-0">
       <h3 className="m-0 text-lg font-semibold font-neue">
         {job.role} / <span className="font-bold text-(--cv-text) italic">{job.company}</span>
       </h3>
-      <p className="m-0 mt-0.5 font-neue mb-2 text-sm tracking-wide leading-none normal-case text-(--cv-muted) italic">
+      <p className="m-0 font-neue mb-2 text-sm tracking-wide leading-none normal-case text-(--cv-muted) italic">
         {job.dateRanges.join(' · ')}
       </p>
       <ul className="m-0 mb-2 list-disc pl-5">

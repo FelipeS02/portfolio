@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 export function Section({ label, children }: { label: string; children: ReactNode }) {
   return (
     <>
-      <div className="font-neue pt-0.5 text-right text-[1.25rem] font-medium uppercase">
+      <div className="font-neue text-right text-[1.25rem] font-medium uppercase">
         {label}
       </div>
       <div>{children}</div>

@@ -40,13 +40,13 @@ export function CvDocument({ content }: { content: CvContent }) {
             ))}
           </Section>
 
-          <Section label={content.labels.certifications}>
+          {/* <Section label={content.labels.certifications}>
             {content.certifications.map((cert) => (
               <p key={cert} className="m-0 mb-1.5 normal-case last:mb-0">
                 {cert}
               </p>
             ))}
-          </Section>
+          </Section> */}
         </div>
       </main>
     </div>
