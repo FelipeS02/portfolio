@@ -20,14 +20,16 @@ export default async function CvPreviewPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ theme?: string }>;
+  searchParams: Promise<{ theme?: string; lang?: string }>;
 }) {
   if (process.env.NODE_ENV !== 'development') notFound();
 
   const { locale } = await params;
-  const { theme: themeParam } = await searchParams;
+  const { theme: themeParam, lang: langParam } = await searchParams;
 
-  const content = CONTENT_BY_LOCALE[locale] ?? es;
+  // The locale is no longer addressable through the URL, so `?lang=` is what
+  // keeps both CV variants previewable without touching the locale cookie
+  const content = CONTENT_BY_LOCALE[langParam ?? locale] ?? es;
   const themeName: CvThemeName = themeParam === 'dark' ? 'dark' : 'light';
   const theme = cvThemes[themeName];
 

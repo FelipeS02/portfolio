@@ -5,6 +5,8 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
+import { useLocaleTransition } from '@/components/providers/locale-transition';
+
 import { setLoadingScreenHidden } from '@/lib/dom';
 import { initialPalette } from '@/lib/theme';
 import { useTheme } from '@/hooks/theme';
@@ -16,6 +18,11 @@ import LoadingLines from './lines';
 // Fired once the lines finished leaving, so pages can start their own entrance
 // animations at the exact moment the screen stops covering them
 export const LOADING_SCREEN_HIDDEN = 'loading-screen:hidden';
+
+// Fired once the lines finished arriving. Nothing is moving on screen from
+// here on, so this is where main-thread-heavy work belongs — see
+// components/providers/locale-transition.tsx
+export const LOADING_SCREEN_COVERED = 'loading-screen:covered';
 
 const LoadingScreen = () => {
   const container = useRef<HTMLDivElement | null>(null);
@@ -32,7 +39,14 @@ const LoadingScreen = () => {
     applyPalette,
   } = useTheme();
 
+  const { switching: isLocaleSwitching } = useLocaleTransition();
+
   const isThemeReloading = isThemeFullfiled && isThemeLoading;
+
+  // Both a theme reroll and a locale switch replace what is on screen, so both
+  // cover it the same way. Revealing waits for whichever is still in flight
+  const isCovering = isThemeReloading || isLocaleSwitching;
+  const isRevealing = isThemeFullfiled && !isThemeLoading && !isLocaleSwitching;
 
   const { contextSafe } = useGSAP({ scope: container });
 
@@ -120,6 +134,9 @@ const LoadingScreen = () => {
           gsap.set(container.current, { display: 'grid' });
           setLoadingScreenHidden(false);
         },
+        onComplete: () => {
+          window.dispatchEvent(new Event(LOADING_SCREEN_COVERED));
+        },
       }),
       '>',
     );
@@ -132,18 +149,19 @@ const LoadingScreen = () => {
     () => {
       if (!loadingLines.current || !container.current) return;
 
-      // fullfiled is part of this because generation is synchronous: React
-      // batches the loading flag away, so isThemeLoading alone never transitions
-      if (!isThemeLoading && isThemeFullfiled) onLoaded();
+      // fullfiled is part of isRevealing because generation is synchronous:
+      // React batches the loading flag away, so isThemeLoading alone never
+      // transitions
+      if (isRevealing) onLoaded();
     },
-    { dependencies: [isThemeLoading, isThemeFullfiled], scope: container },
+    { dependencies: [isRevealing], scope: container },
   );
 
   useGSAP(
     () => {
-      if (isThemeReloading) onLoading();
+      if (isCovering) onLoading();
     },
-    { dependencies: [isThemeReloading], scope: container },
+    { dependencies: [isCovering], scope: container },
   );
 
   const loadElements = (node: HTMLDivElement) => {

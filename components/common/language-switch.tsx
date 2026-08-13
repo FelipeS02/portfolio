@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { ChevronDown, Earth } from 'lucide-react';
@@ -10,31 +9,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useLocaleTransition } from '@/components/providers/locale-transition';
 
 import { cn } from '@/lib/utils';
 
-import { usePathname, useRouter } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
+import { Locale, routing } from '@/i18n/routing';
 
-const LOCALE_LABEL_KEYS: Record<(typeof routing.locales)[number], string> = {
+const LOCALE_LABEL_KEYS: Record<Locale, string> = {
   es: 'spanish',
   en: 'english',
 };
 
 const LanguageSwitch = () => {
   const locale = useLocale();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const t = useTranslations('LanguageSwitch');
-
-  const query = searchParams.toString();
-
-  const switchLocale = (nextLocale: (typeof routing.locales)[number]) => {
-    router.replace(`${pathname}${query ? `?${query}` : ''}`, {
-      locale: nextLocale,
-    });
-  };
+  const { switching, switchLocale } = useLocaleTransition();
 
   return (
     <Popover>
@@ -53,7 +42,7 @@ const LanguageSwitch = () => {
               'hover:bg-foreground/10 px-2 py-1 text-left text-sm',
               localeOption === locale && 'font-semibold',
             )}
-            disabled={localeOption === locale}
+            disabled={switching || localeOption === locale}
             onClick={() => switchLocale(localeOption)}
           >
             {t(LOCALE_LABEL_KEYS[localeOption])}

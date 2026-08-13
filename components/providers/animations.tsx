@@ -545,6 +545,9 @@ function AnimationsProvider({ children }: { children: ReactNode }) {
       // ponytail: about-border color goes stale until next real rebuild
       // (palette change or resize); live-update it via a scoped
       // contextSafe setter if that desync becomes noticeable.
+      // A locale switch needs no dependency here: it changes the value of the
+      // `[locale]` segment, and React remounts this provider along with the
+      // rest of the subtree, so the whole scaffold is rebuilt anyway
       dependencies: [isPaletteFullfiled, hexCode],
       revertOnUpdate: true,
     },

@@ -1,40 +1,41 @@
-import { useRef } from 'react';
-
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
 
+const SLIDE_UP_SELECTOR = '[letter-slide-up]';
+
+const getSlideUpElements = () =>
+  gsap.utils.toArray<HTMLElement>(SLIDE_UP_SELECTOR);
+
 export default function useHandleLoadingAnimations() {
-  const slideUpLetters = useRef<HTMLElement[] | null>(null);
-
+  // Hide the letters before the first paint, so the loading screen never lifts
+  // on already-visible text
   const { contextSafe } = useGSAP(() => {
-    const newSlideUpLetters =
-      gsap.utils.toArray<HTMLElement>('[letter-slide-up]');
-
-    if (!newSlideUpLetters) return;
-
-    newSlideUpLetters.forEach((e) => {
-      gsap.set(e.getElementsByClassName('char'), {
+    getSlideUpElements().forEach((element) => {
+      gsap.set(element.getElementsByClassName('char'), {
         yPercent: 100,
         opacity: 0,
         willChange: 'transform',
       });
     });
-
-    slideUpLetters.current = newSlideUpLetters;
   });
 
   const onPageLoading = contextSafe((): GSAPTween[] => {
-    if (!slideUpLetters.current) return [];
-
-    return slideUpLetters.current?.map((e) => {
-      return gsap.to(e.getElementsByClassName('char'), {
-        yPercent: 0,
-        duration: 0.7,
-        ease: 'circ.inOut',
-        stagger: 0.07,
-        opacity: 1,
-      });
-    });
+    // Elements are re-queried and tweened `fromTo` because a locale switch
+    // replaces the chars with fresh nodes that carry none of the mount-time
+    // state a plain `to` would need
+    return getSlideUpElements().map((element) =>
+      gsap.fromTo(
+        element.getElementsByClassName('char'),
+        { yPercent: 100, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'circ.inOut',
+          stagger: 0.07,
+        },
+      ),
+    );
   });
 
   return { onPageLoading };
