@@ -223,7 +223,7 @@ const es: CvContent = {
         { level: 'Español', items: 'Nativo' },
         {
           level: 'Inglés',
-          items: 'B1 general | C2 en lectura y escucha (EF SET, 72/100)',
+          items: 'B2 general | C2 en lectura y escucha (EF SET, 72/100)',
         },
         { level: 'Italiano', items: 'Básico' },
       ],

@@ -208,7 +208,7 @@ const en: CvContent = {
       title: 'Languages (spoken)',
       entries: [
         { level: 'Spanish', items: 'Native' },
-        { level: 'English', items: 'B1 general | C2 in reading and listening (EF SET, 72/100)' },
+        { level: 'English', items: 'B2 general | C2 in reading and listening (EF SET, 72/100)' },
         { level: 'Italian', items: 'Basic' },
       ],
     },
