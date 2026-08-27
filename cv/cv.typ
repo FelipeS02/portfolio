@@ -36,13 +36,13 @@
   description: [
     - Defined the Design System and technical standards (Tailwind CSS, Zod, shadcn/ui) for one project; they were adopted as the company standard across 5 Next.js projects, 2 of them shipped by teams I never worked with.
 
-    - Part of the company's internal AI lab, where we built an agent-driven test generation workflow: it walks an existing codebase, extracts the functionality actually implemented, and derives the test suite from it — bringing coverage to projects that had shipped with none.
+    - Part of the company's internal AI lab, where we built an agent-driven test generation workflow: it walks an existing codebase, extracts the functionality actually implemented, and derives the test suite from it, bringing coverage to projects that had shipped with none.
 
-    - Delivered features through an AI-assisted workflow with Claude Code, with Jira tickets authored as Spec-Driven Development specs — each card carrying the requirements the agent implements against, instead of ad-hoc prompting.
+    - Delivered features through an AI-assisted workflow with Claude Code, with Jira tickets authored as Spec-Driven Development specs: each card carries the requirements the agent implements against, instead of ad-hoc prompting.
 
-    - Built critical features for financial and corporate platforms — document management, subscriptions and online booking — with Azure AD (MSAL) authentication and Stripe/PayPal payment integrations.
+    - Built document management, subscription and online booking features for financial and corporate platforms, with Azure AD (MSAL) authentication and Stripe/PayPal payment integrations.
 
-    - Built and maintained serverless pipelines on AWS Lambda with SQS queues for media processing(Python + FFmpeg) and document generation.
+    - Built and maintained serverless pipelines on AWS Lambda with SQS queues for media processing (Python + FFmpeg) and document generation.
   ],
 )
 
@@ -52,9 +52,9 @@
   location: "Argentina",
   date: "Jan – Jun 2025",
   description: [
-    - Designed and built the entire frontend of LICAUT, a SaaS platform automating windshield replacement tenders for insurance companies, and implemented from scratch the async queue system (BullMQ + Redis) orchestrating tender scraping and document submission — cutting processing time per tender from 5–8 minutes to 30–40 seconds.
+    - Designed and built the entire frontend of LICAUT, a SaaS platform automating windshield replacement tenders for insurance companies, and implemented from scratch the async queue system (BullMQ + Redis) orchestrating tender scraping and document submission. Processing time per tender fell from 5–8 minutes to 30–40 seconds, roughly 90% faster.
 
-    - The product was commercialized to Todo Parabrisas — a client for whom I also built the corporate landing page — and runs in production, processing 200–300 tenders a month with peaks of up to 500.
+    - The product was commercialized to Todo Parabrisas, a client for whom I also built the corporate landing page. It runs in production, processing 200–300 tenders a month with peaks of up to 500.
   ],
 )
 
@@ -62,13 +62,25 @@
   position: "Front-End Developer",
   institution: [LILAB],
   location: "Argentina",
-  date: "Nov 2021 – Mar 2023 · Dec 2023 – Jun 2024",
+  date: "Dec 2023 – Jun 2024",
   description: [
-    - Led end-to-end development of the invoice factoring flow for Progreso, a CMF-regulated Chilean non-bank lender: first integrated into its existing portal and, after being brought back, as a full standalone application for Temba, its digital brand, where I also owned the UX/UI design.
+    - Brought back to build Temba, the digital brand of Progreso, as a full standalone application: the complete invoice factoring product end to end, instead of a flow embedded in someone else's portal.
+
+    - Owned the UX/UI design of the product alongside its front-end implementation.
+  ],
+)
+
+#job(
+  position: "Front-End Developer",
+  institution: [LILAB],
+  location: "Argentina",
+  date: "Nov 2021 – Mar 2023",
+  description: [
+    - Led end-to-end development of the invoice factoring flow for Progreso, a CMF-regulated Chilean non-bank lender, integrated into its existing customer portal.
 
     - Turned onboarding into self-service: the SME signs up, pulls its invoices from the SII (Chilean tax authority), gets an automated quote of the advance, and submits the request itself. Before, an executive did all of it by hand, client by client.
 
-    - Moved the back office from phone-tracked operations to a database-backed state machine: segmented by originating channel (Progreso and Temba), each carrying its scoring and amount, and every approval stage advanced by a single action.
+    - Moved the back office from phone-tracked operations to a database-backed state machine, with each operation carrying its scoring and amount and every approval stage advanced by a single action.
 
     - Built the team's first design system and Figma workflow, based on TypeScript, Atomic Design and SOLID.
   ],
@@ -82,7 +94,7 @@
 )
 #oneline-title-item(
   title: "English",
-  content: [B2 general, C2 reading and listening (EF SET 72/100)],
+  content: [B2 general, C2 reading and listening],
 )
 
 #sectionsep
@@ -90,7 +102,7 @@
 #project(
   title: [Mindtú],
   date: [2026],
-  description: [Web platform for an audiovisual production company and creator academy — corporate site plus academy section with separate funnels for two audiences. Built end-to-end with Next.js 16 and React 19.]
+  description: [Web platform for an audiovisual production company and creator academy: corporate site plus academy section with separate funnels for two audiences. Built end-to-end with Next.js 16 and React 19.]
 )
 // The template's project() emits no trailing linebreak, so without this the
 // next entry's title runs on at the end of the description above.
@@ -110,4 +122,4 @@
   location: "Argentina",
 )
 
-#set document(author: "Felipe Saracho", title: "Felipe Saracho — CV")
+#set document(author: "Felipe Saracho", title: "Felipe Saracho CV")
