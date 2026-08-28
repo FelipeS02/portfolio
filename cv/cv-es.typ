@@ -38,15 +38,15 @@
   location: "Argentina",
   date: "Mar 2025 – Presente",
   description: [
-    - Definí el Design System y los estándares técnicos (Tailwind CSS, Zod, shadcn/ui) de un proyecto; fueron adoptados como estándar de la empresa en 5 proyectos Next.js, 2 de ellos entregados por equipos con los que nunca trabajé.
+    - Definí el Design System y los estándares técnicos (Tailwind CSS, Zod, shadcn/ui) que se adoptaron como estándar de la empresa en 5 proyectos Next.js, 2 de ellos ajenos a mi participación.
 
-    - Formé parte del laboratorio interno de IA de la empresa, donde construimos un flujo de generación de tests dirigido por agentes: recorre un código base existente, extrae la funcionalidad realmente implementada y deriva de ahí la suite de tests, llevando cobertura a proyectos que se habían entregado sin ninguna.
+    - Participé en el laboratorio interno de I+D, automatizando con agentes la generación de casos de prueba en proyectos con deuda técnica.
 
-    - Entregué funcionalidades mediante un flujo asistido por IA con Claude Code, con tickets de Jira redactados como especificaciones de Spec-Driven Development: cada tarjeta lleva los requerimientos contra los que el agente implementa, en lugar de prompting ad-hoc.
+    - Entregué funcionalidades con Claude Code bajo un flujo Spec-Driven Development integrado con Jira.
 
-    - Construí funcionalidades de gestión documental, suscripciones y reservas online para plataformas financieras y corporativas, con autenticación Azure AD (MSAL) e integraciones de pago con Stripe y PayPal.
+    - Construí funcionalidades de gestión documental, suscripciones y reservas online para plataformas financieras y corporativas, con autenticación Azure AD (MSAL) y pagos con Stripe y PayPal.
 
-    - Construí y mantuve pipelines serverless en AWS Lambda con colas SQS para procesamiento de medios (Python + FFmpeg) y generación de documentos.
+    - Construí pipelines serverless en AWS Lambda con colas SQS para procesamiento de medios (Python + FFmpeg) y generación de documentos.
   ],
 )
 
@@ -82,9 +82,9 @@
   description: [
     - Lideré el desarrollo end-to-end del flujo de factoring de facturas de Progreso, financiera no bancaria chilena regulada por la CMF, integrado en su portal de clientes existente.
 
-    - Convertí el onboarding en autogestión: la pyme se registra, importa sus facturas desde el SII (autoridad tributaria chilena), recibe una cotización automática del adelanto y envía la solicitud sola. Antes lo hacía un ejecutivo a mano, cliente por cliente.
+    - Convertí el onboarding de manual a autogestión, integrando scoring automático e importación de facturas desde el SII (autoridad tributaria chilena).
 
-    - Llevé el back office de operaciones seguidas por teléfono a una máquina de estados en base de datos, con cada operación con su scoring y su monto, y cada etapa de aprobación avanzada con una sola acción.
+    - Transformé el traspaso de operaciones entre ejecutivos, de un seguimiento telefónico manual a una máquina de estados en base de datos.
 
     - Construí el primer design system y flujo de trabajo en Figma del equipo, basado en TypeScript, Atomic Design y SOLID.
   ],

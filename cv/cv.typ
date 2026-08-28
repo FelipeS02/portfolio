@@ -34,15 +34,15 @@
   location: "Argentina",
   date: "Mar 2025 – Present",
   description: [
-    - Defined the Design System and technical standards (Tailwind CSS, Zod, shadcn/ui) for one project; they were adopted as the company standard across 5 Next.js projects, 2 of them shipped by teams I never worked with.
+    - Defined the Design System and technical standards (Tailwind CSS, Zod, shadcn/ui) that became the company standard across 5 Next.js projects, 2 of them outside my own involvement.
 
-    - Part of the company's internal AI lab, where we built an agent-driven test generation workflow: it walks an existing codebase, extracts the functionality actually implemented, and derives the test suite from it, bringing coverage to projects that had shipped with none.
+    - Took part in the internal R&D lab, automating agent-driven test case generation for projects carrying technical debt.
 
-    - Delivered features through an AI-assisted workflow with Claude Code, with Jira tickets authored as Spec-Driven Development specs: each card carries the requirements the agent implements against, instead of ad-hoc prompting.
+    - Delivered features with Claude Code under a Spec-Driven Development workflow integrated with Jira.
 
-    - Built document management, subscription and online booking features for financial and corporate platforms, with Azure AD (MSAL) authentication and Stripe/PayPal payment integrations.
+    - Built document management, subscription and online booking features for financial and corporate platforms, with Azure AD (MSAL) authentication and Stripe/PayPal payments.
 
-    - Built and maintained serverless pipelines on AWS Lambda with SQS queues for media processing (Python + FFmpeg) and document generation.
+    - Built serverless pipelines on AWS Lambda with SQS queues for media processing (Python + FFmpeg) and document generation.
   ],
 )
 
@@ -78,9 +78,9 @@
   description: [
     - Led end-to-end development of the invoice factoring flow for Progreso, a CMF-regulated Chilean non-bank lender, integrated into its existing customer portal.
 
-    - Turned onboarding into self-service: the SME signs up, pulls its invoices from the SII (Chilean tax authority), gets an automated quote of the advance, and submits the request itself. Before, an executive did all of it by hand, client by client.
+    - Turned onboarding from manual to self-service, integrating automated scoring and invoice imports from the SII (Chilean tax authority).
 
-    - Moved the back office from phone-tracked operations to a database-backed state machine, with each operation carrying its scoring and amount and every approval stage advanced by a single action.
+    - Moved the handoff of operations between executives from manual phone tracking to a database-backed state machine.
 
     - Built the team's first design system and Figma workflow, based on TypeScript, Atomic Design and SOLID.
   ],
