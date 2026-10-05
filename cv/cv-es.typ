@@ -15,7 +15,7 @@
   address: "Buenos Aires, Argentina",
   lastupdated: "true",
   pagecount: "true",
-  date: "2026-08-26",
+  date: "2026-08-29",
   contacts: (
     (text: "LinkedIn", link: "https://www.linkedin.com/in/felipe-saracho/"),
     (text: "Github", link: "https://github.com/FelipeS02"),
@@ -26,7 +26,7 @@
 
 // about
 #section[Sobre mí]
-#descript[Desarrollador Front-End con visión de producto, especializado en React, Next.js y TypeScript, con más de 3 años construyendo productos web y SaaS para clientes de fintech, seguros y corporativos. Defino design systems y estándares técnicos que sobreviven a mi participación en el proyecto, y trabajo a lo largo del stack hasta backends serverless.]
+#descript[Desarrollador Full-Stack con visión de producto y foco en el front-end, especializado en TypeScript de punta a punta con React, Next.js y NestJS, con más de 3 años construyendo productos web y SaaS para clientes de fintech, seguros y corporativos. Defino design systems y estándares técnicos que sobreviven a mi participación en el proyecto, y construyo el backend que los sostiene: APIs REST, colas asíncronas y pipelines serverless en AWS.]
 
 #sectionsep
 // Experience
@@ -93,8 +93,12 @@
 #sectionsep
 #section("Habilidades")
 #oneline-title-item(
-  title: "Tecnologías",
-  content: [TypeScript, JavaScript, React, Next.js, Astro, Node.js, NestJS, PostgreSQL, Redis, AWS],
+  title: "Front-End",
+  content: [TypeScript, JavaScript, React, Next.js, Astro, Tailwind CSS, Zod],
+)
+#oneline-title-item(
+  title: "Back-End e infraestructura",
+  content: [Node.js, NestJS, Python, PostgreSQL, Prisma, Redis, BullMQ, AWS (Lambda, SQS)],
 )
 #oneline-title-item(
   title: "Inglés",

@@ -11,7 +11,7 @@
   address: "Buenos Aires, Argentina",
   lastupdated: "true",
   pagecount: "true",
-  date: "2026-08-26",
+  date: "2026-08-29",
   contacts: (
     (text: "LinkedIn", link: "https://www.linkedin.com/in/felipe-saracho/"),
     (text: "Github", link: "https://github.com/FelipeS02"),
@@ -22,7 +22,7 @@
 
 // about
 #section[About Me]
-#descript[Product-minded Front-End engineer specialized in React, Next.js and TypeScript, with 3+ years building web products and SaaS for fintech, insurance and corporate clients. I set design systems and technical standards that outlive my involvement, and work across the stack into serverless backends.]
+#descript[Product-minded Full-Stack engineer with a front-end focus, specialized in end-to-end TypeScript across React, Next.js and NestJS, with 3+ years building web products and SaaS for fintech, insurance and corporate clients. I set design systems and technical standards that outlive my involvement, and build the backend behind them: REST APIs, async queues and serverless pipelines on AWS.]
 
 #sectionsep
 // Experience
@@ -89,8 +89,12 @@
 #sectionsep
 #section("Skills")
 #oneline-title-item(
-  title: "Skills",
-  content: [TypeScript, JavaScript, React, Next.js, Astro, Node.js, NestJS, PostgreSQL, Redis, AWS],
+  title: "Front-End",
+  content: [TypeScript, JavaScript, React, Next.js, Astro, Tailwind CSS, Zod],
+)
+#oneline-title-item(
+  title: "Back-End & infrastructure",
+  content: [Node.js, NestJS, Python, PostgreSQL, Prisma, Redis, BullMQ, AWS (Lambda, SQS)],
 )
 #oneline-title-item(
   title: "English",
